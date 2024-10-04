@@ -5,7 +5,7 @@
       {{ props.config.title }}
     </h2>
 
-    <div class="flex flex-row justify-between">
+    <div class="flex flex-row justify-between" v-if="needsToShowTopFiltersBar">
       <RVGFiltering 
         :config="props.config"
         :gridRefreshFn="gridRefresh"
@@ -36,7 +36,7 @@
         </button>
         <!-- MANUAL REFRESH -->
 
-        <DropDown ref="operationsDropdown">
+        <DropDown ref="operationsDropdown" v-if="needsToShowAdditionalOperationsDropdown">
           <button class="bg-slate-200 rounded-full p-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -612,6 +612,18 @@
     }
 
     return mapping;
+  })
+
+  const needsToShowAdditionalOperationsDropdown = computed(() => {
+    return (props.config.columnSelector && props.config.columnSelector.active) 
+    || (props.config.refreshable && props.config.refreshable.autoActive && props.config.refreshable.autoValues && props.config.refreshable.autoValues.length)
+    || (props.config.pagination && props.config.pagination.possiblePageSizes)
+    || (props.config.xlsxExport && props.config.xlsxExport.active)
+    || (props.config.bulkOperation && props.config.bulkOperation.active)
+  })
+
+  const needsToShowTopFiltersBar = computed(() => {
+    return (props.config.filtering && props.config.filtering.active) || needsToShowAdditionalOperationsDropdown;
   })
 
   function isRecordMatchTheCurrentFiltering(record) {

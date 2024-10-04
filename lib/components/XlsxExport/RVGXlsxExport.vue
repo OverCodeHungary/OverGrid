@@ -1,5 +1,9 @@
 <template>
-  <RVGModal :showModal="showModal" :onClose="hideModal">
+  <CustomContentModal
+    :show="showModal" 
+    title="Oszlopok kiválasztása" 
+    :disableButtons="true"
+    :close="() => { hideModal() }" >
     <template #head>
       <div class=" flex flex-col">
         <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
@@ -37,13 +41,13 @@
         </xlsx-workbook>
       </div>
     </template>
-  </RVGModal>
+  </CustomContentModal>
 </template>
 
 <script>
 import l from '../../helpers/lang.js'
 import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue3-xlsx';
-import RVGModal from '../../RobberVueGridModal.vue'
+import CustomContentModal from '../CustomContentModal.vue';
 import moment from 'moment';
 
 export default {
@@ -53,7 +57,7 @@ export default {
     XlsxWorkbook,
     XlsxSheet,
     XlsxDownload,
-    RVGModal
+    CustomContentModal
   },
   data() {
     return {

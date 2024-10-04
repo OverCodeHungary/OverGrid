@@ -16,6 +16,7 @@
   const config = {
     endpoint: 'http://localhost:3000',
     idkey: "id",
+    title: "Hello World",
     defaultOrderKey: 'id',
     defaultOrderDirection: 'desc',
     orderLocal: false,
