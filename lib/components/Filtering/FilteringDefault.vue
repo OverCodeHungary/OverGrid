@@ -41,7 +41,13 @@
     </div>
 
     <!-- :disabled="!currentFilterValue || !currentFilterValue.isValid" -->
-    <CustomContentModal :show="state.filteringModalShown" title="Szűrőfeltétel hozzáadása" cancelButtonTitle="Mégse" okButtonTitle="OK" :close="() => { state.filteringModalShown = false }" :ok="addFiltering">
+    <CustomContentModal 
+      :show="state.filteringModalShown" 
+      title="Szűrőfeltétel hozzáadása" 
+      cancelButtonTitle="Mégse" 
+      okButtonTitle="OK" 
+      :close="() => { state.filteringModalShown = false }" 
+      :ok="addFiltering">
       <template #content>
         <div class="pb-2">
           <label class="pull-left" for="selectorField">Mező kiválasztása:</label>

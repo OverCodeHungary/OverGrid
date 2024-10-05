@@ -181,6 +181,32 @@
         exportable: true,
         orderable: true
       },
+      "email": {
+        title: "E-mail",
+        visible: true,
+        selectable: true,
+        filterable: {
+          active: true,
+          type: 'Text'
+        },
+        exportable: true,
+        orderable: true,
+      },
+      "phoneNumbers": {
+        title: "Telefonszámok",
+        visible: true,
+        selectable: true,
+        filterable: {
+          active: true,
+          type: 'Text'
+        },
+        middleware: (value) => {
+          if(!value) return '';
+          return value.join(', ')
+        },
+        exportable: true,
+        orderable: true,
+      },
     }
   }
 </script>

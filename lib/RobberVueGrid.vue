@@ -134,9 +134,10 @@
         :rerender="gridRefresh" />
 
       <RVGXlsxExport 
-        :showModal="state.showXlsxExportModal" 
+        :modalShown="state.showXlsxExportModal" 
         :hideModal="() => { state.showXlsxExportModal = false }" 
         data-test="RVGXlxsExport" 
+        :disableButtons="true"
         v-if="props.config.xlsxExport && props.config.xlsxExport.active" 
         :xlsxExportConfig="props.config.xlsxExport" 
         :dataMapping="props.config.mapping" 
@@ -277,7 +278,7 @@
           </button>
         </li>
       </ol>
-      <SpinnerLoader v-if="refreshNeeded" />
+      <SpinnerLoader v-if="state.refreshNeeded" />
     </div>
     <!-- PAGINATION -->
 
