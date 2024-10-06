@@ -214,7 +214,15 @@
                 </td>
                 <td class="whitespace-nowrap px-2 py-1.5 text-xs" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
                   <span v-if="value.formatter && typeof value.formatter == 'object' && value.formatter.type">
-                    <component v-bind:is="'RVG' + value.formatter.type" :data="value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody]" :config="value" :rowid="record[props.config.idkey]" :field="cmNameBody" :record="record" @refreshGrid="state.refreshNeeded=true" :openExtraRow="(recordId) => { mainRowClick(recordId) }" />
+                    <RootFormatter 
+                      :type="'RVG' + value.formatter.type" 
+                      :data="value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody]" 
+                      :config="value" 
+                      :rowid="record[props.config.idkey]" 
+                      :field="cmNameBody" 
+                      :record="record" 
+                      :refreshGrid="() => { state.refreshNeeded=true }" 
+                      :openExtraRow="(recordId) => { mainRowClick(recordId) }" />
                   </span>
                   <span v-else-if="value.formatter && typeof value.formatter == 'function'" v-html="value.formatter(value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody], () => { state.refreshNeeded=true }, record[props.config.idkey], record)" />
                   <span v-else>
@@ -299,6 +307,7 @@
   import RVGFilterableDateConfig from './Filterables/RVGFilterableDate.config.js';
   import RVGFilterableStatusConfig from './Filterables/RVGFilterableStatus.config.js';
   import RVGFilterableTextConfig from './Filterables/RVGFilterableText.config.js';
+  import RootFormatter from './Formatters/RootFormatter.vue';
   const i18n = useI18n('hu');
   const Axios = useAxios();
 
