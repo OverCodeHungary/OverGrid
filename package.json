@@ -1,18 +1,18 @@
 {
-  "name": "robbervuegrid",
+  "name": "overgrid",
   "private": true,
   "version": "1.0.1",
   "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/RobberVueGrid.umd.cjs",
-  "module": "./dist/RobberVueGrid.js",
+  "main": "./dist/OverGrid.umd.cjs",
+  "module": "./dist/OverGrid.js",
   "types": "./dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/RobberVueGrid.js",
-      "require": "./dist/RobberVueGrid.umd.js"
+      "import": "./dist/OverGrid.js",
+      "require": "./dist/OverGrid.umd.js"
     },
     "./dist/default.css": "./dist/default.css"
   },

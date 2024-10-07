@@ -1,5 +1,5 @@
 <template>
-  <RobberVueGrid :config="config" :customFormatters="[{
+  <OverGrid :config="config" :customFormatters="[{
     name: 'CustomFormatter',
     component: CustomFormatter
   }]">
@@ -8,12 +8,12 @@
         {{ record }}
       </div>
     </template>
-  </RobberVueGrid>
+  </OverGrid>
 </template>
 
 <script setup lang="ts">
   import './index.css'
-  import RobberVueGrid from '../lib/RobberVueGrid.vue'
+  import OverGrid from '../lib/OverGrid.vue'
   import CustomFormatter from './CustomFormatter.vue';
 
   const gridUniqueId = 'rvgSampleGrid'

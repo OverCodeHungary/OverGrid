@@ -55,10 +55,10 @@
             <option v-for="(text, key) in selectorFieldOptions" :key="key" :value="key">{{ text }}</option>
           </select>
           <component
-            :is="Filterables['RVGFilterable' + currentFilterableConfig.type]" 
+            :is="Filterables['Filterable' + currentFilterableConfig.type]" 
             v-if="state.selectorField != 'null' && currentFilterableConfig" 
             @changeValue="changeFilterValue" 
-            v-bind:is="'RVGFilterable' + currentFilterableConfig.type" 
+            v-bind:is="'Filterable' + currentFilterableConfig.type" 
             :config="currentFilterableConfig" 
             :id="state.selectorField" 
             :formatterConfig="formatterConfig" />
@@ -72,24 +72,24 @@
 <script setup>
 
 // filterables
-import RVGFilterableNumber from '../../Filterables/RVGFilterableNumber.vue'
-import RVGFilterableNumberConfig from '../../Filterables/RVGFilterableNumber.config.js'
-import RVGFilterableText from '../../Filterables/RVGFilterableText.vue'
-import RVGFilterableTextConfig from '../../Filterables/RVGFilterableText.config.js'
-import RVGFilterableDate from '../../Filterables/RVGFilterableDate.vue'
-import RVGFilterableDateConfig from '../../Filterables/RVGFilterableDate.config.js'
-import RVGFilterableStatus from '../../Filterables/RVGFilterableStatus.vue'
-import RVGFilterableStatusConfig from '../../Filterables/RVGFilterableStatus.config.js'
-//import RVGFilterableLookup from '../../Filterables/RVGFilterableLookup.vue'
+import FilterableNumber from './Filterables/FilterableNumber.vue'
+import FilterableNumberConfig from './Filterables/FilterableNumber.config.js'
+import FilterableText from './Filterables/FilterableText.vue'
+import FilterableTextConfig from './Filterables/FilterableText.config.js'
+import FilterableDate from './Filterables/FilterableDate.vue'
+import FilterableDateConfig from './Filterables/FilterableDate.config.js'
+import FilterableStatus from './Filterables/FilterableStatus.vue'
+import FilterableStatusConfig from './Filterables/FilterableStatus.config.js'
+//import FilterableLookup from './Filterables/FilterableLookup.vue'
 import CustomContentModal from '../CustomContentModal.vue'
 import { reactive, onMounted, watch, computed } from 'vue'
 
 const Filterables = {
-  RVGFilterableNumber,
-  RVGFilterableText,
-  RVGFilterableDate,
-  RVGFilterableStatus,
-  //RVGFilterableLookup
+  FilterableNumber,
+  FilterableText,
+  FilterableDate,
+  FilterableStatus,
+  //FilterableLookup
 }
 
 const props = defineProps({
@@ -146,16 +146,16 @@ const tweakedFilters = computed(() => {
 
     switch(props.filters[i].type) {
       case "number":
-        cNewFilter.textual = RVGFilterableNumberConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableNumberConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "text":
-        cNewFilter.textual = RVGFilterableTextConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableTextConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "date":
-        cNewFilter.textual = RVGFilterableDateConfig.getTextual(props.filters[i].operation, props.filters[i].value, true).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableDateConfig.getTextual(props.filters[i].operation, props.filters[i].value, true).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "status":
-        cNewFilter.textual = RVGFilterableStatusConfig.getTextual(props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableStatusConfig.getTextual(props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
     }
     

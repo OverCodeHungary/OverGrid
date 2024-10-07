@@ -8,9 +8,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'lib/main.ts'),
-      name: 'RobberVueGrid',
+      name: 'OverGrid',
       // the proper extensions will be added
-      fileName: 'RobberVueGrid'
+      fileName: 'OverGrid'
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
