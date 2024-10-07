@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .og-btn-primary {
+    @apply !text-red-500
+  }
+}

@@ -20,7 +20,7 @@
             <button @click="close()" :disabled="okButtonLoading" class="disabled:opacity-60 btn min-w-[7rem] !rounded-full h-9 border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80">
               {{ cancelButtonTitle ? cancelButtonTitle : 'Cancel' }}
             </button>
-            <button v-if="!noNeedOkButton" :disabled="okButtonLoading || disableOkButton" @click="() => { ok(close); }" class="disabled:opacity-60 min-w-[7rem] h-9 !rounded-full bg-teal-400 font-medium text-white hover:bg-primary-focus focus:bg-teal-500 active:bg-teal-500">
+            <button v-if="!noNeedOkButton" :disabled="okButtonLoading || disableOkButton" @click="() => { ok(close); }" class="og-btn-primary">
               <span v-if="!okButtonLoading">{{ okButtonTitle ? okButtonTitle : 'OK' }}</span>
               <SpinnerLoader v-else sizeClasses="h-5.5 w-5.5" />
             </button>

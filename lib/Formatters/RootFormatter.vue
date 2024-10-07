@@ -23,7 +23,9 @@
   <RVGDownloadAsTxt v-if="type === 'RVGDownloadAsTxt'" :data="data" :config="config" :rowid="rowid" :field="field" :record="record" :refreshGrid="refreshGrid" :openExtraRow="openExtraRow" />
   <RVGTailwindFormatter v-if="type === 'RVGTailwindFormatter'" :data="data" :config="config" :rowid="rowid" :field="field" :record="record" :refreshGrid="refreshGrid" :openExtraRow="openExtraRow" />
   <RVGLevel v-if="type === 'RVGLevel'" :data="data" :config="config" :rowid="rowid" :field="field" :record="record" :refreshGrid="refreshGrid" :openExtraRow="openExtraRow" />
-
+  <template v-for="formatter in props.customFormatters">
+    <component v-if="type === 'RVG' + formatter.name" :is="formatter.component" :data="props.data" :config="config" :rowid="rowid" :field="field" :record="record" :refreshGrid="refreshGrid" :openExtraRow="openExtraRow" />
+  </template>
 </template>
 
 <script setup>
@@ -84,6 +86,10 @@
     openExtraRow: {
       type: Function,
       required: true
+    },
+    customFormatters: {
+      type: Array,
+      required: false
     }
   });
 </script>

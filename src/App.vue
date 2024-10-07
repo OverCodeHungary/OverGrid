@@ -1,5 +1,8 @@
 <template>
-  <RobberVueGrid :config="config">
+  <RobberVueGrid :config="config" :customFormatters="[{
+    name: 'CustomFormatter',
+    component: CustomFormatter
+  }]">
     <template #extraRow="{ record }">
       <div>
         {{ record }}
@@ -9,7 +12,9 @@
 </template>
 
 <script setup lang="ts">
+  import './index.css'
   import RobberVueGrid from '../lib/RobberVueGrid.vue'
+  import CustomFormatter from './CustomFormatter.vue';
 
   const gridUniqueId = 'rvgSampleGrid'
 
@@ -129,6 +134,9 @@
         filterable: {
           active: true,
           type: 'Text'
+        },
+        formatter: {
+          type: 'CustomFormatter'
         },
         exportable: true,
         orderable: true,

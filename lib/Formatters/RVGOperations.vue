@@ -1,7 +1,7 @@
 <template>
   <div data-test="" class="flex flex-row overflow-y-visible" @mousedown.stop>
     <span v-if="rowButtonsNormal.length > 0" class="flex flex-row items-center gap-1 pr-2">
-      <button :disabled="button.disabled ? button.disabled : false" data-test="RVGOperationsButton" :data-test-value="button.testValueAttribute" v-for="(button, index) in rowButtonsNormal" :key="index" class="rounded-lg bg-red-500 p-2 text-white" v-tooltip="{text:button.tooltip,theme:{placement:'right',displayArrow:false}}" @click="button.onClick">
+      <button :disabled="button.disabled ? button.disabled : false" data-test="RVGOperationsButton" :data-test-value="button.testValueAttribute" v-for="(button, index) in rowButtonsNormal" :key="index" class="rounded-lg bg-red-500 p-2 text-white" @click="button.onClick">
         <span v-html="button.icon"></span>
         {{ button.title }}
       </button>

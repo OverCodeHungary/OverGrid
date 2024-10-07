@@ -20,7 +20,7 @@
 
         <!-- BULK OPERATION -->
         <span v-if="props.config.bulkOperation && props.config.bulkOperation.active">
-          <select :disabled="state.checkedRows.length <= 0" v-model="state.bulkMethod" @change="onBulkMethod" class="disabled:opacity-40 form-select mt-1 h-8 pr-8 w-48 rounded-lg border border-slate-300 bg-white px-2.5 text-xs+ hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
+          <select :disabled="state.checkedRows.length <= 0" v-model="state.bulkMethod" @change="onBulkMethod" class="disabled:opacity-40 form-select h-8 pr-8 w-48 rounded-lg border border-slate-300 bg-white px-2.5 text-xs+ hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
             <option v-if="state.checkedRows.length <= 0" value="null">Tömeges művelet</option>
             <option v-else value="null">{{ state.checkedRows.length }} sor kiválasztva</option>
             <option v-for="method in props.config.bulkOperation.methods" :value="method.key" :key="method.key">{{ method.title }}</option>
@@ -222,6 +222,7 @@
                       :field="cmNameBody" 
                       :record="record" 
                       :refreshGrid="() => { state.refreshNeeded=true }" 
+                      :customFormatters="props.customFormatters"
                       :openExtraRow="(recordId) => { mainRowClick(recordId) }" />
                   </span>
                   <span v-else-if="value.formatter && typeof value.formatter == 'function'" v-html="value.formatter(value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody], () => { state.refreshNeeded=true }, record[props.config.idkey], record)" />
@@ -315,6 +316,11 @@
 
   const props = defineProps({
     config: Object,
+    customFormatters: {
+      type: Array,
+      required: false,
+      default: () => []
+    }
   });
 
   const state = reactive({
@@ -1006,5 +1012,4 @@
 
     //changeTableHeight()
   })
-
 </script>

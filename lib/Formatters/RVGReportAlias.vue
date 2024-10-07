@@ -5,7 +5,7 @@
       <strong v-if="record.alias">{{ record.alias }}</strong>
     </a>
 
-    <b-button @click="onEditClick" v-if="this.record.status == 'DRAFT' && isEditable" size="sm" variant="link" class="editButton" v-b-tooltip.hover :title="config.formatter.editButtonTitle">
+    <b-button @click="onEditClick" v-if="this.record.status == 'DRAFT' && isEditable" size="sm" variant="link" class="editButton" :title="config.formatter.editButtonTitle">
       <b-icon-pencil @mousedown.stop />
     </b-button>
 

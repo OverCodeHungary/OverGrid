@@ -1,7 +1,7 @@
 <template>
   <div class="RVGQuestionParamStats">
     <div class="paramsAreFine" v-if="data.needsToBefilledRequiredCount <= 0">
-      <a href="javascript:void(null);" v-b-tooltip.hover title="A paraméterek kitöltöttsége elégséges a futtatáshoz!">
+      <a href="javascript:void(null);" title="A paraméterek kitöltöttsége elégséges a futtatáshoz!">
         <b-icon-check-circle-fill @mousedown.stop class="text-success statusFlag" />
       </a>
       <span class="separator"> // </span>
@@ -13,12 +13,12 @@
         {{ data.filledCount }} kitöltve
       </b-badge>
       <span v-if="this.record.status == 'DRAFT'" class="separator"> // </span>
-      <b-button v-if="this.record.status == 'DRAFT'" @click="onEditClick" pill size="sm" class="editButton" v-b-tooltip.hover title="Paraméterek szerkesztése">
+      <b-button v-if="this.record.status == 'DRAFT'" @click="onEditClick" pill size="sm" class="editButton" title="Paraméterek szerkesztése">
         <b-icon-pencil @mousedown.stop />
       </b-button>
     </div>
     <div class="paramsNeedsToBeUpdated" v-if="data.needsToBefilledRequiredCount > 0">
-      <a href="javascript:void(null);" v-b-tooltip.hover title="A futtatáshoz szükséges paraméterek közül nem mindegyike van kitöltve!">
+      <a href="javascript:void(null);" title="A futtatáshoz szükséges paraméterek közül nem mindegyike van kitöltve!">
         <b-icon-exclamation-circle-fill @mousedown.stop class="text-warning statusFlag" />
       </a>
       <span class="separator"> // </span>
@@ -30,7 +30,7 @@
         {{ data.filledCount }} kitöltve
       </b-badge>
       <span v-if="this.record.status == 'DRAFT'" class="separator"> // </span>
-      <b-button v-if="this.record.status == 'DRAFT'" pill @click="onEditClick" size="sm" class="editButton" v-b-tooltip.hover title="Paraméterek szerkesztése">
+      <b-button v-if="this.record.status == 'DRAFT'" pill @click="onEditClick" size="sm" class="editButton" title="Paraméterek szerkesztése">
         <b-icon-pencil @mousedown.stop />
       </b-button>
     </div>

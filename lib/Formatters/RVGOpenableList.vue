@@ -1,11 +1,11 @@
 <template>
   <div class="RVGOpenableList">
-    <a v-if="!validationState" class="validationState mr-2" href="javascript:void(null);" v-b-tooltip.hover title="A szekciók megadásánál valamilyen hiba van!">
+    <a v-if="!validationState" class="validationState mr-2" href="javascript:void(null);" title="A szekciók megadásánál valamilyen hiba van!">
       <b-icon-exclamation-circle-fill @mousedown.stop class="text-warning statusFlag" />
     </a>
     <span class="listHolder" v-html="listText" />
 
-    <b-button @click="onEditClick" v-if="this.record.status == 'DRAFT'" pill size="sm" class="editButton ml-2" v-b-tooltip.hover :title="config.formatter.editButtonTitle">
+    <b-button @click="onEditClick" v-if="this.record.status == 'DRAFT'" pill size="sm" class="editButton ml-2" :title="config.formatter.editButtonTitle">
       <b-icon-pencil @mousedown.stop />
     </b-button>
   </div>
