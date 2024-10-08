@@ -2,14 +2,14 @@
   <div class="flex flex-col gap-2 my-2 ">
 
     <div>
-      <label for="selectorOperationField">Művelet:</label>
+      <label for="selectorOperationField">{{ i18n.l('operation') }}:</label>
       <select @change="changeValue" v-model="state.operation" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
         <option v-for="(option, key) in possibleOperations" :value="key" :key="key">{{ option }}</option>
       </select>
     </div>
 
     <div class="flex flex-col" v-if="state.operation == 'eq'">
-      <label>Érték:</label>
+      <label>{{ i18n.l('value') }}:</label>
       <span class="relative mt-1.5 flex">
         <input 
           class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
@@ -21,13 +21,13 @@
         />
       </span>
       <span v-if="!validation" class="text-tiny+ text-error mt-1 text-red-500 text-sm">
-        Válasszon dátumot!
+        {{ i18n.l('choose_date') }}
       </span>
     </div>
 
     <div class="flex flex-row gap-2" v-if="state.operation == 'bw'">
       <div class="w-1/2 flex flex-col">
-        <label for="selectorDateValueStart">Kezdő dátum:</label>
+        <label for="selectorDateValueStart">{{ i18n.l('start_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
             class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
@@ -41,7 +41,7 @@
       </div>
 
       <div class="w-1/2 flex flex-col">
-        <label for="selectorDateValueStart">Záró dátum:</label>
+        <label for="selectorDateValueStart">{{ i18n.l('end_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
             class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
@@ -63,6 +63,8 @@
   import Config from './FilterableDate.config.js'
   import moment from 'moment';
   import { computed, reactive } from 'vue';
+  import useI18n from '../../../composables/useI18n.js';
+  const i18n = useI18n('hu');
 
   const emit = defineEmits(['changeValue']);
 

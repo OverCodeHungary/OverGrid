@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row gap-1 items-center"> 
-    <button title="Szűrőfeltétel hozzáadása" class="bg-slate-200 rounded-full p-2" @click="() => { state.filteringModalShown = true }">
+    <button :title="i18n.l('add_filter')" class="bg-slate-200 rounded-full p-2" @click="() => { state.filteringModalShown = true }">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
       </svg>
@@ -8,7 +8,7 @@
     <div class="filtersSection">
       <div class="currentFiltersHolder">
         <span class="noFilterMessage" v-if="props.filters.length <= 0">
-          Nincs beállított szűrőfeltétel...
+          {{ i18n.l('no_filters_added') }}
         </span>
         <span class="flex flex-row items-center gap-2" v-if="props.filters.length > 0">
           <span v-for="filter in tweakedFilters" :key="filter.field">
@@ -30,8 +30,8 @@
             <ul class="mb-0 ml-2 mr-2" v-else>
               <li>
                 <select class="h-7 w-full rounded-lg px-2.5 text-xs+ border-2" data-test="filterOperatorSelector" v-model="state.operator">
-                  <option value="OR">VAGY</option>
-                  <option value="AND">ÉS</option>
+                  <option value="OR">{{ i18n.l('or') }}</option>
+                  <option value="AND">{{ i18n.l('and') }}</option>
                 </select>
               </li>
             </ul>
@@ -43,14 +43,12 @@
     <!-- :disabled="!currentFilterValue || !currentFilterValue.isValid" -->
     <CustomContentModal 
       :show="state.filteringModalShown" 
-      title="Szűrőfeltétel hozzáadása" 
-      cancelButtonTitle="Mégse" 
-      okButtonTitle="OK" 
+      :title="i18n.l('add_filter')" 
       :close="() => { state.filteringModalShown = false }" 
       :ok="addFiltering">
       <template #content>
         <div class="pb-2">
-          <label class="pull-left" for="selectorField">Mező kiválasztása:</label>
+          <label class="pull-left" for="selectorField">{{ i18n.l('select_field') }}</label>
           <select class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent" v-model="state.selectorField">
             <option v-for="(text, key) in selectorFieldOptions" :key="key" :value="key">{{ text }}</option>
           </select>
@@ -83,6 +81,8 @@ import FilterableStatusConfig from './Filterables/FilterableStatus.config.js'
 //import FilterableLookup from './Filterables/FilterableLookup.vue'
 import CustomContentModal from '../CustomContentModal.vue'
 import { reactive, onMounted, watch, computed } from 'vue'
+import useI18n from '../../composables/useI18n';
+const i18n = useI18n('hu');
 
 const Filterables = {
   FilterableNumber,
@@ -110,7 +110,7 @@ const state = reactive({
 });
 
 onMounted(() => {
-  state.operator = state.filterOperator;
+  state.operator = props.filterOperator;
 });
 
 watch(() => props.filterOperator, () => {
@@ -169,7 +169,7 @@ const tweakedFilters = computed(() => {
 
 const selectorFieldOptions = computed(() => {
   var options = {
-    null: "-- Mező kiválasztása --"
+    null: "-- " + i18n.l('select_field') + " --"
   };
   for(var i in props.dataMapping) {
     if(props.dataMapping[i].filterable && props.dataMapping[i].filterable.active) {
@@ -210,19 +210,19 @@ const formatterConfig = computed(() => {
 function translateTypeToHumanType(type) {
   switch(type.toLowerCase()) {
     case "number":
-      return "Egész szám"
+      return i18n.l('whole_number')
     case "text":
-      return "Szöveges"
+      return i18n.l('text')
     case "date":
-      return "Dátum"
+      return i18n.l('date')
     case "user":
-      return "Felhasználó"
+      return i18n.l('user')
     case "status":
-      return "Státusz"
+      return i18n.l('status')
     case "lookup":
-      return "Elem"
+      return i18n.l('lookup')
     default:
-      return "Szöveges"
+      return i18n.l('text')
   }
 }
 

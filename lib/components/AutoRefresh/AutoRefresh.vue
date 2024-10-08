@@ -1,6 +1,6 @@
 <template>
-  <ul class="mt-4">
-    <li class="px-3">
+  <ul>
+    <li>
       <h3 class="font-bold">
         {{ i18n.l('auto_refresh_menu_title') }}
       </h3>

@@ -16,7 +16,7 @@
   import OverGrid from '../lib/OverGrid.vue'
   import CustomFormatter from './CustomFormatter.vue';
 
-  const gridUniqueId = 'rvgSampleGrid'
+  const gridUniqueId = 'ogSampleGrid'
 
   const config = {
     endpoint: 'http://localhost:3000',
@@ -24,7 +24,7 @@
     title: "Hello World",
     defaultOrderKey: 'id',
     defaultOrderDirection: 'desc',
-    orderLocal: false,
+    orderLocal: true,
     rootkey: "data",
     gridUniqueId: gridUniqueId,
     pagination: {

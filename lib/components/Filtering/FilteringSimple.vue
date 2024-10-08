@@ -18,7 +18,8 @@
 <script setup>
 
   import { reactive, watch, computed } from 'vue';
-  import l from '../../helpers/lang.js'
+  import useI18n from '../../composables/useI18n';
+  const i18n = useI18n('hu');
 
   const props = defineProps({
     setFilter: {
@@ -53,7 +54,7 @@
       return props.config.filtering.simplePlaceholder;
     }
     else {
-      return "Keresés..."
+      return i18n.l('search')
     }
   });
 
@@ -62,7 +63,7 @@
       return props.config.filtering.simpleHelpText;
     }
     else {
-      return l('rvg-simple-filter-help-text')
+      return i18n.l('simple_filter_help_text')
     }
   });
 </script>

@@ -20,13 +20,13 @@
 </template>
 
 <script setup>
-  import { reactive } from 'vue';
+  import { reactive, onMounted, nextTick } from 'vue';
   import FilteringDefault from './FilteringDefault.vue'
   import FilteringSimple from './FilteringSimple.vue'
 
   const props = defineProps({
     config: Object,
-    gridRefreshFn: Function
+    setNewFiltersAndRefresh: Function
   });
 
   const state = reactive({
@@ -41,9 +41,11 @@
     }
 
     state.filters.push(filter);
-    if(!props.config.filtering.local) {
-      props.gridRefreshFn();
-    }
+    props.setNewFiltersAndRefresh({
+      filters: state.filters,
+      filterOperator: state.filterOperator,
+      simpleFilter: state.simpleFilter
+    });
     updateFilterParametersInURL();
   }
 
@@ -67,9 +69,11 @@
     }
     
     state.filters.splice(ind, 1);
-    if(!props.config.filtering.local) {
-      props.gridRefreshFn();
-    }
+    props.setNewFiltersAndRefresh({
+      filters: state.filters,
+      filterOperator: state.filterOperator,
+      simpleFilter: state.simpleFilter
+    });
     updateFilterParametersInURL();
   }
 
@@ -79,14 +83,30 @@
 
   function changeFilterOperator(op) {
     state.filterOperator = op;
-    if(!props.config.filtering.local) {
-      props.gridRefreshFn();
-    }
+    props.setNewFiltersAndRefresh({
+      filters: state.filters,
+      filterOperator: state.filterOperator,
+      simpleFilter: state.simpleFilter
+    });
     updateFilterParametersInURL();
   }
 
   function setSimpleFilter(filter) {
     state.simpleFilter = filter; 
-    props.gridRefreshFn(true);
+    props.setNewFiltersAndRefresh({
+      filters: state.filters,
+      filterOperator: state.filterOperator,
+      simpleFilter: state.simpleFilter
+    });
   }
+
+  onMounted(() => {
+    nextTick(() => {
+      props.setNewFiltersAndRefresh({
+        filters: state.filters,
+        filterOperator: state.filterOperator,
+        simpleFilter: state.simpleFilter
+      });
+    })
+  })
 </script>

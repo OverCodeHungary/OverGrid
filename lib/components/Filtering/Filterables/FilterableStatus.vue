@@ -1,15 +1,15 @@
 <template>
   <div class="flex flex-row gap-2 my-2 ">
     <div class="w-1/2">
-      <label>Művelet:</label>
+      <label>{{ i18n.l('operation') }}:</label>
       <select @change="changeValue" v-model="state.operation" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
         <option v-for="(option, key) in possibleOperations" :value="key" :key="key">{{ option }}</option>
       </select>
     </div>
     <div class="w-1/2">
-      <label>Értékek kiválasztása:</label>
+      <label>{{ i18n.l('values') }}</label>
       <select :disabled="availableOptions.length === 0" @change="(e) => { addTag(e.target.value) }" v-model="state.currentSelectedValue" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
-        <option value="null">Válasszon az értékek közül</option>
+        <option value="null">{{ i18n.l('please_choose_values') }}</option>
         <option v-for="(option, key) in availableOptions" :value="key" :key="key">{{ option }}</option>
       </select>
 
@@ -27,6 +27,8 @@
 <script setup>
   import Config from './FilterableStatus.config.js'
   import { computed, reactive } from 'vue';
+  import useI18n from '../../../composables/useI18n.js';
+  const i18n = useI18n('hu');
 
   const emit = defineEmits(['changeValue']);
 

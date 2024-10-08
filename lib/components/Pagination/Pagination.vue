@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-  import { reactive, watch, computed } from 'vue';
+  import { reactive, watch, computed, onMounted, nextTick } from 'vue';
   import SpinnerLoader from '../SpinnerLoader.vue';
 
   const props = defineProps({
@@ -42,6 +42,10 @@
     },
     changePagination: {
       type: Function,
+      required: true,
+    },
+    config: {
+      type: Object,
       required: true,
     }
   })
@@ -101,4 +105,15 @@
       props.changePagination(state.pagination);
     }
   }
+
+  onMounted(() => {
+    if(props.config.pagination && props.config.pagination.active) {
+      state.pagination.active = true;
+      state.pagination.page = props.config.pagination.page;
+
+      nextTick(() => {
+        props.changePagination(state.pagination);
+      })
+    }
+  })
 </script>

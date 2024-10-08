@@ -8,7 +8,7 @@
     <div class="flex flex-row justify-between" v-if="needsToShowTopFiltersBar">
       <Filtering 
         :config="props.config"
-        :gridRefreshFn="gridRefresh"
+        :setNewFiltersAndRefresh="(newFilters) => { state.filters = newFilters.filters; state.filterOperator = newFilters.filterOperator; state.simpleFilter = newFilters.simpleFilter; gridRefresh(); }"
         />
 
       <div class="flex flex-row items-center gap-2">
@@ -19,13 +19,11 @@
         <!-- REFRESH INDICATOR -->
 
         <!-- BULK OPERATION -->
-        <span v-if="props.config.bulkOperation && props.config.bulkOperation.active">
-          <select :disabled="state.checkedRows.length <= 0" v-model="state.bulkMethod" @change="onBulkMethod" class="disabled:opacity-40 form-select h-8 pr-8 w-48 rounded-lg border border-slate-300 bg-white px-2.5 text-xs+ hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
-            <option v-if="state.checkedRows.length <= 0" value="null">Tömeges művelet</option>
-            <option v-else value="null">{{ state.checkedRows.length }} sor kiválasztva</option>
-            <option v-for="method in props.config.bulkOperation.methods" :value="method.key" :key="method.key">{{ method.title }}</option>
-          </select>
-        </span>
+          <BulkOperations
+            :config="props.config"
+            :checkedRows="state.checkedRows"
+            :changeCheckedRows="(checkedRows) => { state.checkedRows = checkedRows; }"
+            v-if="props.config.bulkOperation && props.config.bulkOperation.active" />
         <!-- BULK OPERATION -->
 
         <!-- MANUAL REFRESH -->
@@ -43,70 +41,43 @@
             </svg>
           </button>
           <template #content>
-
             <div class="flex flex-col">
-              <!-- MENU:COLUMN SELECTOR -->
-                <ColumnSelector 
-                  v-if="props.config.columnSelector && props.config.columnSelector.active"
-                  data-test="ColumnSelector" 
-                  :dataMapping="props.config.mapping" 
-                  :gridUniqueId="props.config.gridUniqueId"
-                  :rerender="gridRefresh" />
-              <!-- MENU:COLUMN SELECTOR -->
-
-              <!-- MENU:AUTO REFRESH -->
-                <AutoRefresh
-                  v-if="props.config.refreshable && props.config.refreshable.autoActive && props.config.refreshable.autoValues && props.config.refreshable.autoValues.length > 0"
-                  data-test="AutoRefresh"
-                  :gridRefresh="gridRefresh"
-                  :currentValue="state.autoRefresh"
-                  :config="props.config" />
-              <!-- MENU:AUTO REFRESH -->
-
-              <!-- MENU:PAGE SIZE -->
-              <ul class="mt-4" v-if="props.config.pagination && props.config.pagination.possiblePageSizes">
-                <li class="px-3">
-                  <h3 class="text-base font-medium tracking-wide text-slate-700 dark:text-slate-300 line-clamp-1">{{ i18n.l('rvg-page-size') }}</h3>
-                </li>
-                <li v-for="(possiblePageSize, key) in props.config.pagination.possiblePageSizes" :key="key">
-                  <a href="javascript:void(null)" @click="changePageSize(possiblePageSize)" class="flex flex-row gap-1 items-center ml-1 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" :class="[{ '!text-red-500': state.pagination.size == possiblePageSize }]" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    <span>{{ i18n.l('rvg-rows-per-page', { possiblePageSize }) }}</span>
-                  </a>
+              <ul>
+                <li>
+                  <h3 class="font-bold">
+                    {{ i18n.l('operations') }}
+                  </h3>
                 </li>
               </ul>
-              <!-- MENU:PAGE SIZE -->
+              <ColumnSelector 
+                v-if="props.config.columnSelector && props.config.columnSelector.active"
+                :dataMapping="props.config.mapping" 
+                :gridUniqueId="props.config.gridUniqueId"
+                :rerender="gridRefresh" />
 
-              <!-- MENU:XLSX EXPORT-->
-              <ul v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0" class="mt-4">
-                <li class="pt-1">
-                  <a href="javascript:void(null)" @click="() => { state.showXlsxExportModal = true; }" class="flex flex-row gap-1 items-center ml-1 mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
-                    </svg>
-                    <span>{{ i18n.l('rvg-export-records-link-text') }}</span>
-                  </a>
-                </li>
-              </ul>
-              <!-- MENU:XLSX EXPORT-->
+              <XlsxExport 
+                v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0"
+                :xlsxExportConfig="props.config.xlsxExport" 
+                :dataMapping="props.config.mapping" 
+                :records="state.records" />
+
+              <AutoRefresh
+                class="mt-3"
+                v-if="props.config.refreshable && props.config.refreshable.autoActive && props.config.refreshable.autoValues && props.config.refreshable.autoValues.length > 0"
+                :gridRefresh="gridRefresh"
+                :currentValue="state.autoRefresh"
+                :config="props.config" />
+
+              <ChangePageSize
+                class="mt-3"
+                v-if="props.config.pagination && props.config.pagination.possiblePageSizes"
+                :config="props.config"
+                :changePageSize="(newPageSize) => { state.pagination.size = newPageSize; gridRefresh(); }" />
 
             </div>
-
           </template>
         </DropDown>
       </div>
-
-      <XlsxExport 
-        :modalShown="state.showXlsxExportModal" 
-        :hideModal="() => { state.showXlsxExportModal = false }" 
-        data-test="XlxsExport" 
-        :disableButtons="true"
-        v-if="props.config.xlsxExport && props.config.xlsxExport.active" 
-        :xlsxExportConfig="props.config.xlsxExport" 
-        :dataMapping="props.config.mapping" 
-        :records="state.records" />
     </div>
 
     <!-- GRID -->
@@ -147,13 +118,13 @@
             <template v-for="(record, index) in filteredOrderedRecords" :key="index">
               <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'extraRowOpened': state.openedRow.includes(record[props.config.idkey]) }, 'OverGridRow border-y border-transparent border-b-slate-200 dark:border-b-navy-500 dark:hover:bg-slate-700 hover:bg-slate-100', { 'bg-error/10': props.config.rowHightlighter && props.config.rowHightlighter.active && props.config.rowHightlighter.fn(record) }]" >
                 <td class="whitespace-nowrap px-2 py-1.5 text-xs" width="30px" v-if="isExtraRowEnabled">
-                  <button variant="link" class="RVGExtraRowOpenLink" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
+                  <button variant="link" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                       <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
                   </button>
-                  <button variant="link" class="RVGExtraRowCloseLink" v-if="(state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
+                  <button variant="link" v-if="(state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M15.707 4.293a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 8.586l4.293-4.293a1 1 0 011.414 0zm0 6a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 14.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
@@ -196,7 +167,7 @@
                   </span>
                 </td>
               </tr>
-              <tr class="RVGExtraRow" v-if="isRowOpened(record[props.config.idkey])">
+              <tr v-if="isRowOpened(record[props.config.idkey])">
                 <td :colspan="colNumber">
                   <slot v-bind:record="record" v-bind:extraParams="props.config.extraRow.extraParams" name="extraRow"></slot>
                 </td>
@@ -230,7 +201,8 @@
     <!-- PAGINATION -->
       <Pagination 
         v-model="state.pagination" 
-        :changePagination="(newPagination) => { state.pagination = newPagination; state.refreshNeeded = true; }"
+        :config="props.config"
+        :changePagination="(newPagination) => { state.pagination.active = newPagination.active; state.pagination.page = newPagination.page; state.refreshNeeded = true; }"
         v-if="props.config.pagination && props.config.pagination.active && state.pagination.totalPages > 1" />
     <!-- PAGINATION -->
 
@@ -243,21 +215,21 @@
   import './default.css'
   import SpinnerLoader from './components/SpinnerLoader.vue';
   import DropDown from './components/DropDown.vue';
-  import useI18n from './composables/useI18n';
   import useAxios from './composables/useAxios';
   import useColumnsVisible from './composables/useColumnsVisible';
+  import useLocalSortAndFilter from './composables/useLocalSortAndFilter';
   import ColumnSelector from './components/ColumnSelector/ColumnSelector.vue';
   import XlsxExport from './components/XlsxExport/XlsxExport.vue';
-  import FilterableNumberConfig from './components/Filtering/Filterables/FilterableNumber.config.js';
-  import FilterableDateConfig from './components/Filtering/Filterables/FilterableDate.config.js';
-  import FilterableStatusConfig from './components/Filtering/Filterables/FilterableStatus.config.js';
-  import FilterableTextConfig from './components/Filtering/Filterables/FilterableText.config.js';
   import RootFormatter from './Formatters/RootFormatter.vue';
   import Pagination from './components/Pagination/Pagination.vue';
+  import ChangePageSize from './components/Pagination/ChangePageSize.vue';
   import AutoRefresh from './components/AutoRefresh/AutoRefresh.vue';
-  const i18n = useI18n('hu');
+  import BulkOperations from './components/BulkOperations/BulkOperations.vue';
   const columnsVisible = useColumnsVisible();
   const Axios = useAxios();
+  const localSortAndFilter = useLocalSortAndFilter();
+  import useI18n from './composables/useI18n';
+  const i18n = useI18n('hu');
 
   const operationsDropdown = ref(null);
 
@@ -289,7 +261,7 @@
     /* BULK OPERATIONS */
     checkedRows: [],
     checkedRow: null,
-    bulkMethod: 'null',
+    //bulkMethod: 'null',
     /* BULK OPERATIONS */
 
     /* COLUMN SELECTOR */
@@ -323,36 +295,6 @@
     showXlsxExportModal: false,
     /* XLSX EXPORT */
   });
-
-  /* BULK OPERATIONS */
-    function onBulkMethod() {
-      var actionFn;
-      for(var i in props.config.bulkOperation.methods) {
-        if(props.config.bulkOperation.methods[i].key == state.bulkMethod) {
-          actionFn = props.config.bulkOperation.methods[i].action;
-          break;
-        }
-      }
-      
-      if(actionFn) {
-        var that = this;
-        actionFn(state.checkedRows, () => {
-          that.bulkMethod = "null";
-          that.checkedRows = [];
-        });
-      }
-    }
-
-    watch(() => state.checkedRows, () => {
-      if(props.config.events && props.config.events.onBulkSelectChanges) {
-        props.config.events.onBulkSelectChanges(state.checkedRows);
-      }
-    })
-  /* BULK OPERATIONS */
-
-  /* AUTO REFRESH */
-    
-  /* AUTO REFRESH */
 
   /* EXTRA ROW */
   const isExtraRowEnabled = computed(() => {
@@ -404,14 +346,6 @@
     }
   }
   /* ORDER */
-
-  function changePageSize(size) {
-    state.pagination.size = size;
-    if(state.config.pagination && state.config.gridUniqueId) {
-      localStorage.setItem('pagesizevalue_' + props.config.pagination.gridUniqueId, size)
-    }
-    gridRefresh();
-  }
 
   function gridRefresh(withPaginationReset = false) {
     if(withPaginationReset) {
@@ -471,69 +405,11 @@
   })
 
   function isRecordMatchTheCurrentFiltering(record) {
-    if(state.filters.length <= 0) {
-      return true;
-    }
-
-    var matchBools = [];
-    for(var i in state.filters) {
-      var cFilter = state.filters[i];
-      if(cFilter.type == "number") {
-        matchBools.push(FilterableNumberConfig.isMatch(record[cFilter.field], cFilter.operation, cFilter.value));
-      }
-      if(cFilter.type == "date") {
-        matchBools.push(FilterableDateConfig.isMatch(record[cFilter.field], cFilter.operation, cFilter.value));
-      }
-      if(cFilter.type == "status") {
-        matchBools.push(FilterableStatusConfig.isMatch(record[cFilter.field], cFilter.operation, cFilter.value));
-      }
-      if(cFilter.type == "text") {
-        matchBools.push(FilterableTextConfig.isMatch(record[cFilter.field], cFilter.operation, cFilter.value));
-      }
-    }
-
-    if(matchBools.length <= 0) {
-      return true;
-    }
-
-    if(state.filterOperator.toLowerCase() == "and") {
-      return matchBools.includes(false) ? false : true;
-    }
-
-    if(state.filterOperator.toLowerCase() == "or") {
-      return matchBools.includes(true) ? true : false;
-    }
+    return localSortAndFilter.isRecordMatchTheCurrentFiltering(record, state.filters, state.filterOperator);
   }
 
   function sortRecords(recArray, field, direction) {
-    var fieldMappingConfig = props.config.mapping[field];
-    return recArray.sort(function(first, second) {
-      var a;
-      var b;
-
-      if(fieldMappingConfig && fieldMappingConfig.formatter && fieldMappingConfig.formatter.type && fieldMappingConfig.formatter.type.toLowerCase() == "status" && fieldMappingConfig.formatter.mapping) {
-        a = fieldMappingConfig.formatter.mapping[first[field]].title.toLowerCase();
-        b = fieldMappingConfig.formatter.mapping[second[field]].title.toLowerCase();        
-      }
-      else {
-        if(first[field] && typeof first[field] == "string") { a = first[field].toLowerCase(); } else { a = ""; }
-        if(second[field] && typeof second[field] == "string") { b = second[field].toLowerCase(); } else { b = ""; }
-
-        if(typeof first[field] == "number") { a = first[field] }
-        if(typeof second[field] == "number") { b = second[field] }
-      }
-
-      if(direction == "asc") {
-        if(a < b) { return -1; }
-        else if(a > b) { return 1; }
-        else { return 0;}
-      }
-      else {
-        if(a > b) { return -1; }
-        else if(a < b) { return 1; }
-        else { return 0; }
-      }
-    });
+    return localSortAndFilter.sortRecords(recArray, field, direction, props.config.mapping[field]);
   }
 
   const filteredOrderedRecords = computed(() => {
@@ -780,11 +656,7 @@
   }
 
   onMounted(() => {
-    if(props.config.pagination && props.config.pagination.active) {
-      state.pagination.active = true;
-      state.pagination.page = props.config.pagination.page;
-      state.pagination.size = props.config.pagination.size;
-    }
+
 
     // if(this.route.query && this.route.query.filters) { // @TODO: Refactor this to not depend on the vue-router
     //   try {
@@ -799,15 +671,6 @@
     //   this.filterOperator = this.route.query.filter_operator;
     // }
 
-    
-
-    // pagesize if enabled
-    if(props.config.pagination && props.config.pagination.possiblePageSizes) {
-      var currentPageSizeValue = localStorage.getItem('pagesizevalue_' + props.config.gridUniqueId)
-      if(currentPageSizeValue) {
-        state.pagination.size = currentPageSizeValue;
-      }
-    }
 
     // if(this.route.hash) { // @TODO: Refactor this to not depend on the vue-router
     //   var hashParts = this.route.hash.split("-");
@@ -816,7 +679,7 @@
     // }
 
     nextTick(() => {
-      state.refreshNeeded = true;
+      gridRefresh();
     })
 
     // var changeTableHeight = function() {
