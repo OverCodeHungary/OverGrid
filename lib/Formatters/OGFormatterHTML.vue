@@ -1,20 +1,9 @@
 <template>
-  <div class="OGFormatterHTML" v-html="this.data">
-  </div>
+  <div v-html="props.data"></div>
 </template>
 
-<script>
-export default {
-  name: "OGFormatterHTML",
-  components: {
-  },
-  props: ['data'],
-  computed: {
-  },
-  mounted() {
-  }
-};
+<script setup lang="ts">
+  import FormatterProps from './types/FormatterProps';
+  const props = defineProps<FormatterProps>()
 </script>
 
-<style scoped>
-</style>

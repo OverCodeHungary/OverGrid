@@ -1,38 +1,23 @@
 <template>
-  <div class="OGFormatterDateTime">
-    <i class="fa-regular fa-calendar" v-if="this.data && !isNaN(this.data)"></i>
-    <span v-if="this.data && !isNaN(this.data)">{{ formattedDate }}</span>
-    <span class="naDate" v-if="!this.data || isNaN(this.data)">[nincs megadva]</span>
+  <div class="flex flex-row items-center justify-start gap-2 text-slate-500 dark:text-slate-300">
+    <span>{{ formattedDate }}</span>
+    <span class="opacity-50 italic" v-if="!this.data">[{{ i18n.l('no_data') }}]</span>
   </div>
 </template>
 
-<script>
-import moment from 'moment';
-export default {
-  name: "OGFormatterDateTime",
-  components: {
-  },
-  props: ['data', 'config'],
-  computed: {
-    formattedDate: function () {
-      var format = process.env.VUE_APP_DATETIME_FORMAT;
-      if(this.config.formatter.shortFormat) {
-        format = process.env.VUE_APP_DATETIME_SHORT_FORMAT;
-      }
+<script setup lang="ts">
+  import moment from 'moment';
+  import { computed } from 'vue';
+  import useI18n from '../composables/useI18n';
+  const i18n = useI18n('hu');
+  import FormatterProps from './types/FormatterProps';
+  const props = defineProps<FormatterProps>()
 
-      return moment(this.data*1000).format(format);
+  const formattedDate = computed(() => {
+    if(!props.data) {
+      return '';
     }
-  }
-};
+    return moment(props.data, props.config.formatter.inputFormat ? props.config.formatter.inputFormat : null).format(props.config.formatter.outputFormat);
+  })
 </script>
 
-<style scoped>
-.OGFormatterDateTime span {
-  margin-left: 10px;
-}
-
-.OGFormatterDateTime .naDate {
-  font-style: italic;
-  font-weight: 200;
-}
-</style>

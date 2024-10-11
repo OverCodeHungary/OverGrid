@@ -1,17 +1,10 @@
 <template>
-  <span v-if="!config.formatter.hideWhenEmpty || data" :class="['OGFormatterTailwindFormatter', config.formatter.classList]">
+  <span v-if="!props.config.formatter.hideWhenEmpty || data" :class="['OGFormatterTailwindFormatter', props.config.formatter.classList]">
     {{ data }}
   </span>
 </template>
 
-<script>
-export default {
-  name: "OGFormatterTailwindFormatter",
-  components: {
-  },
-  props: ['data', 'config', 'rowid']
-};
+<script setup lang="ts">
+  import FormatterProps from './types/FormatterProps';
+  const props = defineProps<FormatterProps>()
 </script>
-
-<style scoped>
-</style>

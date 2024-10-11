@@ -1,9 +1,9 @@
 <template>
   <div class="relative" :id="componentId">
-    <span @click="toggleOpen">
+    <span class="z-10" @click="toggleOpen">
       <slot></slot>
     </span>
-    <div v-show="state.open" class="absolute right-0 mt-2 flex items-center justify-start p-2 px-3 rounded-md w-64 bg-slate-200">
+    <div v-show="state.open" class="absolute right-0 mt-2 z-20 flex items-center justify-start p-2 px-3 rounded-md w-64 bg-slate-200">
       <slot name="content"></slot>
     </div>
   </div>

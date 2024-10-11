@@ -1,17 +1,12 @@
 <template>
-  <strong class="OGFormatterStrong">
-    {{ data }}
-  </strong>
+  <div class="font-bold">
+    {{ props.data }}
+  </div>
 </template>
 
-<script>
-export default {
-  name: "OGFormatterStrong",
-  components: {
-  },
-  props: ['data']
-};
+<script setup lang="ts">
+  import FormatterProps from './types/FormatterProps';
+  const props = defineProps<FormatterProps>()
 </script>
 
-<style scoped>
-</style>
+

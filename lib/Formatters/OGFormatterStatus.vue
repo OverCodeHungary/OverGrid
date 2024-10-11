@@ -1,65 +1,44 @@
 <template>
-  <div class="OGFormatterStatus">
-    <div :class="currentStatus.classList">
-      {{ currentStatus.title }}
-    </div>
+  <div :class="currentStatus.classList">
+    {{ currentStatus.title }}
   </div>
 </template>
 
-<script>
-export default {
-  name: "OGFormatterStatus",
-  components: {
-  },
-  props: ['data', 'config', 'rowid'],
-  computed: {
-    badgeStyle() {
-      if(this.config.formatter && this.config.formatter.badgeStyle) {
-        return this.config.formatter.badgeStyle;
-      }
+<script setup lang="ts">
+  import { computed } from 'vue';
+  import PropsConfig from './types/FormatterProps';
 
-      return '';
-    },
-    currentStatus() {
-      if(!this.config.formatter.dataType || this.config.formatter.dataType == "text") {
-        for(var i in this.config.formatter.mapping) {
-          if(i == this.data) {
-            return this.config.formatter.mapping[i];
-          }
+  const props = defineProps<PropsConfig>();
+
+  const currentStatus = computed<{
+    classList: string;
+    title: string;
+  }>(() => {
+    if(!props.config.formatter.dataType || props.config.formatter.dataType == 'text') {
+      for (const i in props.config.formatter.mapping) {
+        if (i == props.data) {
+          return props.config.formatter.mapping[i];
         }
       }
-
-      if(this.config.formatter.dataType && this.config.formatter.dataType == "integer") {
-        for(var j in this.config.formatter.mapping) {
-          if(window.parseInt(j) == this.data) {
-            return this.config.formatter.mapping[j];
-          }
-        }
-      }
-
-      if(this.config.formatter.dataType && this.config.formatter.dataType == "boolean") {
-        if(this.data) {
-          return this.config.formatter.mapping["true"];
-        }
-        else {
-          return this.config.formatter.mapping["false"];
-        }
-      }
-
-      return {};
     }
-  },
-  mounted() {
 
-  }
-};
+    if(props.config.formatter.dataType && props.config.formatter.dataType == 'integer') {
+      for (const j in props.config.formatter.mapping) {
+        if (window.parseInt(j) == props.data) {
+          return props.config.formatter.mapping[j];
+        }
+      }
+    }
+
+    if(props.config.formatter.dataType && props.config.formatter.dataType == 'boolean') {
+      if (props.data) {
+        return props.config.formatter.mapping['true'];
+      } else {
+        return props.config.formatter.mapping['false'];
+      }
+    }
+
+    return { classList: '', title: '' };
+  });
 </script>
 
-<style scoped>
-.OGFormatterStatus:deep(.badge) {
-  vertical-align: text-top;
-  padding: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-</style>

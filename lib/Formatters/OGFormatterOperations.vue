@@ -29,60 +29,56 @@
   </div>
 </template>
 
-<script>
-import DropDown from '../components/DropDown.vue'
+<script setup lang="ts">
+  import DropDown from '../components/DropDown.vue'
+  import FormatterProps from './types/FormatterProps';
+  const props = defineProps<FormatterProps>()
+  import { computed } from 'vue';
 
-export default {
-  name: "OGFormatterUser",
-  components: {
-    DropDown
-  },
-  props: ['data', 'config', 'rowid', 'record', 'refreshGrid'],
-  computed: {
-    rowButtons() {
-      if(!this.config.formatter.config || !this.config.formatter.config.buttons) {
-        return []
-      }
-
-      var btnz = [];
-
-      if(typeof this.config.formatter.config.buttons == "object") {
-        btnz = this.config.formatter.config.buttons
-      }
-
-      if(typeof this.config.formatter.config.buttons == "function") {
-        var vm = this;
-        btnz = this.config.formatter.config.buttons(this, () => {
-          props.refreshGrid()
-        }, this.rowid, this.record)
-      }
-
-      return btnz
-    },
-    rowButtonsDropdowned() {
-      var btnz = this.rowButtons
-
-      var result = []
-      for(var i in btnz) {
-        if(btnz[i].dropdowned) {
-          result.push(btnz[i])
-        }
-      }
-
-      return result
-    },
-    rowButtonsNormal() {
-      var btnz = this.rowButtons
-
-      var result = []
-      for(var i in btnz) {
-        if(!btnz[i].dropdowned) {
-          result.push(btnz[i])
-        }
-      }
-
-      return result
+  const rowButtons = computed(() => {
+    if(!props.config.formatter.config || !props.config.formatter.config.buttons) {
+      return []
     }
-  }
-};
+
+    var btnz = [];
+
+    if(typeof props.config.formatter.config.buttons == "object") {
+      btnz = props.config.formatter.config.buttons
+    }
+
+    if(typeof props.config.formatter.config.buttons == "function") {
+      var vm = this;
+      btnz = props.config.formatter.config.buttons(this, () => {
+        props.refreshGrid()
+      }, props.rowid, props.record)
+    }
+
+    return btnz
+  })
+
+  const rowButtonsDropdowned = computed(() => {
+    var btnz = rowButtons.value
+
+    var result = []
+    for(var i in btnz) {
+      if(btnz[i].dropdowned) {
+        result.push(btnz[i])
+      }
+    }
+
+    return result
+  })
+
+  const rowButtonsNormal = computed(() => {
+    var btnz = rowButtons.value
+
+    var result = []
+    for(var i in btnz) {
+      if(!btnz[i].dropdowned) {
+        result.push(btnz[i])
+      }
+    }
+
+    return result
+  })
 </script>

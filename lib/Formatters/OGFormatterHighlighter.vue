@@ -1,34 +1,26 @@
 <template>
-  <div class="OGFormatterHighlighter">
-    <span v-html="craftedData"></span>
-  </div>
+  <span v-html="craftedData"></span>
 </template>
 
-<script>
-export default {
-  name: "OGFormatterHighlighter",
-  components: {
-  },
-  props: ['data', 'config'],
-  computed: {
-    craftedData() {
-      var cut = this.data;
-      if(this.config.formatter && this.config.formatter.maxLength) {
-        cut = cut.slice(0, this.config.formatter.maxLength) + "..."
-      }
+<script setup lang="ts">
+  import { computed } from 'vue';
+  import FormatterProps from './types/FormatterProps';
+  const props = defineProps<FormatterProps>()
 
-      if(this.config.formatter && this.config.formatter.highlights) {
-        for(var i in this.config.formatter.highlights) {
-          var chl = this.config.formatter.highlights[i];
-          cut = cut.replace(chl.regexp, '<strong style="' + chl.style + '">$1</strong>')
-        }
-      }
-
-      return cut;
+  const craftedData = computed(() => {
+    var cut = props.data;
+    if(props.config.formatter && props.config.formatter.maxLength) {
+      cut = cut.slice(0, props.config.formatter.maxLength) + "..."
     }
-  }
-};
+
+    if(props.config.formatter && props.config.formatter.highlights) {
+      for(var i in props.config.formatter.highlights) {
+        var chl = props.config.formatter.highlights[i];
+        cut = cut.replace(chl.regexp, '<strong style="' + chl.style + '">$1</strong>')
+      }
+    }
+
+    return cut;
+  })
 </script>
 
-<style scoped>
-</style>
