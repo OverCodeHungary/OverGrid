@@ -1,5 +1,7 @@
 <template>
-  {{ props.data ? i18n.l('yes') : i18n.l('no') }}
+  <span>
+    {{ props.data ? i18n.l('yes') : i18n.l('no') }}
+  </span>
 </template>
 
 <script setup lang="ts">

@@ -21,7 +21,7 @@
             <input v-if="output.text != ''" :disabled="output.disabled"
               v-model="state.selected"
               :value="output.value"
-              class="disabled:opacity-50 form-checkbox is-basic h-5 w-5 !rounded-full  border-slate-400/70 checked:!border-info checked:bg-info hover:!border-info focus:!border-info dark:border-navy-400"
+              class="og-checkbox"
               type="checkbox"
             />
             <p v-if="output.text != ''" :class="[{'opacity-40': output.disabled}]" class="pl-2 cursor-pointer">{{ output.text }}</p>

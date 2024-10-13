@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row items-center justify-start gap-2 text-slate-500 dark:text-slate-300">
     <span>{{ formattedDate }}</span>
-    <span class="opacity-50 italic" v-if="!this.data">[{{ i18n.l('no_data') }}]</span>
+    <span class="opacity-50 italic" v-if="!props.data">[{{ i18n.l('no_data') }}]</span>
   </div>
 </template>
 

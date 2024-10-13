@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row gap-1 items-center"> 
-    <button :title="i18n.l('add_filter')" class="bg-slate-200 rounded-full p-2" @click="() => { state.filteringModalShown = true }">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4" stroke="currentColor">
+    <button :title="i18n.l('add_filter')" class="og-btn og-btn-rounded og-btn-primary" @click="() => { state.filteringModalShown = true }">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="min-w-4 w-4 h-4" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
       </svg>
     </button>
@@ -18,7 +18,7 @@
                   @click="removeFilter(filter.field)"
                   :title="filter.textual"
                   :disabled="false"
-                  class="bg-teal-400 px-2 text-white hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-500/80 flex flex-row items-center cursor-pointer rounded-lg"
+                  class="og-filtering-tag"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
@@ -49,7 +49,7 @@
       <template #content>
         <div class="pb-2">
           <label class="pull-left" for="selectorField">{{ i18n.l('select_field') }}</label>
-          <select class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent" v-model="state.selectorField">
+          <select class="og-form-select" v-model="state.selectorField">
             <option v-for="(text, key) in selectorFieldOptions" :key="key" :value="key">{{ text }}</option>
           </select>
           <component

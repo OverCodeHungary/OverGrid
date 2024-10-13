@@ -3,7 +3,7 @@
 
     <div>
       <label for="selectorOperationField">{{ i18n.l('operation') }}:</label>
-      <select @change="changeValue" v-model="state.operation" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
+      <select @change="changeValue" v-model="state.operation" class="og-form-select">
         <option v-for="(option, key) in possibleOperations" :value="key" :key="key">{{ option }}</option>
       </select>
     </div>
@@ -12,7 +12,7 @@
       <label>{{ i18n.l('value') }}:</label>
       <span class="relative mt-1.5 flex">
         <input 
-          class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
+          class="og-form-input"
           type="date"
           min="1000-01-01" 
           max="2999-12-31"
@@ -30,7 +30,7 @@
         <label for="selectorDateValueStart">{{ i18n.l('start_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
-            class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
+            class="og-form-input"
             type="date"
             min="1000-01-01" 
             max="2999-12-31"
@@ -44,7 +44,7 @@
         <label for="selectorDateValueStart">{{ i18n.l('end_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
-            class="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
+            class="og-form-input"
             type="date"
             min="1000-01-01" 
             max="2999-12-31"

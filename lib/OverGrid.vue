@@ -1,7 +1,7 @@
 <template>
   
-  <div class="flex flex-col">
-    <h2 class="font-medium tracking-wide text-slate-700 line-clamp-1 dark:text-navy-100 lg:text-base">
+  <div class="flex flex-col gap-1 overgrid">
+    <h2 class="">
       {{ props.config.title }}
     </h2>
 
@@ -13,7 +13,7 @@
 
       <div class="flex flex-row items-center gap-2">
         <!-- REFRESH INDICATOR -->
-        <span class="text-xs text-slate-400 dark:text-navy-300 gridRefreshedIndicator mr-3" v-if="state.refreshNeeded">
+        <span class="" v-if="state.refreshNeeded">
           <SpinnerLoader sizeClasses="w-5 h-5" />
         </span>
         <!-- REFRESH INDICATOR -->
@@ -27,7 +27,7 @@
         <!-- BULK OPERATION -->
 
         <!-- MANUAL REFRESH -->
-        <button v-if="props.config.refreshable && props.config.refreshable.manualActive" title="Lista frissítése" @click="state.refreshNeeded = true" class="bg-slate-200 rounded-full p-2">
+        <button v-if="props.config.refreshable && props.config.refreshable.manualActive" title="Lista frissítése" @click="state.refreshNeeded = true" class="rounded-full p-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
@@ -35,7 +35,7 @@
         <!-- MANUAL REFRESH -->
 
         <DropDown ref="operationsDropdown" v-if="needsToShowAdditionalOperationsDropdown">
-          <button class="bg-slate-200 rounded-full p-2">
+          <button class="rounded-full p-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
@@ -81,20 +81,20 @@
     </div>
 
     <!-- GRID -->
-    <div :key="state.updateKey" class="overflow-visible w-full card scrollbar scrollbar-h-5 scrollbar-thumb-slate-300 scrollbar-track-slate-200 dark:scrollbar-track-navy-800 dark:scrollbar-thumb-navy-500 scrollbar-thumb-rounded-full">
-      <div class="overflow-x-scroll rounded-lg">
+    <div :key="state.updateKey" class="">
+      <div class="overflow-x-scroll">
         <table class="w-full text-left">
-          <thead>
-            <tr class="border-y border-transparent border-b-slate-200 dark:border-b-navy-500">
-              <th class="whitespace-nowrap bg-slate-200 px-3 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-3" width="30px" v-if="isExtraRowEnabled"></th>
-              <th class="whitespace-nowrap bg-slate-200 dark:bg-navy-800" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active) || (props.config.singleRowSelection && props.config.singleRowSelection.active)">
-                <label class="inline-flex items-center space-x-2">
+          <thead class="og-table-thead">
+            <tr class="">
+              <th class="" width="30px" v-if="isExtraRowEnabled"></th>
+              <th class="" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active) || (props.config.singleRowSelection && props.config.singleRowSelection.active)">
+                <label class="">
                 </label>
               </th>
-              <th class="whitespace-nowrap bg-slate-200 px-3 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-2" v-for="(value, index) in titlesVisible" :key="'tvbl_' + index" :width="value.width">
-                <div class="flex flex-row gap-2 items-center">
-                  <span class="text-xs">{{ value.title }}</span>
-                  <button v-if="value.orderable == true" :title="(state.order.active && state.order.field == value.key && state.order.direction == 'desc') ? 'Csökkenő sorrend' : 'Növekvő sorrend'" :class="['btn !p-0', {'h-4 w-4 !rounded-full bg-secondary font-medium text-white hover:bg-secondary-focus focus:bg-secondary-focus active:bg-secondary-focus/90': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
+              <th class="" v-for="(value, index) in titlesVisible" :key="'tvbl_' + index" :width="value.width">
+                <div class="flex flex-row items-center gap-2">
+                  <span class="text-xs whitespace-nowrap">{{ value.title }}</span>
+                  <button v-if="value.orderable == true" :title="(state.order.active && state.order.field == value.key && state.order.direction == 'desc') ? 'Csökkenő sorrend' : 'Növekvő sorrend'" :class="['p-2', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
                     <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == 'asc'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
                     </svg>
@@ -105,7 +105,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
                     </svg>
                   </button>
-                  <button title="Rendezés törlése" class="btn btn-order removeOrder" v-if="state.order.active && state.order.field == value.key" @click="removeOrder">
+                  <button title="Rendezés törlése" class="" v-if="state.order.active && state.order.field == value.key" @click="removeOrder">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -116,8 +116,8 @@
           </thead>
           <tbody v-if="state.records.length > 0">
             <template v-for="(record, index) in filteredOrderedRecords" :key="index">
-              <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'extraRowOpened': state.openedRow.includes(record[props.config.idkey]) }, 'OverGridRow border-y border-transparent border-b-slate-200 dark:border-b-navy-500 dark:hover:bg-slate-700 hover:bg-slate-100', { 'bg-error/10': props.config.rowHightlighter && props.config.rowHightlighter.active && props.config.rowHightlighter.fn(record) }]" >
-                <td class="whitespace-nowrap px-2 py-1.5 text-xs" width="30px" v-if="isExtraRowEnabled">
+              <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'extraRowOpened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHightlighter && props.config.rowHightlighter.active && props.config.rowHightlighter.fn(record) }]" >
+                <td class="og-cell" width="30px" v-if="isExtraRowEnabled">
                   <button variant="link" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -130,25 +130,25 @@
                     </svg>
                   </button>
                 </td>
-                <td class="whitespace-nowrap px-2 py-1.5 text-xs" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active)">
+                <td class="og-cell" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active)">
                   <label class="inline-flex items-center space-x-2">
                     <input
                       :value="record[props.config.idkey]" v-model="state.checkedRows"
-                      class="form-checkbox is-basic h-5 w-5 !rounded-full border-slate-400/70 checked:bg-secondary checked:border-secondary hover:border-secondary focus:border-secondary dark:border-navy-400 dark:checked:bg-secondary-light dark:checked:border-secondary-light dark:hover:border-secondary-light dark:focus:border-secondary-light"
+                      class="og-checkbox"
                       type="checkbox"
                     />
                   </label>
                 </td>
-                <td class="whitespace-nowrap px-2 py-1.5 text-xs" width="30px" v-if="(props.config.singleRowSelection && props.config.singleRowSelection.active)">
+                <td class="og-cell" width="30px" v-if="(props.config.singleRowSelection && props.config.singleRowSelection.active)">
                   <label class="inline-flex items-center space-x-2">
                     <input
                       :value="record[props.config.idkey]" v-model="state.checkedRow"
-                      class="form-checkbox is-basic h-5 w-5 !rounded-full border-slate-400/70 checked:bg-secondary checked:border-secondary hover:border-secondary focus:border-secondary dark:border-navy-400 dark:checked:bg-secondary-light dark:checked:border-secondary-light dark:hover:border-secondary-light dark:focus:border-secondary-light"
+                      class="og-radio"
                       type="radio"
                     />
                   </label>
                 </td>
-                <td class="whitespace-nowrap px-2 py-1.5 text-xs" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
+                <td class="og-cell" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
                   <span v-if="value.formatter && typeof value.formatter == 'object' && value.formatter.type">
                     <RootFormatter 
                       :type="'OGFormatter' + value.formatter.type" 
@@ -178,17 +178,18 @@
             <tr v-if="!state.refreshNeeded">
               <td :colspan="Object.keys(titlesVisible).length" class="w-full text-left p-5">
                 <div class="flex flex-row items-center justify-start gap-2">
-                  <i class="fa-solid fa-ban dark:text-slate-500"></i>
-                  <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)] dark:text-slate-500">Ebben a nézetben nincs megjeleníthető adat...</span>
+                  <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)]">
+                    {{ i18n.l('there_is_no_data_here') }}
+                  </span>
                 </div>
               </td>
             </tr>
             <tr v-else>
               <td :colspan="Object.keys(titlesVisible).length" class="w-full max-w-xl !text-left p-5">
                 <div class="flex flex-row items-start justify-start gap-2">
-                  <div :class="'w-5 h-5 inline-block animate-spin !rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-slate-500'" role="status">
-                  </div>
-                  <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)] dark:text-slate-500">Betöltés folyamatban...</span>
+                  <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)]">
+                    {{ i18n.l('loading_data') }}
+                  </span>
                 </div>
               </td>
             </tr>
@@ -212,7 +213,6 @@
 <script setup>
   import { reactive, ref, computed, watch, nextTick, onMounted } from 'vue';
   import Filtering from './components/Filtering/Filtering.vue'
-  import './default.css'
   import SpinnerLoader from './components/SpinnerLoader.vue';
   import DropDown from './components/DropDown.vue';
   import useAxios from './composables/useAxios';
@@ -230,6 +230,7 @@
   const localSortAndFilter = useLocalSortAndFilter();
   import useI18n from './composables/useI18n';
   const i18n = useI18n('hu');
+  import './themes/default.css'
 
   const operationsDropdown = ref(null);
 

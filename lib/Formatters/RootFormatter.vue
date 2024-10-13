@@ -30,7 +30,7 @@
       required: true
     },
     data: {
-      type: [Object, String, Number, Array],
+      type: [Object, String, Number, Array, Boolean],
       required: false
     },
     config: {
