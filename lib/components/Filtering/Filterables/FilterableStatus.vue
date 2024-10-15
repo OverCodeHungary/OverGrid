@@ -1,21 +1,21 @@
 <template>
   <div class="flex flex-row gap-2 my-2 ">
     <div class="w-1/2">
-      <label>{{ i18n.l('operation') }}:</label>
-      <select @change="changeValue" v-model="state.operation" class="og-form-select">
+      <label class="og-text-compact">{{ i18n.l('operation') }}:</label>
+      <select @change="changeValue" v-model="state.operation" class="og-form-select og-text-compact">
         <option v-for="(option, key) in possibleOperations" :value="key" :key="key">{{ option }}</option>
       </select>
     </div>
     <div class="w-1/2">
-      <label>{{ i18n.l('values') }}</label>
-      <select :disabled="availableOptions.length === 0" @change="(e) => { addTag(e.target.value) }" v-model="state.currentSelectedValue" class="og-form-select">
+      <label class="og-text-compact">{{ i18n.l('values') }}</label>
+      <select :disabled="availableOptions.length === 0" @change="(e) => { addTag(e.target.value) }" v-model="state.currentSelectedValue" class="og-form-select og-text-compact">
         <option value="null">{{ i18n.l('please_choose_values') }}</option>
         <option v-for="(option, key) in availableOptions" :value="key" :key="key">{{ option }}</option>
       </select>
 
       <div v-if="state.currentValue.length > 0" class="flex flex-row whitespace-normal overflow-auto flex-wrap gap-2 mt-2">
         <div v-for="tag in state.currentValue" :key="tag.id" class="cursor-pointer">
-          <div :class="tag.classList"
+          <div class="!og-text-compact" :class="tag.classList"
             @click="removeTag(tag.id)"
           >{{ tag.title }}</div>
         </div>

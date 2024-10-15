@@ -1,5 +1,5 @@
 <template>
-  <div class="font-bold">
+  <div class="font-bold og-text-compact">
     {{ props.data }}
   </div>
 </template>

@@ -2,14 +2,14 @@
   <div class="flex flex-col gap-2 my-2 ">
 
     <div>
-      <label for="selectorOperationField">{{ i18n.l('operation') }}:</label>
-      <select @change="changeValue" v-model="state.operation" class="og-form-select">
+      <label for="selectorOperationField" class="og-text-compact">{{ i18n.l('operation') }}:</label>
+      <select @change="changeValue" v-model="state.operation" class="og-form-select og-text-compact">
         <option v-for="(option, key) in possibleOperations" :value="key" :key="key">{{ option }}</option>
       </select>
     </div>
 
     <div class="flex flex-col" v-if="state.operation == 'eq'">
-      <label>{{ i18n.l('value') }}:</label>
+      <label class="og-text-compact">{{ i18n.l('value') }}:</label>
       <span class="relative mt-1.5 flex">
         <input 
           class="og-form-input"
@@ -20,14 +20,14 @@
           @change="changeValue"
         />
       </span>
-      <span v-if="!validation" class="text-tiny+ text-error mt-1 text-red-500 text-sm">
+      <span v-if="!validation" class="text-tiny+ text-error mt-1 text-red-500 text-sm og-text-compact">
         {{ i18n.l('choose_date') }}
       </span>
     </div>
 
     <div class="flex flex-row gap-2" v-if="state.operation == 'bw'">
       <div class="w-1/2 flex flex-col">
-        <label for="selectorDateValueStart">{{ i18n.l('start_date') }}</label>
+        <label for="selectorDateValueStart" class="og-text-compact">{{ i18n.l('start_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
             class="og-form-input"
@@ -41,7 +41,7 @@
       </div>
 
       <div class="w-1/2 flex flex-col">
-        <label for="selectorDateValueStart">{{ i18n.l('end_date') }}</label>
+        <label for="selectorDateValueStart" class="og-text-compact">{{ i18n.l('end_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
             class="og-form-input"

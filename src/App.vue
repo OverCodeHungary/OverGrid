@@ -1,14 +1,28 @@
 <template>
-  <OverGrid :config="config" :customFormatters="[{
-    name: 'CustomFormatter',
-    component: CustomFormatter
-  }]">
-    <template #extraRow="{ record }">
-      <div>
-        {{ record }}
-      </div>
-    </template>
-  </OverGrid>
+  <div class="p-8">
+    <OverGrid :config="config" :customFormatters="[{
+      name: 'CustomFormatter',
+      component: CustomFormatter
+    }]">
+      <template #title>
+        <div class="w-full text-left sm:text-center">
+          <span class="text-2xl font-bold text-center flex flex-row items-center sm:justify-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" class="w-8 h-8 text-[#61b1a6]">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5" />
+            </svg>
+            <span>
+              OverGrid Demo
+            </span>
+          </span>
+        </div>
+      </template>
+      <template #extraRow="{ record }">
+        <div>
+          {{ record }}
+        </div>
+      </template>
+    </OverGrid>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -93,6 +107,7 @@
         formatter: {
           type: 'Operations',
           config: {
+            dropdownOrientation: 'right', // optional, default is left
             buttons: (vm, callMeToRefreshTheGrid, rowid, record) => {
               var buttons = [];
 
@@ -100,8 +115,8 @@
                 title: '',
                 tooltip: 'Letöltés',
                 icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg>',
-                classList: 'btn mask is-hexagon h-9 w-9 !p-0 font-medium text-white bg-primary hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90',
                 testValueAttribute: 'deleteButton',
+                classList: 'bg-slate-200 p-3 rounded-full text-black/60 h-8 w-8 items-center text-center flex justify-center',
                 dropdowned: false,
                 disabled: false,
                 onClick: () => {
@@ -113,7 +128,6 @@
                 title: '',
                 tooltip: 'Törlés',
                 icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>',
-                classList: 'btn mask is-hexagon h-9 w-9 !p-0 font-medium text-white bg-error hover:bg-error-focus',
                 testValueAttribute: 'deleteButton',
                 dropdowned: false,
                 disabled: false,
@@ -126,7 +140,6 @@
                 title: 'valami más',
                 tooltip: 'valami más',
                 icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>',
-                classList: 'btn mask is-hexagon h-9 w-9 !p-0 font-medium text-white bg-error hover:bg-error-focus',
                 testValueAttribute: 'deleteButton',
                 dropdowned: true,
                 disabled: false,
@@ -184,7 +197,7 @@
         formatter: {
           type: 'TailwindFormatter',
           hideWhenEmpty: true,
-          classList: 'text-sm text-red-500 dark:text-slate-300 font-bold text-2xl'
+          classList: 'text-sm font-bold'
         },
         exportable: true,
         orderable: true
@@ -218,11 +231,11 @@
           dataType: 'text',
           mapping: {
             "male": {
-              classList: 'p-2 rounded-md bg-teal-400 text-white text-center',
+              classList: 'p-2 py-1 rounded-md bg-slate-700 text-white text-center',
               title: 'Férfi'
             },
             "female": {
-              classList: 'p-2 rounded-md bg-red-400 text-white text-center',
+              classList: 'p-2 py-1 rounded-md bg-slate-200 text-black text-center',
               title: 'Nő'
             }
           }
@@ -243,7 +256,7 @@
           maxLength: 20,
           highlights: [{
             regexp: /([a-zA-Z0-9._%+-]+@)/g,
-            style: 'color: red;'
+            style: 'font-weight: bold;'
           }]
         },
         exportable: true,

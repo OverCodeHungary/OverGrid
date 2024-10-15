@@ -3,11 +3,11 @@
     <div class="absolute w-full h-full bg-slate-900/60"></div>
     <div class="flex align-items-center justify-center w-full py-8">
       <div class="relative flex w-full max-w-2xl origin-top flex-col overflow-hidden rounded-lg bg-white dark:bg-navy-700">
-        <div class="flex justify-between rounded-t-lg bg-slate-200 px-4 py-3 dark:bg-navy-800 sm:px-5">
+        <div class="flex justify-between items-center rounded-t-lg bg-slate-200 px-4 py-3 dark:bg-navy-800 sm:px-5">
           <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
             {{ title }}
           </h3>
-          <button @click="close()" class="btn -mr-1.5 h-7 w-7 !rounded-full !p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
+          <button @click="close()" class="btn -mr-1.5 h-5 w-5 !rounded-full !p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
@@ -16,11 +16,11 @@
 
         <div class="scrollbar-sm overflow-y-auto px-4 py-4 sm:px-5" :class="[{ '!overflow-y-visible': overflowVisible }]">
           <slot name="content"></slot>
-          <div v-if="disableButtons !== true" class="space-x-2 text-right mt-3 flex flex-row items-center justify-end">
-            <button @click="close()" :disabled="okButtonLoading" class="og-btn og-btn-secondary">
+          <div v-if="disableButtons !== true" class="mt-3 flex flex-row items-center justify-end gap-1">
+            <button @click="close()" :disabled="okButtonLoading" class="og-btn og-btn-secondary og-btn-rounded">
               {{ cancelButtonTitle ? cancelButtonTitle : i18n.l('cancel') }}
             </button>
-            <button v-if="!noNeedOkButton" :disabled="okButtonLoading || disableOkButton" @click="() => { ok(close); }" class="og-btn og-btn-primary min-w-24">
+            <button v-if="!noNeedOkButton" :disabled="okButtonLoading || disableOkButton" @click="() => { ok(close); }" class="og-btn og-btn-primary og-btn-rounded min-w-24 font-bold uppercase">
               <span v-if="!okButtonLoading">{{ okButtonTitle ? okButtonTitle : i18n.l('ok') }}</span>
               <SpinnerLoader v-else sizeClasses="h-5.5 w-5.5" />
             </button>

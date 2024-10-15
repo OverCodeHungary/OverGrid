@@ -2,7 +2,7 @@
   <div class="mt-3 w-full flex items-center justify-center">
     <ol class="flex flex-row items-center gap-3">
       <li>
-        <button :disabled="isPaginationBackDisabled" @click="paginationBack" data-test="OGPaginationBack" class="og-btn og-btn-secondary og-btn-rounded">
+        <button :disabled="isPaginationBackDisabled" @click="paginationBack" data-test="OGPaginationBack" class="og-btn og-btn-secondary og-btn-circle">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor" stroke-width="2" >
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
           </svg>
@@ -15,7 +15,7 @@
         <!-- <a href="#" class="flex h-8 min-w-[2rem] items-center justify-center !rounded-full bg-slate-150 px-3 leading-tight transition-colors hover:bg-slate-300 focus:bg-slate-300 active:bg-slate-300/80 dark:bg-navy-500 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90">1</a> -->
       </li>
       <li>
-        <button :disabled="isPaginationNextDisabled" @click="paginationNext" data-test="OGPaginationNext" class="og-btn og-btn-secondary og-btn-rounded">
+        <button :disabled="isPaginationNextDisabled" @click="paginationNext" data-test="OGPaginationNext" class="og-btn og-btn-secondary og-btn-circle">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>

@@ -1,11 +1,9 @@
 <template>
   
-  <div class="flex flex-col gap-1 overgrid">
-    <h2 class="">
-      {{ props.config.title }}
-    </h2>
+  <div class="flex flex-col gap-3 overgrid">
+    <slot name="title"></slot>
 
-    <div class="flex flex-row justify-between" v-if="needsToShowTopFiltersBar">
+    <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 justify-between" v-if="needsToShowTopFiltersBar">
       <Filtering 
         :config="props.config"
         :setNewFiltersAndRefresh="(newFilters) => { state.filters = newFilters.filters; state.filterOperator = newFilters.filterOperator; state.simpleFilter = newFilters.simpleFilter; gridRefresh(); }"
@@ -41,16 +39,17 @@
             </svg>
           </button>
           <template #content>
-            <div class="flex flex-col">
+            <div class="flex flex-col p-1.5">
               <ul>
                 <li>
-                  <h3 class="font-bold">
+                  <h3 class="font-bold og-text-compact">
                     {{ i18n.l('operations') }}
                   </h3>
                 </li>
               </ul>
               <ColumnSelector 
                 v-if="props.config.columnSelector && props.config.columnSelector.active"
+                :closeDropdown="closeOperationDropdown"
                 :dataMapping="props.config.mapping" 
                 :gridUniqueId="props.config.gridUniqueId"
                 :rerender="gridRefresh" />
@@ -93,7 +92,7 @@
               </th>
               <th class="" v-for="(value, index) in titlesVisible" :key="'tvbl_' + index" :width="value.width">
                 <div class="flex flex-row items-center gap-2">
-                  <span class="text-xs whitespace-nowrap">{{ value.title }}</span>
+                  <span class="whitespace-nowrap og-text-compact">{{ value.title }}</span>
                   <button v-if="value.orderable == true" :title="(state.order.active && state.order.field == value.key && state.order.direction == 'desc') ? 'Csökkenő sorrend' : 'Növekvő sorrend'" :class="['p-2', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
                     <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == 'asc'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
@@ -117,7 +116,7 @@
           <tbody v-if="state.records.length > 0">
             <template v-for="(record, index) in filteredOrderedRecords" :key="index">
               <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'extraRowOpened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHightlighter && props.config.rowHightlighter.active && props.config.rowHightlighter.fn(record) }]" >
-                <td class="og-cell" width="30px" v-if="isExtraRowEnabled">
+                <td class="og-cell og-text-compact" width="30px" v-if="isExtraRowEnabled">
                   <button variant="link" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -130,7 +129,7 @@
                     </svg>
                   </button>
                 </td>
-                <td class="og-cell" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active)">
+                <td class="og-cell og-text-compact" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active)">
                   <label class="inline-flex items-center space-x-2">
                     <input
                       :value="record[props.config.idkey]" v-model="state.checkedRows"
@@ -139,7 +138,7 @@
                     />
                   </label>
                 </td>
-                <td class="og-cell" width="30px" v-if="(props.config.singleRowSelection && props.config.singleRowSelection.active)">
+                <td class="og-cell og-text-compact" width="30px" v-if="(props.config.singleRowSelection && props.config.singleRowSelection.active)">
                   <label class="inline-flex items-center space-x-2">
                     <input
                       :value="record[props.config.idkey]" v-model="state.checkedRow"
@@ -148,7 +147,7 @@
                     />
                   </label>
                 </td>
-                <td class="og-cell" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
+                <td class="og-cell og-text-compact" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
                   <span v-if="value.formatter && typeof value.formatter == 'object' && value.formatter.type">
                     <RootFormatter 
                       :type="'OGFormatter' + value.formatter.type" 
@@ -320,6 +319,12 @@
     if(!props.config.orderLocal) {
       state.refreshNeeded = true
     }
+  }
+
+  function closeOperationDropdown() {
+    nextTick(() => {
+      operationsDropdown.value.close()
+    })
   }
 
   function orderChange(event, field) {

@@ -1,6 +1,6 @@
 <template>
   <span>
-    <select :disabled="state.checkedRows.length <= 0" v-model="state.bulkMethod" @change="onBulkMethod" class="disabled:opacity-40 h-8 rounded-lg border px-2.5">
+    <select :disabled="state.checkedRows.length <= 0" v-model="state.bulkMethod" @change="onBulkMethod" class="disabled:opacity-40 h-8 rounded-lg border px-2.5 og-text-compact">
       <option v-if="state.checkedRows.length <= 0" value="null">{{ i18n.l('bulk_method') }}</option>
       <option v-else value="null">{{ i18n.l('selected_rows', { selectedCount: state.checkedRows.length }) }}</option>
       <option v-for="method in props.config.bulkOperation.methods" :value="method.key" :key="method.key">{{ method.title }}</option>

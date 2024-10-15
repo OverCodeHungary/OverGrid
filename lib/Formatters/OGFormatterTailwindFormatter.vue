@@ -1,5 +1,5 @@
 <template>
-  <span v-if="!props.config.formatter.hideWhenEmpty || data" :class="['OGFormatterTailwindFormatter', props.config.formatter.classList]">
+  <span v-if="!props.config.formatter.hideWhenEmpty || data" :class="[props.config.formatter.classList]">
     {{ data }}
   </span>
 </template>

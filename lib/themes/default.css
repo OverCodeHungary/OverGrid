@@ -3,25 +3,17 @@
 @tailwind components;
 @tailwind utilities;
 
-.root,
-#root,
-#docs-root {
-  --primary-color: #fff;
-  --secondary-color: #000;
-}
-
-
 .overgrid, .overgrid * {
   font-family: 'Urbanist', sans-serif;
 }
 
 @layer components {
-  .og-btn-primary {
-    @apply py-2 px-5 bg-violet-500 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75;
+  .overgrid table {
+    @apply rounded-lg overflow-hidden
   }
 
   .og-table-thead tr th {
-    @apply border-r border-gray-200 bg-gray-100 p-2;
+    @apply border-r border-white bg-slate-100 p-2;
   }
 
   .og-row {
@@ -33,11 +25,11 @@
   }
 
   .og-form-select {
-    @apply w-full h-10 rounded-lg border border-slate-300 bg-white px-3 hover:border-slate-400
+    @apply w-full h-8 rounded-lg border border-slate-300 bg-white px-3 hover:border-slate-400
   }
 
   .og-form-input {
-    @apply w-full h-10 rounded-lg border border-slate-300 bg-transparent px-3 placeholder:text-slate-400/70 hover:border-slate-400
+    @apply w-full h-8 rounded-lg border border-slate-300 bg-transparent px-3 placeholder:text-slate-400/70 hover:border-slate-400
   }
 
   .og-radio {
@@ -45,26 +37,38 @@
   }
 
   .og-cell {
-    @apply whitespace-nowrap px-2 py-1.5 text-xs
+    @apply whitespace-nowrap px-2 py-1.5
   }
 
   .og-filtering-tag {
-    @apply bg-teal-400 px-2 text-white hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-500/80 flex flex-row items-center cursor-pointer rounded-lg
+    @apply bg-[#61b1a6] px-2 text-white hover:bg-[#6ebeb3] focus:bg-[#6ebeb3] active:bg-[#6ebeb3] flex flex-row items-center cursor-pointer rounded-lg
   }
 
   .og-btn {
-    @apply w-10 h-10 flex items-center justify-center
+    @apply h-[30px] flex items-center justify-center disabled:opacity-40 outline-none focus:outline-none
   }
 
   .og-btn-primary {
-    @apply bg-rose-700 focus:bg-rose-700/80 active:bg-rose-700/80 hover:bg-rose-700/80 text-white
+    @apply bg-[#61b1a6] focus:bg-[#6ebeb3] active:bg-[#6ebeb3] hover:bg-[#6ebeb3] text-white
+  }
+
+  .og-btn-secondary {
+    @apply bg-slate-300 focus:bg-slate-300/80 active:bg-slate-300/80 hover:bg-slate-300/80 text-black
   }
 
   .og-btn-rounded {
-    @apply rounded-full
+    @apply rounded-full px-4
+  }
+
+  .og-btn-circle {
+    @apply w-[30px] min-w-[30px] rounded-full
   }
 
   .og-dropdown {
-    @apply bg-zinc-100
+    @apply bg-slate-200 shadow-lg rounded-lg
+  }
+
+  .og-text-compact {
+    @apply text-sm
   }
 }

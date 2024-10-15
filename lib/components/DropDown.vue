@@ -3,7 +3,7 @@
     <span class="z-10" @click="toggleOpen">
       <slot></slot>
     </span>
-    <div v-show="state.open" class="absolute right-0 mt-2 z-20 flex items-center justify-start p-2 px-3 rounded-md w-64 og-dropdown">
+    <div v-show="state.open" class="absolute mt-2 z-20 flex items-center justify-start p-2 px-3 rounded-md w-[250px] og-dropdown" :class="[{ 'right-0': props.orientation == 'left' }, { 'left-0': props.orientation == 'right' }]">
       <slot name="content"></slot>
     </div>
   </div>
@@ -13,6 +13,13 @@
   import { reactive, watch } from 'vue';
 
   const componentId = 'dd' + Math.random().toString(36).substring(7);
+
+  const props = defineProps({
+    orientation: {
+      type: String,
+      default: 'left'
+    }
+  });
 
   const state = reactive({
     open: false

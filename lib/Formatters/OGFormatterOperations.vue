@@ -1,20 +1,20 @@
 <template>
   <div data-test="" class="flex flex-row overflow-y-visible" @mousedown.stop>
-    <span v-if="rowButtonsNormal.length > 0" class="flex flex-row items-center gap-1 pr-2">
-      <button :disabled="button.disabled ? button.disabled : false" data-test="OGFormatterOperationsButton" :data-test-value="button.testValueAttribute" v-for="(button, index) in rowButtonsNormal" :key="index" class="rounded-lg bg-red-500 p-2 text-white" @click="button.onClick">
+    <span v-if="rowButtonsNormal.length > 0" class="flex flex-row items-center gap-1 pr-1">
+      <button :disabled="button.disabled ? button.disabled : false" data-test="OGFormatterOperationsButton" :data-test-value="button.testValueAttribute" v-for="(button, index) in rowButtonsNormal" :key="index" :class="[button.classList, { 'og-btn og-btn-circle og-btn-primary': !button.classList }]" @click="button.onClick">
         <span v-html="button.icon"></span>
         {{ button.title }}
       </button>
     </span>
-    <span v-if="rowButtonsDropdowned.length > 0" class="">
-      <DropDown>
-        <button class="ml-1 btn h-8 w-8 !rounded-full !p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <span v-if="rowButtonsDropdowned.length > 0" class="flex items-center">
+      <DropDown :orientation="props.config.formatter?.config?.dropdownOrientation ? props.config.formatter.config.dropdownOrientation : 'left'">
+        <button class="og-btn og-btn-primary og-btn-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 min-w-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
           </svg>
         </button>
         <template #content>
-          <div class="!rounded-md border font-inter w-full">
+          <div class="!rounded-md font-inter w-full">
             <ul class="my-1 rounded-lg">
               <li class="" v-for="(button, key) in rowButtonsDropdowned" :key="key">
                 <button :disabled="button.disabled ? button.disabled : false" :data-test-value="button.testValueAttribute"  @click="button.onClick" class="flex text-slate-700 dark:text-slate-300  w-full items-center px-3 py-2 font-medium tracking-wide outline-none transition-all hover:bg-primary hover:text-white focus:bg-primary focus:text-white dark:hover:bg-accent dark:focus:bg-accent">
