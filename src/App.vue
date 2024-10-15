@@ -49,7 +49,11 @@
     },
     filtering: {
       active: true,
-      local: true
+      simple: false,
+      local: false,
+      // simpleHelpText: null,
+      // simpleFilterTemplate: 'workName=*{data}/i|workNumberCustom=*{data}/i|orderNumber=*{data}/i|attentionTo=*{data}/i',
+      // simplePlaceholder: 'Keresés...',
     },
     singleRowSelection: {
       active: false

@@ -17,9 +17,9 @@
           <div class="!rounded-md font-inter w-full">
             <ul class="my-1 rounded-lg">
               <li class="" v-for="(button, key) in rowButtonsDropdowned" :key="key">
-                <button :disabled="button.disabled ? button.disabled : false" :data-test-value="button.testValueAttribute"  @click="button.onClick" class="flex text-slate-700 dark:text-slate-300  w-full items-center px-3 py-2 font-medium tracking-wide outline-none transition-all hover:bg-primary hover:text-white focus:bg-primary focus:text-white dark:hover:bg-accent dark:focus:bg-accent">
+                <a href="javascript:void(null);" :disabled="button.disabled ? button.disabled : false" :data-test-value="button.testValueAttribute"  @click="button.onClick" class="flex flex-row gap-1 items-center ml-1 mt-1 og-operation-link">
                   {{ button.tooltip }}
-                </button>
+                </a>
               </li>
             </ul>
           </div>

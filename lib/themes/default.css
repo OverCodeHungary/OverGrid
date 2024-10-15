@@ -4,6 +4,8 @@
 @tailwind utilities;
 
 .overgrid, .overgrid * {
+  --og-color-primary: #61b1a6;
+  --og-color-primary-active: #6ebeb3;
   font-family: 'Urbanist', sans-serif;
 }
 
@@ -41,7 +43,7 @@
   }
 
   .og-filtering-tag {
-    @apply bg-[#61b1a6] px-2 text-white hover:bg-[#6ebeb3] focus:bg-[#6ebeb3] active:bg-[#6ebeb3] flex flex-row items-center cursor-pointer rounded-lg
+    @apply bg-[--og-color-primary] px-2 text-white hover:bg-[--og-color-primary-active] focus:bg-[--og-color-primary-active] active:bg-[--og-color-primary-active] flex flex-row items-center cursor-pointer rounded-lg
   }
 
   .og-btn {
@@ -49,7 +51,7 @@
   }
 
   .og-btn-primary {
-    @apply bg-[#61b1a6] focus:bg-[#6ebeb3] active:bg-[#6ebeb3] hover:bg-[#6ebeb3] text-white
+    @apply bg-[--og-color-primary] focus:bg-[--og-color-primary-active] active:bg-[--og-color-primary-active] hover:bg-[--og-color-primary-active] text-white
   }
 
   .og-btn-secondary {
@@ -70,5 +72,13 @@
 
   .og-text-compact {
     @apply text-sm
+  }
+
+  .og-bg-primary {
+    @apply bg-[--og-color-primary]
+  }
+
+  .og-operation-link {
+    @apply text-black hover:text-black/70
   }
 }

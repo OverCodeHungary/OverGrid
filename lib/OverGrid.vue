@@ -47,18 +47,26 @@
                   </h3>
                 </li>
               </ul>
-              <ColumnSelector 
-                v-if="props.config.columnSelector && props.config.columnSelector.active"
-                :closeDropdown="closeOperationDropdown"
-                :dataMapping="props.config.mapping" 
-                :gridUniqueId="props.config.gridUniqueId"
-                :rerender="gridRefresh" />
-
-              <XlsxExport 
-                v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0"
-                :xlsxExportConfig="props.config.xlsxExport" 
-                :dataMapping="props.config.mapping" 
-                :records="state.records" />
+              <ul v-if="props.config.columnSelector && props.config.columnSelector.active">
+                <li>
+                  <a href="javascript:void(null)" @click="() => { state.showColumnSelectorModal = true; }" class="flex flex-row gap-1 items-center ml-1 mt-1 og-operation-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    <span class="og-text-compact">{{ i18n.l('select_columns') }}</span>
+                  </a>
+                </li>
+              </ul>
+              <ul class="mt-1.5" v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0">
+                <li>
+                  <a href="javascript:void(null)" @click="() => { state.showXlsxExportModal = true; }" class="flex flex-row gap-1 items-center ml-1 mt-0 og-operation-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                    </svg>
+                    <span class="og-text-compact">{{ i18n.l('export_records') }}</span>
+                  </a>
+                </li>
+              </ul>
 
               <AutoRefresh
                 class="mt-3"
@@ -76,6 +84,24 @@
             </div>
           </template>
         </DropDown>
+
+        <ColumnSelector 
+          v-if="props.config.columnSelector && props.config.columnSelector.active"
+          :showModal="state.showColumnSelectorModal"
+          :closeDropdown="closeOperationDropdown"
+          :closeModal="() => { state.showColumnSelectorModal = false; }"
+          :dataMapping="props.config.mapping" 
+          :gridUniqueId="props.config.gridUniqueId"
+          :rerender="gridRefresh" />
+
+        <XlsxExport 
+          v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0"
+          :showModal="state.showXlsxExportModal"
+          :closeModal="() => { state.showXlsxExportModal = false; }"
+          :closeDropdown="closeOperationDropdown"
+          :xlsxExportConfig="props.config.xlsxExport" 
+          :dataMapping="props.config.mapping" 
+          :records="state.records" />
       </div>
     </div>
 
@@ -115,7 +141,7 @@
           </thead>
           <tbody v-if="state.records.length > 0">
             <template v-for="(record, index) in filteredOrderedRecords" :key="index">
-              <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'extraRowOpened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHightlighter && props.config.rowHightlighter.active && props.config.rowHightlighter.fn(record) }]" >
+              <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'og-row-opened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHightlighter && props.config.rowHightlighter.active && props.config.rowHightlighter.fn(record) }]" >
                 <td class="og-cell og-text-compact" width="30px" v-if="isExtraRowEnabled">
                   <button variant="link" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -166,11 +192,13 @@
                   </span>
                 </td>
               </tr>
-              <tr v-if="isRowOpened(record[props.config.idkey])">
-                <td :colspan="colNumber">
-                  <slot v-bind:record="record" v-bind:extraParams="props.config.extraRow.extraParams" name="extraRow"></slot>
-                </td>
-              </tr>
+              <Transition name="og-extra-row">
+                <tr v-show="isRowOpened(record[props.config.idkey])">
+                  <td :colspan="colNumber">
+                    <slot v-bind:record="record" v-bind:extraParams="props.config.extraRow.extraParams" name="extraRow"></slot>
+                  </td>
+                </tr>
+              </Transition>
             </template>
           </tbody>
           <tbody v-else>
@@ -265,7 +293,7 @@
     /* BULK OPERATIONS */
 
     /* COLUMN SELECTOR */
-    //showColumnSelectorModal: false,
+    showColumnSelectorModal: false,
     /* COLUMN SELECTOR */
 
     /* AUTO REFRESH */
@@ -697,3 +725,16 @@
     //changeTableHeight()
   })
 </script>
+
+<style scoped>
+  /* .og-extra-row-enter-active,
+  .og-extra-row-leave-active {
+    transform: scale3d(1, 1, 1);
+    transform-origin: top;
+    transition: ease 0.2s;
+  }
+  .og-extra-row-enter-from,
+  .og-extra-row-leave-to {
+    transform: scale3d(1, 0, 1);
+  } */
+</style>

@@ -1,19 +1,9 @@
 <template>
-  <ul class="mt-1.5">
-    <li>
-      <a href="javascript:void(null)" @click="() => { state.modalShown = true; }" class="flex flex-row gap-1 items-center ml-1 mt-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
-        </svg>
-        <span class="og-text-compact">{{ i18n.l('export_records') }}</span>
-      </a>
-    </li>
-  </ul>
   <CustomContentModal
-    :show="state.modalShown" 
+    :show="state.showModal" 
     :title="i18n.l('export_records')" 
     :disableButtons="true"
-    :close="() => { state.modalShown = false; }" 
+    :close="() => { props.closeModal(); }" 
     :ok="download">
     <template #content>
       <div class="flex flex-col mt-1">
@@ -45,7 +35,7 @@
         </div>
 
         <div class="flex flex-row justify-end gap-2">
-          <button @click="() => { state.modalShown = false; }" class="disabled:opacity-60 btn min-w-[7rem] !rounded-full h-9 border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80">
+          <button @click="() => { props.closeModal() }" class="disabled:opacity-60 btn min-w-[7rem] !rounded-full h-9 border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80">
             {{ i18n.l('cancel') }}
           </button>
           <jsonExcel
@@ -59,7 +49,6 @@
             </button>
           </jsonExcel>
         </div>
-
 
       </div>
     </template>
@@ -77,6 +66,9 @@
   const props = defineProps({
     xlsxExportConfig: Object,
     dataMapping: Object,
+    closeModal: Function,
+    closeDropdown: Function,
+    showModal: Boolean,
     records: Array
   })
 
@@ -84,11 +76,15 @@
     selected: [],
     format: 'xlsx',
     loading: false,
-    modalShown: false
+    showModal: props.showModal
   })
 
-  watch(() => props.modalShown, (value) => {
-    state.modalShown = value;
+  watch(() => props.showModal, (newValue) => {
+    state.showModal = newValue;
+
+    if(newValue) {
+      props.closeDropdown();
+    }
   })
 
   onMounted(() => {
