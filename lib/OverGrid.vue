@@ -6,7 +6,7 @@
     <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 justify-between" v-if="needsToShowTopFiltersBar">
       <Filtering 
         :config="props.config"
-        :setNewFiltersAndRefresh="(newFilters) => { state.filters = newFilters.filters; state.filterOperator = newFilters.filterOperator; state.simpleFilter = newFilters.simpleFilter; gridRefresh(); }"
+        :setNewFiltersAndRefresh="(newFilters: any) => { state.filters = newFilters.filters; state.filterOperator = newFilters.filterOperator; state.simpleFilter = newFilters.simpleFilter; gridRefresh(); }"
         />
 
       <div class="flex flex-row items-center gap-2">
@@ -20,12 +20,12 @@
           <BulkOperations
             :config="props.config"
             :checkedRows="state.checkedRows"
-            :changeCheckedRows="(checkedRows) => { state.checkedRows = checkedRows; }"
-            v-if="props.config.bulkOperation && props.config.bulkOperation.active" />
+            :changeCheckedRows="(checkedRows: any) => { state.checkedRows = checkedRows; }"
+            v-if="props.config?.bulkOperation && props.config.bulkOperation.active" />
         <!-- BULK OPERATION -->
 
         <!-- MANUAL REFRESH -->
-        <button v-if="props.config.refreshable && props.config.refreshable.manualActive" title="Lista frissítése" @click="state.refreshNeeded = true" class="rounded-full p-2">
+        <button v-if="props.config.refreshable && props.config.refreshable.manualActive" title="Lista frissítése" @click="() => { state.refreshNeeded = true }" class="rounded-full p-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
@@ -71,15 +71,14 @@
               <AutoRefresh
                 class="mt-3"
                 v-if="props.config.refreshable && props.config.refreshable.autoActive && props.config.refreshable.autoValues && props.config.refreshable.autoValues.length > 0"
-                :gridRefresh="gridRefresh"
-                :currentValue="state.autoRefresh"
+                :gridRefresh="() => { gridRefresh() }"
                 :config="props.config" />
 
               <ChangePageSize
                 class="mt-3"
                 v-if="props.config.pagination && props.config.pagination.possiblePageSizes"
                 :config="props.config"
-                :changePageSize="(newPageSize) => { state.pagination.size = newPageSize; gridRefresh(); }" />
+                :changePageSize="(newPageSize: any) => { state.pagination.size = newPageSize; gridRefresh(); }" />
 
             </div>
           </template>
@@ -92,7 +91,7 @@
           :closeModal="() => { state.showColumnSelectorModal = false; }"
           :dataMapping="props.config.mapping" 
           :gridUniqueId="props.config.gridUniqueId"
-          :rerender="gridRefresh" />
+          :rerender="() => { gridRefresh() }" />
 
         <XlsxExport 
           v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0"
@@ -117,9 +116,9 @@
                 </label>
               </th>
               <th class="" v-for="(value, index) in titlesVisible" :key="'tvbl_' + index" :width="value.width">
-                <div class="flex flex-row items-center gap-2">
-                  <span class="whitespace-nowrap og-text-compact">{{ value.title }}</span>
-                  <button v-if="value.orderable == true" :title="(state.order.active && state.order.field == value.key && state.order.direction == 'desc') ? 'Csökkenő sorrend' : 'Növekvő sorrend'" :class="['p-2', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
+                <div class="flex flex-row items-center gap-0.5">
+                  <span class="whitespace-nowrap og-text-compact mr-1">{{ value.title }}</span>
+                  <button v-if="value.orderable == true" v-show="(state.order.active && state.order.field == value.key) || !state.order.active" :title="(state.order.active && state.order.field == value.key && state.order.direction == 'desc') ? i18n.l('descending') : i18n.l('ascending')" :class="['og-btn og-btn-secondary og-btn-circle og-btn-sm', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
                     <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == 'asc'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
                     </svg>
@@ -130,7 +129,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
                     </svg>
                   </button>
-                  <button title="Rendezés törlése" class="" v-if="state.order.active && state.order.field == value.key" @click="removeOrder">
+                  <button :title="i18n.l('remove_order')" class="og-btn og-btn-primary og-btn-circle og-btn-sm" v-if="state.order.active && state.order.field == value.key" @click="removeOrder">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -184,7 +183,7 @@
                       :record="record" 
                       :refreshGrid="() => { state.refreshNeeded=true }" 
                       :customFormatters="props.customFormatters"
-                      :openExtraRow="(recordId) => { mainRowClick(recordId) }" />
+                      :openExtraRow="(recordId: any) => { mainRowClick(recordId) }" />
                   </span>
                   <span v-else-if="value.formatter && typeof value.formatter == 'function'" v-html="value.formatter(value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody], () => { state.refreshNeeded=true }, record[props.config.idkey], record)" />
                   <span v-else>
@@ -230,14 +229,15 @@
       <Pagination 
         v-model="state.pagination" 
         :config="props.config"
-        :changePagination="(newPagination) => { state.pagination.active = newPagination.active; state.pagination.page = newPagination.page; state.refreshNeeded = true; }"
-        v-if="props.config.pagination && props.config.pagination.active && state.pagination.totalPages > 1" />
+        :changePagination="(newPagination: any) => { state.pagination.active = newPagination.active; state.pagination.page = newPagination.page; }"
+        :gridRefresh="() => { gridRefresh() }"
+        v-if="props.config.pagination && props.config.pagination.active && state.pagination.totalPages && state.pagination.totalPages > 1" />
     <!-- PAGINATION -->
 
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { reactive, ref, computed, watch, nextTick, onMounted } from 'vue';
   import Filtering from './components/Filtering/Filtering.vue'
   import SpinnerLoader from './components/SpinnerLoader.vue';
@@ -252,6 +252,10 @@
   import ChangePageSize from './components/Pagination/ChangePageSize.vue';
   import AutoRefresh from './components/AutoRefresh/AutoRefresh.vue';
   import BulkOperations from './components/BulkOperations/BulkOperations.vue';
+  import DefaultTransformation from './integrations/DefaultTransformation.ts';
+  import { FilteringClass, FilteringFilter, FilteringOperator } from './components/model/Filtering';
+  import { Ordering, OrderDirection } from './components/model/Ordering';
+  import { PaginationClass } from './components/model/Pagination';
   const columnsVisible = useColumnsVisible();
   const Axios = useAxios();
   const localSortAndFilter = useLocalSortAndFilter();
@@ -262,7 +266,10 @@
   const operationsDropdown = ref(null);
 
   const props = defineProps({
-    config: Object,
+    config: {
+      type: Object,
+      required: true
+    },
     customFormatters: {
       type: Array,
       required: false,
@@ -277,7 +284,7 @@
     registeredEvents: {},
 
     /* EXTRA ROW */
-    openedRow: [],
+    openedRow: [] as any[],
     /* EXTRA ROW */
 
     /* FILTERING */
@@ -297,8 +304,8 @@
     /* COLUMN SELECTOR */
 
     /* AUTO REFRESH */
-    // autoRefresh: 'disabled',
-    // autoRefreshInterval: null,
+    autoRefresh: 'disabled',
+    autoRefreshInterval: null,
     /* AUTO REFRESH */
 
     /* PAGINATION */
@@ -334,7 +341,7 @@
     }
   })
 
-  function isRowOpened(recordId) {
+  function isRowOpened(recordId: any) {
     return state.openedRow.includes(recordId);
   }
   /* EXTRA ROW */
@@ -474,128 +481,56 @@
   })
 
   const axiosParams = computed(() => {
-    const params = new URLSearchParams();
+    //const params = new URLSearchParams();
 
-    if(!props.config.orderLocal) {
+    let filtering = new FilteringClass();
+    let ordering = new Ordering();
+    let pagination = new PaginationClass();
+
+    let isOrderActive = false;
+    let orderKey = null;
+    let orderDirection = null;
+    if(!props.config?.orderLocal) {
       if(state.order.active) {
-        if(props.config.mapping[state.order.field].orderKey) {
-          params.append('OrderBy', [props.config.mapping[state.order.field].orderKey + " " + state.order.direction]);
-        }
-        else {
-          params.append('OrderBy', [state.order.field + " " + state.order.direction]);
-        }
+        isOrderActive = true;
+        orderKey = props.config.mapping[state.order.field].orderKey ? props.config.mapping[state.order.field].orderKey : state.order.field;
+        orderDirection = state.order.direction;
       }
       else {
         if(props.config.defaultOrderKey && props.config.defaultOrderDirection) {
-          params.append('OrderBy', [props.config.defaultOrderKey + " " + props.config.defaultOrderDirection]);
+          isOrderActive = true;
+          orderKey = props.config.defaultOrderKey;
+          orderDirection = props.config.defaultOrderDirection;
         }
       }
     }
 
-    if(state.pagination.active) {
-      params.append('Page', state.pagination.page + 1);
-      params.append('PageSize', state.pagination.size);
+    ordering.initByState(
+      isOrderActive,
+      orderKey, 
+      orderDirection
+    );
+
+    pagination.initByState(
+      state.pagination.active, 
+      state.pagination.page, 
+      state.pagination.size
+    );
+    
+    filtering.initByState(
+      props.config.filtering && props.config.filtering.active && !props.config.filtering.local && (state.filters.length > 0 || props.config.filtering.simple),
+      state.filters, 
+      state.filterOperator, 
+      !!(props.config.filtering && props.config.filtering.simple),
+      state.simpleFilter
+    );
+
+    if(props.config && props.config.serverTransformation) {
+      return props.config.serverTransformation(ordering, pagination, filtering);
     }
-
-    if(!props.config.filtering.local) {
-      if(state.filters && state.filters.length > 1) {
-        params.append('filter_operator', state.filterOperator);
-      }
-
-      var newFilters = [];
-
-      for(var i in state.filters) { // @TODO: refactor this part to a separate function and make support for multiple type of filters
-        if(state.filters[i].type == "text") {
-          if(state.filters[i].operation == "eq") {
-            newFilters.push(state.filters[i].filterKey + "=" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "cn") {
-            newFilters.push(state.filters[i].filterKey + "=*" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "bw") {
-            newFilters.push(state.filters[i].filterKey + "^" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "ew") {
-            newFilters.push(state.filters[i].filterKey + "$" + state.filters[i].value);
-          }
-        }
-        if(state.filters[i].type == "date") {
-          if(state.filters[i].operation == "eq") {
-            newFilters.push('(' + state.filters[i].filterKey + ">=" + state.filters[i].value+'T00:00:00Z' + ',' + state.filters[i].filterKey + "<=" + state.filters[i].value+'T23:59:59Z' + ')');
-          }
-          if(state.filters[i].operation == "bw") {
-            newFilters.push('(' + state.filters[i].filterKey + ">=" + state.filters[i].value.start+'T00:00:00Z' + ',' + state.filters[i].filterKey + "<=" + state.filters[i].value.end+'T23:59:59Z' + ')');
-            //newFilters.push(state.filters[i].filterKey + "=*" + state.filters[i].value);
-          }
-        }
-        if(state.filters[i].type == "number") {
-          if(state.filters[i].operation == "eq") {
-            newFilters.push(state.filters[i].filterKey + "=" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "lt") {
-            newFilters.push(state.filters[i].filterKey + "<" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "le") {
-            newFilters.push(state.filters[i].filterKey + "<=" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "gt") {
-            newFilters.push(state.filters[i].filterKey + ">" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "ge") {
-            newFilters.push(state.filters[i].filterKey + ">=" + state.filters[i].value);
-          }
-          if(state.filters[i].operation == "ne") {
-            newFilters.push(state.filters[i].filterKey + "!=" + state.filters[i].value);
-          }
-        }
-        if(state.filters[i].type == "status" && state.filters[i].value && state.filters[i].value.length > 0) {
-          let cFilters = [];
-          for(let l in state.filters[i].value) {
-            cFilters.push(state.filters[i].filterKey + "=" + state.filters[i].value[l]);
-          }
-          newFilters.push("(" + cFilters.join('|') + ")");
-        }
-        // var cFilter = JSON.parse(JSON.stringify(state.filters[i]));
-        // if(cFilter.type == "date") {
-        //   cFilter.field = cFilter.field + "Date"
-        // }
-        // newFilters.push(cFilter);
-      }
-
-      if(newFilters.length > 0) {
-        let filterOper = '|';
-        if(params.get('filter_operator')) {
-          if(params.get('filter_operator').toLowerCase() == 'and') {
-            filterOper = ',';
-          }
-        }
-
-        if(props.config.filtering && props.config.filtering.defaultFilter) {
-          params.append('Filter', '(' + props.config.filtering.defaultFilter + '),(' + newFilters.join(filterOper) + ')')
-        }
-        else {
-          params.append('Filter', newFilters.join(filterOper))
-        }
-        
-      }
-      else {
-        let finalFilters = [];
-
-        if(props.config.filtering && props.config.filtering.defaultFilter) {
-          finalFilters.push(props.config.filtering.defaultFilter);
-        }
-
-        if(props.config.filtering && props.config.filtering.simple && state.simpleFilter) {
-          finalFilters.push(props.config.filtering.simpleFilterTemplate.replaceAll('{data}', state.simpleFilter));
-        }
-
-        if(finalFilters.length > 0) {
-          params.append('Filter', '(' + finalFilters.join('),(') + ')')
-        }
-      }
+    else {
+      return DefaultTransformation(ordering, pagination, filtering);
     }
-
-    return params;
   })
 
   async function refetchData() {
@@ -641,9 +576,11 @@
 
       state.records = rec;
 
+
+      let allRecordsCountKey = props.config.filtering?.allRecordsCountKey ? props.config.filtering?.allRecordsCountKey : 'count';
       if(props.config.pagination && props.config.pagination.active) {
-        state.pagination.totalPages = Math.ceil(resData.count / state.pagination.size); // @TODO: Refactor to configurate response data
-        state.pagination.totalElements = resData.count
+        state.pagination.totalPages = Math.ceil(resData[allRecordsCountKey] / state.pagination.size);
+        state.pagination.totalElements = resData[allRecordsCountKey]
       }
 
       if(props.config.events && props.config.events.readyAfterRefresh) {
@@ -658,8 +595,10 @@
     }
   }
 
-  watch(() => state.refreshNeeded, () => {
-    refetchData()
+  watch(() => state.refreshNeeded, (newValue) => {
+    if(newValue) {
+      refetchData()
+    }
   })
 
   function isExtraRowMultiOpenEnable() {
@@ -712,17 +651,24 @@
     //   this.mainRowClick(id)
     // }
 
+    if(props.config.pagination && props.config.pagination.active) {
+      state.pagination.active = true;
+      state.pagination.page = props.config.pagination.page;
+    }
+
     nextTick(() => {
       gridRefresh();
     })
 
-    // var changeTableHeight = function() {
-    //   const element = document.getElementById('RVGHeightConfiguration')
-    //   element.style.height = (window.innerHeight - 250)+"px";
-    // }
-    // window.addEventListener('resize', changeTableHeight);
+  })
 
-    //changeTableHeight()
+  defineExpose({
+    FilteringClass,
+    FilteringFilter,
+    FilteringOperator,
+    Ordering,
+    OrderDirection,
+    PaginationClass,
   })
 </script>
 

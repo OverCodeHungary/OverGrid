@@ -66,6 +66,12 @@
     @apply w-[30px] min-w-[30px] rounded-full
   }
 
+  .og-btn-sm {
+    &.og-btn-circle {
+      @apply h-[20px] w-[20px] min-w-[20px]
+    }
+  }
+
   .og-dropdown {
     @apply bg-slate-200 shadow-lg rounded-lg
   }

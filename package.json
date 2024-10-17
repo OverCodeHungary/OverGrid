@@ -7,8 +7,8 @@
     "dist"
   ],
   "main": "./dist/OverGrid.umd.cjs",
-  "module": "./dist/OverGrid.js",
-  "types": "./dist/main.d.ts",
+  "module": "./dist/OverGrid",
+  "types": "./dist/main.d",
   "exports": {
     ".": {
       "import": "./dist/OverGrid.js",

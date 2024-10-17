@@ -31,12 +31,11 @@
 
   const props = defineProps({
     config: Object,
-    currentValue: String,
     gridRefresh: Function
   });
 
   const state = reactive({
-    autoRefresh: props.currentValue,
+    autoRefresh: null,
     autoRefreshInterval: null
   });
 

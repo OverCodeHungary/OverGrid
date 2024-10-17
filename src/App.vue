@@ -28,19 +28,46 @@
 <script setup lang="ts">
   import './index.css'
   import OverGrid from '../lib/OverGrid.vue'
+  import { Filtering, Ordering, Pagination } from '../lib/OverGrid.vue'
   import CustomFormatter from './CustomFormatter.vue';
 
   const gridUniqueId = 'ogSampleGrid'
 
   const config = {
     endpoint: 'http://localhost:3000',
+    rootkey: "data",
     idkey: "id",
     title: "Hello World",
     defaultOrderKey: 'id',
     defaultOrderDirection: 'desc',
-    orderLocal: true,
-    rootkey: "data",
+    orderLocal: false,
     gridUniqueId: gridUniqueId,
+    // serverTransformation: (ordering: Ordering, pagination: Pagination, filtering: Filtering): URLSearchParams => {
+    //   const params = new URLSearchParams();
+
+    //   params.append("type", "user-defined");
+
+    //   if(ordering.active) {
+    //     params.append('myOrderKey', ordering.key);
+    //     params.append('myOrderDirection', ordering.direction.toString());
+    //   }
+
+    //   if(pagination.active) {
+    //     params.append('myPage', pagination.page.toString());
+    //     params.append('mySize', pagination.size.toString());
+    //   }
+
+    //   if(filtering.active) {
+    //     if(!filtering.isSimpleFilter) {
+    //       params.append('myFilter', JSON.stringify(filtering.filters));
+    //     }
+    //     else {
+    //       params.append('myFilter', filtering.simpleFilterValue);
+    //     }
+    //   }
+
+    //   return params;
+    // },
     pagination: {
       active: true,
       page: 0,
@@ -48,12 +75,13 @@
       possiblePageSizes: [10, 20, 50, 100, 200]
     },
     filtering: {
+      allRecordsCountKey: 'count',
       active: true,
-      simple: false,
+      simple: true,
       local: false,
-      // simpleHelpText: null,
-      // simpleFilterTemplate: 'workName=*{data}/i|workNumberCustom=*{data}/i|orderNumber=*{data}/i|attentionTo=*{data}/i',
-      // simplePlaceholder: 'Keresés...',
+      simpleHelpText: null,
+      simpleFilterTemplate: 'workName=*{data}/i|workNumberCustom=*{data}/i|orderNumber=*{data}/i|attentionTo=*{data}/i',
+      simplePlaceholder: 'Keresés...',
     },
     singleRowSelection: {
       active: false
@@ -157,6 +185,13 @@
           }
         }
       },
+      "title": {
+        title: "Title",
+        visible: true,
+        selectable: true,
+        exportable: true,
+        orderable: true
+      },
       "name": {
         title: "Név",
         visible: true,
@@ -189,6 +224,7 @@
       "address": {
         title: "Cím",
         visible: true,
+        orderKey: 'address.zip',
         selectable: true,
         filterable: {
           active: true,
@@ -303,18 +339,6 @@
         formatter: {
           type: 'LongText',
           title: 'Bemutatkozás'
-        }
-      },
-      "title": {
-        title: "Title and sub",
-        visible: true,
-        selectable: true,
-        exportable: true,
-        orderable: true,
-        formatter: {
-          type: 'TitleAndSub',
-          titleKey: 'name',
-          subitleKey: 'title'
         }
       },
     }
