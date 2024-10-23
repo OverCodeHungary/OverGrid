@@ -85,6 +85,7 @@ type MappingRecordType = {
 
 type OGConfig = {
   endpoint: string,
+  theme: string,
   rootkey?: string,
   idkey: string,
   title?: string,

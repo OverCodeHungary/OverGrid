@@ -1,1 +1,1 @@
-declare module 'vue-json-excel3'
+declare module 'vue-json-excel3';

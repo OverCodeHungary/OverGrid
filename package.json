@@ -8,17 +8,20 @@
   ],
   "main": "./dist/OverGrid.umd.cjs",
   "module": "./dist/OverGrid",
-  "types": "dist/index",
+  "types": "dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/OverGrid",
-      "require": "./dist/OverGrid.umd"
+      "import": "./dist/overgrid.js",
+      "require": "./dist/overgrid.umd.js"
     },
-    "./dist/default.css": "./dist/default.css"
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    }
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vite build && vue-tsc --emitDeclarationOnly",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -37,6 +37,7 @@
 
   const config: OGConfig = {
     endpoint: 'http://localhost:3000',
+    theme: 'default',
     rootkey: "data",
     idkey: "id",
     title: "Hello World",
@@ -201,9 +202,6 @@
         filterable: {
           active: true,
           type: 'Text'
-        },
-        formatter: {
-          type: 'CustomFormatter'
         },
         exportable: true,
         orderable: true,

@@ -4,7 +4,7 @@
       <slot></slot>
     </span>
     <Transition :name="'og-anim-dd-' + props.orientation">
-      <div v-show="state.open" class="absolute mt-2 z-20 flex items-center justify-start p-2 px-3 rounded-md w-[250px] og-dropdown" :class="[{ 'right-0': props.orientation == 'left' }, { 'left-0': props.orientation == 'right' }]">
+      <div v-show="state.open" class="absolute mt-2 z-20 flex items-center justify-start p-2 px-3 rounded-md w-[250px] og-dropdown" :class="[{ 'right-0': props.orientation == 'left' }, { 'left-0': props.orientation == 'right' }, 'og-theme-' + props.theme]">
         <slot name="content"></slot>
       </div>
     </Transition>
@@ -17,6 +17,10 @@
   const componentId = 'dd' + Math.random().toString(36).substring(7);
 
   const props = defineProps({
+    theme: {
+      type: String,
+      default: 'default'
+    },
     orientation: {
       type: String,
       default: 'left'

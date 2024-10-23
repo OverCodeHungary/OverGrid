@@ -1,239 +1,241 @@
 <template>
-  
-  <div class="flex flex-col gap-3 overgrid">
-    <slot name="title"></slot>
+  <div :class="'og-theme-' + props.config.theme">
+    <div class="flex flex-col gap-3 overgrid">
+      <slot name="title"></slot>
 
-    <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 justify-between" v-if="needsToShowTopFiltersBar">
-      <Filtering 
-        :config="props.config"
-        :setNewFiltersAndRefresh="(newFilters: any) => { state.filters = newFilters.filters; state.filterOperator = newFilters.filterOperator; state.simpleFilter = newFilters.simpleFilter; gridRefresh(); }"
-        />
+      <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 justify-between" v-if="needsToShowTopFiltersBar">
+        <Filtering 
+          :config="props.config"
+          :setNewFiltersAndRefresh="(newFilters: any) => { state.filters = newFilters.filters; state.filterOperator = newFilters.filterOperator; state.simpleFilter = newFilters.simpleFilter; gridRefresh(); }"
+          />
 
-      <div class="flex flex-row items-center gap-2">
-        <!-- REFRESH INDICATOR -->
-        <span class="" v-if="state.refreshNeeded">
-          <SpinnerLoader sizeClasses="w-5 h-5" />
-        </span>
-        <!-- REFRESH INDICATOR -->
+        <div class="flex flex-row items-center gap-2">
+          <!-- REFRESH INDICATOR -->
+          <span class="" v-if="state.refreshNeeded">
+            <SpinnerLoader sizeClasses="w-5 h-5" />
+          </span>
+          <!-- REFRESH INDICATOR -->
 
-        <!-- BULK OPERATION -->
-          <BulkOperations
-            :config="props.config"
-            :checkedRows="state.checkedRows"
-            :changeCheckedRows="(checkedRows: any) => { state.checkedRows = checkedRows; }"
-            v-if="props.config?.bulkOperation && props.config.bulkOperation.active" />
-        <!-- BULK OPERATION -->
+          <!-- BULK OPERATION -->
+            <BulkOperations
+              :config="props.config"
+              :checkedRows="state.checkedRows"
+              :changeCheckedRows="(checkedRows: any) => { state.checkedRows = checkedRows; }"
+              v-if="props.config?.bulkOperation && props.config.bulkOperation.active" />
+          <!-- BULK OPERATION -->
 
-        <!-- MANUAL REFRESH -->
-        <button v-if="props.config.refreshable && props.config.refreshable.manualActive" title="Lista frissítése" @click="() => { state.refreshNeeded = true }" class="rounded-full p-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </button>
-        <!-- MANUAL REFRESH -->
-
-        <DropDown ref="operationsDropdown" v-if="needsToShowAdditionalOperationsDropdown">
-          <button class="rounded-full p-2">
+          <!-- MANUAL REFRESH -->
+          <button v-if="props.config.refreshable && props.config.refreshable.manualActive" title="Lista frissítése" @click="() => { state.refreshNeeded = true }" class="rounded-full p-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
           </button>
-          <template #content>
-            <div class="flex flex-col p-1.5">
-              <ul>
-                <li>
-                  <h3 class="font-bold og-text-compact">
-                    {{ i18n.l('operations') }}
-                  </h3>
-                </li>
-              </ul>
-              <ul v-if="props.config.columnSelector && props.config.columnSelector.active">
-                <li>
-                  <a href="javascript:void(null)" @click="() => { state.showColumnSelectorModal = true; }" class="flex flex-row gap-1 items-center ml-1 mt-1 og-operation-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                    </svg>
-                    <span class="og-text-compact">{{ i18n.l('select_columns') }}</span>
-                  </a>
-                </li>
-              </ul>
-              <ul class="mt-1.5" v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0">
-                <li>
-                  <a href="javascript:void(null)" @click="() => { state.showXlsxExportModal = true; }" class="flex flex-row gap-1 items-center ml-1 mt-0 og-operation-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
-                    </svg>
-                    <span class="og-text-compact">{{ i18n.l('export_records') }}</span>
-                  </a>
-                </li>
-              </ul>
+          <!-- MANUAL REFRESH -->
 
-              <AutoRefresh
-                class="mt-3"
-                v-if="props.config.refreshable && props.config.refreshable.autoActive && props.config.refreshable.autoValues && props.config.refreshable.autoValues.length > 0"
-                :gridRefresh="() => { gridRefresh() }"
-                :config="props.config" />
+          <DropDown ref="operationsDropdown" v-if="needsToShowAdditionalOperationsDropdown" :theme="props.config.theme">
+            <button class="rounded-full p-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+            <template #content>
+              <div class="flex flex-col p-1.5">
+                <ul>
+                  <li>
+                    <h3 class="font-bold og-text-compact">
+                      {{ i18n.l('operations') }}
+                    </h3>
+                  </li>
+                </ul>
+                <ul v-if="props.config.columnSelector && props.config.columnSelector.active">
+                  <li>
+                    <a href="javascript:void(null)" @click="() => { state.showColumnSelectorModal = true; }" class="flex flex-row gap-1 items-center ml-1 mt-1 og-operation-link">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                      </svg>
+                      <span class="og-text-compact">{{ i18n.l('select_columns') }}</span>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="mt-1.5" v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0">
+                  <li>
+                    <a href="javascript:void(null)" @click="() => { state.showXlsxExportModal = true; }" class="flex flex-row gap-1 items-center ml-1 mt-0 og-operation-link">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                      </svg>
+                      <span class="og-text-compact">{{ i18n.l('export_records') }}</span>
+                    </a>
+                  </li>
+                </ul>
 
-              <ChangePageSize
-                class="mt-3"
-                v-if="props.config.pagination && props.config.pagination.possiblePageSizes"
-                :config="props.config"
-                :changePageSize="(newPageSize: any) => { state.pagination.size = newPageSize; gridRefresh(); }" />
+                <AutoRefresh
+                  class="mt-3"
+                  v-if="props.config.refreshable && props.config.refreshable.autoActive && props.config.refreshable.autoValues && props.config.refreshable.autoValues.length > 0"
+                  :gridRefresh="() => { gridRefresh() }"
+                  :config="props.config" />
 
-            </div>
-          </template>
-        </DropDown>
+                <ChangePageSize
+                  class="mt-3"
+                  v-if="props.config.pagination && props.config.pagination.possiblePageSizes"
+                  :config="props.config"
+                  :changePageSize="(newPageSize: any) => { state.pagination.size = newPageSize; gridRefresh(); }" />
 
-        <ColumnSelector 
-          v-if="props.config.columnSelector && props.config.columnSelector.active"
-          :showModal="state.showColumnSelectorModal"
-          :closeDropdown="closeOperationDropdown"
-          :closeModal="() => { state.showColumnSelectorModal = false; }"
-          :dataMapping="props.config.mapping" 
-          :gridUniqueId="props.config.gridUniqueId"
-          :rerender="() => { gridRefresh() }" />
+              </div>
+            </template>
+          </DropDown>
 
-        <XlsxExport 
-          v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0"
-          :showModal="state.showXlsxExportModal"
-          :closeModal="() => { state.showXlsxExportModal = false; }"
-          :closeDropdown="closeOperationDropdown"
-          :xlsxExportConfig="props.config.xlsxExport" 
-          :dataMapping="props.config.mapping" 
-          :records="state.records" />
+          <ColumnSelector 
+            v-if="props.config.columnSelector && props.config.columnSelector.active"
+            :showModal="state.showColumnSelectorModal"
+            :closeDropdown="closeOperationDropdown"
+            :closeModal="() => { state.showColumnSelectorModal = false; }"
+            :dataMapping="props.config.mapping" 
+            :gridUniqueId="props.config.gridUniqueId"
+            :rerender="() => { gridRefresh() }" />
+
+          <XlsxExport 
+            v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0"
+            :showModal="state.showXlsxExportModal"
+            :closeModal="() => { state.showXlsxExportModal = false; }"
+            :closeDropdown="closeOperationDropdown"
+            :xlsxExportConfig="props.config.xlsxExport" 
+            :dataMapping="props.config.mapping" 
+            :records="state.records" />
+        </div>
       </div>
-    </div>
 
-    <!-- GRID -->
-    <div :key="state.updateKey" class="">
-      <div class="overflow-x-scroll">
-        <table class="w-full text-left">
-          <thead class="og-table-thead">
-            <tr class="">
-              <th class="" width="30px" v-if="isExtraRowEnabled"></th>
-              <th class="" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active) || (props.config.singleRowSelection && props.config.singleRowSelection.active)">
-                <label class="">
-                </label>
-              </th>
-              <th class="" v-for="(value, index) in titlesVisible" :key="'tvbl_' + index" :width="value.width">
-                <div class="flex flex-row items-center gap-0.5">
-                  <span class="whitespace-nowrap og-text-compact mr-1">{{ value.title }}</span>
-                  <button v-if="value.orderable == true" v-show="(state.order.active && state.order.field == value.key) || !state.order.active" :title="(state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.desc) ? i18n.l('descending') : i18n.l('ascending')" :class="['og-btn og-btn-secondary og-btn-circle og-btn-sm', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
-                    <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.asc" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
-                    </svg>
-                    <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.desc" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
-                    </svg>
-                    <svg v-if="!state.order.active" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
-                    </svg>
-                  </button>
-                  <button :title="i18n.l('remove_order')" class="og-btn og-btn-primary og-btn-circle og-btn-sm" v-if="state.order.active && state.order.field == value.key" @click="removeOrder">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody v-if="state.records.length > 0">
-            <template v-for="(record, index) in filteredOrderedRecords" :key="index">
-              <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'og-row-opened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHighlighter && props.config.rowHighlighter.active && props.config.rowHighlighter.fn(record) }]" >
-                <td class="og-cell og-text-compact" width="30px" v-if="isExtraRowEnabled">
-                  <button variant="link" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                  <button variant="link" v-if="(state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M15.707 4.293a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 8.586l4.293-4.293a1 1 0 011.414 0zm0 6a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 14.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                </td>
-                <td class="og-cell og-text-compact" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active)">
-                  <label class="inline-flex items-center space-x-2">
-                    <input
-                      :value="record[props.config.idkey]" v-model="state.checkedRows"
-                      class="og-checkbox"
-                      type="checkbox"
-                    />
+      <!-- GRID -->
+      <div :key="state.updateKey" class="">
+        <div class="overflow-x-scroll">
+          <table class="w-full text-left">
+            <thead class="og-table-thead">
+              <tr class="">
+                <th class="" width="30px" v-if="isExtraRowEnabled"></th>
+                <th class="" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active) || (props.config.singleRowSelection && props.config.singleRowSelection.active)">
+                  <label class="">
                   </label>
-                </td>
-                <td class="og-cell og-text-compact" width="30px" v-if="(props.config.singleRowSelection && props.config.singleRowSelection.active)">
-                  <label class="inline-flex items-center space-x-2">
-                    <input
-                      :value="record[props.config.idkey]" v-model="state.checkedRow"
-                      class="og-radio"
-                      type="radio"
-                    />
-                  </label>
-                </td>
-                <td class="og-cell og-text-compact" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
-                  <span v-if="value.formatter && typeof value.formatter == 'object' && value.formatter.type">
-                    <RootFormatter 
-                      :type="'OGFormatter' + value.formatter.type" 
-                      :data="value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody]" 
-                      :formatter="value.formatter ? value.formatter : null" 
-                      :rowid="record[props.config.idkey]" 
-                      :field="cmNameBody.toString()" 
-                      :record="record" 
-                      :refreshGrid="() => { state.refreshNeeded=true }" 
-                      :customFormatters="props.customFormatters"
-                      :openExtraRow="(recordId: any) => { mainRowClick(recordId) }" />
-                  </span>
-                  <span v-else-if="value.formatter && typeof value.formatter == 'function'" v-html="value.formatter(value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody], () => { state.refreshNeeded=true }, record[props.config.idkey], record)" />
-                  <span v-else>
-                    {{ value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody] }}
-                  </span>
-                </td>
+                </th>
+                <th class="" v-for="(value, index) in titlesVisible" :key="'tvbl_' + index" :width="value.width">
+                  <div class="flex flex-row items-center gap-0.5">
+                    <span class="whitespace-nowrap og-text-compact mr-1">{{ value.title }}</span>
+                    <button v-if="value.orderable == true" v-show="(state.order.active && state.order.field == value.key) || !state.order.active" :title="(state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.desc) ? i18n.l('descending') : i18n.l('ascending')" :class="['og-btn og-btn-secondary og-btn-circle og-btn-sm', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
+                      <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.asc" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
+                      </svg>
+                      <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.desc" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
+                      </svg>
+                      <svg v-if="!state.order.active" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
+                      </svg>
+                    </button>
+                    <button :title="i18n.l('remove_order')" class="og-btn og-btn-primary og-btn-circle og-btn-sm" v-if="state.order.active && state.order.field == value.key" @click="removeOrder">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </th>
               </tr>
-              <Transition name="og-extra-row">
-                <tr v-show="isRowOpened(record[props.config.idkey])">
-                  <td :colspan="colNumber">
-                    <slot v-bind:record="record" v-bind:extraParams="props.config.extraRow?.extraParams" name="extraRow"></slot>
+            </thead>
+            <tbody v-if="state.records.length > 0">
+              <template v-for="(record, index) in filteredOrderedRecords" :key="index">
+                <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'og-row-opened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHighlighter && props.config.rowHighlighter.active && props.config.rowHighlighter.fn(record) }]" >
+                  <td class="og-cell og-text-compact" width="30px" v-if="isExtraRowEnabled">
+                    <button variant="link" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                    <button variant="link" v-if="(state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M15.707 4.293a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 8.586l4.293-4.293a1 1 0 011.414 0zm0 6a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 14.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </td>
+                  <td class="og-cell og-text-compact" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active)">
+                    <label class="inline-flex items-center space-x-2">
+                      <input
+                        :value="record[props.config.idkey]" v-model="state.checkedRows"
+                        class="og-checkbox"
+                        type="checkbox"
+                      />
+                    </label>
+                  </td>
+                  <td class="og-cell og-text-compact" width="30px" v-if="(props.config.singleRowSelection && props.config.singleRowSelection.active)">
+                    <label class="inline-flex items-center space-x-2">
+                      <input
+                        :value="record[props.config.idkey]" v-model="state.checkedRow"
+                        class="og-radio"
+                        type="radio"
+                      />
+                    </label>
+                  </td>
+                  <td class="og-cell og-text-compact" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
+                    <span v-if="value.formatter && typeof value.formatter == 'object' && value.formatter.type">
+                      <RootFormatter 
+                        :theme="props.config.theme"
+                        :type="'OGFormatter' + value.formatter.type" 
+                        :data="value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody]" 
+                        :formatter="value.formatter ? value.formatter : null" 
+                        :rowid="record[props.config.idkey]" 
+                        :field="cmNameBody.toString()" 
+                        :record="record" 
+                        :refreshGrid="() => { state.refreshNeeded=true }" 
+                        :customFormatters="props.customFormatters"
+                        :openExtraRow="(recordId: any) => { mainRowClick(recordId) }" />
+                    </span>
+                    <span v-else-if="value.formatter && typeof value.formatter == 'function'" v-html="value.formatter(value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody], () => { state.refreshNeeded=true }, record[props.config.idkey], record)" />
+                    <span v-else>
+                      {{ value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody] }}
+                    </span>
                   </td>
                 </tr>
-              </Transition>
-            </template>
-          </tbody>
-          <tbody v-else>
-            <tr v-if="!state.refreshNeeded">
-              <td :colspan="Object.keys(titlesVisible).length" class="w-full text-left p-5">
-                <div class="flex flex-row items-center justify-start gap-2">
-                  <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)]">
-                    {{ i18n.l('there_is_no_data_here') }}
-                  </span>
-                </div>
-              </td>
-            </tr>
-            <tr v-else>
-              <td :colspan="Object.keys(titlesVisible).length" class="w-full max-w-xl !text-left p-5">
-                <div class="flex flex-row items-start justify-start gap-2">
-                  <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)]">
-                    {{ i18n.l('loading_data') }}
-                  </span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <Transition name="og-extra-row">
+                  <tr v-show="isRowOpened(record[props.config.idkey])">
+                    <td :colspan="colNumber">
+                      <slot v-bind:record="record" v-bind:extraParams="props.config.extraRow?.extraParams" name="extraRow"></slot>
+                    </td>
+                  </tr>
+                </Transition>
+              </template>
+            </tbody>
+            <tbody v-else>
+              <tr v-if="!state.refreshNeeded">
+                <td :colspan="Object.keys(titlesVisible).length" class="w-full text-left p-5">
+                  <div class="flex flex-row items-center justify-start gap-2">
+                    <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)]">
+                      {{ i18n.l('there_is_no_data_here') }}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr v-else>
+                <td :colspan="Object.keys(titlesVisible).length" class="w-full max-w-xl !text-left p-5">
+                  <div class="flex flex-row items-start justify-start gap-2">
+                    <span class="whitespace-nowrap !p-0 ![clip:rect(0,0,0,0)]">
+                      {{ i18n.l('loading_data') }}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <!-- GRID -->
+
+      <!-- PAGINATION -->
+        <Pagination 
+          v-model="state.pagination" 
+          :config="props.config"
+          :changePagination="(newPagination: any) => { state.pagination.active = newPagination.active; state.pagination.page = newPagination.page; }"
+          :gridRefresh="() => { gridRefresh() }"
+          v-if="props.config.pagination && props.config.pagination.active && state.pagination.totalPages && state.pagination.totalPages > 1" />
+      <!-- PAGINATION -->
+
     </div>
-    <!-- GRID -->
-
-    <!-- PAGINATION -->
-      <Pagination 
-        v-model="state.pagination" 
-        :config="props.config"
-        :changePagination="(newPagination: any) => { state.pagination.active = newPagination.active; state.pagination.page = newPagination.page; }"
-        :gridRefresh="() => { gridRefresh() }"
-        v-if="props.config.pagination && props.config.pagination.active && state.pagination.totalPages && state.pagination.totalPages > 1" />
-    <!-- PAGINATION -->
-
   </div>
 </template>
 
@@ -262,6 +264,7 @@
   import useI18n from './composables/useI18n';
   const i18n = useI18n('hu');
   import { OGConfig } from './components/model/OGConfig';
+  import './themes/default.css'
 
   const operationsDropdown = ref<typeof DropDown>();
 
@@ -691,7 +694,7 @@
     FilteringOperator,
     Ordering,
     OrderDirection,
-    PaginationClass,
+    PaginationClass
   })
 </script>
 

@@ -15,6 +15,6 @@
     "outDir": "dist",
     "declaration": true
   },
-  "include": ["lib/**/*.ts", "lib/**/*.d.ts", "lib/**/*.tsx", "lib/**/*.vue", "lib/**/*.js", "lib/**/*.d.js", "lib/**/*.jsx"]
+  "include": ["lib/**/*.ts", "lib/**/*.d.ts", "lib/**/*.tsx", "lib/**/*.vue"]
 }
 

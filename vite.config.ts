@@ -17,7 +17,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'lib/main.ts'),
       name: 'OverGrid',
       // the proper extensions will be added
-      fileName: 'OverGrid'
+      fileName: 'overgrid'
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled

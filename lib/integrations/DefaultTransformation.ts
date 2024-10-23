@@ -9,8 +9,6 @@ export default (
 ): URLSearchParams => {
   const params = new URLSearchParams();
 
-  console.log(filtering)
-
   params.append("type", "default");
 
   if(ordering.active) {
