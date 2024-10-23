@@ -59,22 +59,28 @@
   </div>
 </template>
 
-<script setup>
-  import Config from './FilterableDate.config.js'
+<script setup lang="ts">
+  import Config from './FilterableDate.config'
   import moment from 'moment';
   import { computed, reactive } from 'vue';
-  import useI18n from '../../../composables/useI18n.js';
+  import useI18n from '../../../composables/useI18n';
   const i18n = useI18n('hu');
 
   const emit = defineEmits(['changeValue']);
 
-  const props = defineProps({
+  const props = defineProps<{
     data: Object,
-    config: Object,
+    config: {
+      filterKey: string
+    },
     id: String
-  });
+  }>();
 
-  const state = reactive({
+  const state = reactive<{
+    operation: string,
+    currentValue: string | null,
+    currentValueEnd: null | string
+  }>({
     operation: 'eq',
     currentValue: null,
     currentValueEnd: null

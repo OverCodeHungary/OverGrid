@@ -5,6 +5,7 @@ class FilteringFilter {
   operation: string;
   value: any;
   textual: string;
+  _opselector?: boolean;
 
   constructor(field: string, filterKey: string, type: string, operation: string, value: any, textual: string) {
     this.field = field;
@@ -13,6 +14,7 @@ class FilteringFilter {
     this.operation = operation;
     this.value = value;
     this.textual = textual;
+    this._opselector = false;
   }
 }
 
@@ -21,6 +23,15 @@ enum FilteringOperator {
   or
 }
 
+/**
+ * Adds two values and returns the sum.
+ *
+ * @example
+ * ```ts
+ * import { sum } from "jsr:@deno/sum";
+ * const finalValue = sum(1, "this is a string"); // 3
+ * ```
+ */
 class FilteringClass {
   active: boolean;
   operator: FilteringOperator;
@@ -40,8 +51,8 @@ class FilteringClass {
     this.filters = filters;
   }
 
-  constructor(active: boolean) {
-    this.active = active;
+  constructor() {
+    this.active = false;
     this.operator = FilteringOperator.and;
     this.filters = [];
     this.isSimpleFilter = false;

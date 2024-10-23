@@ -1,13 +1,13 @@
 <template>
   <div data-test="" class="flex flex-row overflow-y-visible" @mousedown.stop>
     <span v-if="rowButtonsNormal.length > 0" class="flex flex-row items-center gap-1 pr-1">
-      <button :disabled="button.disabled ? button.disabled : false" data-test="OGFormatterOperationsButton" :data-test-value="button.testValueAttribute" v-for="(button, index) in rowButtonsNormal" :key="index" :class="[button.classList, { 'og-btn og-btn-circle og-btn-primary': !button.classList }]" @click="button.onClick">
+      <button :disabled="button.disabled ? button.disabled : false" data-test="OGFormatterOperationsButton" :data-test-value="button.testValueAttribute" v-for="(button, index) in rowButtonsNormal" :key="index" :class="[button.classList, { 'og-btn og-btn-circle og-btn-primary': !button.classList }]" @click="(event: Event) => { button.onClick(event) }">
         <span v-html="button.icon"></span>
         {{ button.title }}
       </button>
     </span>
     <span v-if="rowButtonsDropdowned.length > 0" class="flex items-center">
-      <DropDown :orientation="props.config.formatter?.config?.dropdownOrientation ? props.config.formatter.config.dropdownOrientation : 'left'">
+      <DropDown :orientation="props.config?.config?.dropdownOrientation ? props.config.config.dropdownOrientation : 'left'">
         <button class="og-btn og-btn-primary og-btn-circle">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 min-w-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -17,7 +17,7 @@
           <div class="!rounded-md font-inter w-full">
             <ul class="my-1 rounded-lg">
               <li class="" v-for="(button, key) in rowButtonsDropdowned" :key="key">
-                <a href="javascript:void(null);" :disabled="button.disabled ? button.disabled : false" :data-test-value="button.testValueAttribute"  @click="button.onClick" class="flex flex-row gap-1 items-center ml-1 mt-1 og-operation-link">
+                <a href="javascript:void(null);" :disabled="button.disabled ? button.disabled : false" :data-test-value="button.testValueAttribute"  @click="(event: Event) => { button.onClick(event) }" class="flex flex-row gap-1 items-center ml-1 mt-1 og-operation-link">
                   {{ button.tooltip }}
                 </a>
               </li>
@@ -32,23 +32,24 @@
 <script setup lang="ts">
   import DropDown from '../components/DropDown.vue'
   import FormatterProps from './types/FormatterProps';
-  const props = defineProps<FormatterProps>()
+  import { OperationsFormatterConfigType, OperatorButtonType } from '../components/model/OGConfig'
+  const props = defineProps<FormatterProps<OperationsFormatterConfigType>>()
   import { computed } from 'vue';
 
   const rowButtons = computed(() => {
-    if(!props.config.formatter.config || !props.config.formatter.config.buttons) {
+    if(!props.config.config || !props.config.config.buttons) {
       return []
     }
 
-    var btnz = [];
+    var btnz: Array<OperatorButtonType> = [];
 
-    if(typeof props.config.formatter.config.buttons == "object") {
-      btnz = props.config.formatter.config.buttons
+    if(typeof props.config.config.buttons == "object") {
+      btnz = props.config.config.buttons
     }
 
-    if(typeof props.config.formatter.config.buttons == "function") {
+    if(typeof props.config.config.buttons == "function") {
       var vm = this;
-      btnz = props.config.formatter.config.buttons(this, () => {
+      btnz = props.config.config.buttons(this, () => {
         props.refreshGrid()
       }, props.rowid, props.record)
     }

@@ -1,13 +1,22 @@
-import useI18n from '../../../composables/useI18n.js';
+import useI18n from '../../../composables/useI18n';
 const i18n = useI18n('hu');
 
+type StatusFormatterConfig = {
+  mapping: {
+    [key: string]: {
+      classList: string
+      title: string
+    }
+  }
+}
+
 export default {
-  possibleOperations() {
+  possibleOperations(): Record<string, string> {
     return {
       'in': i18n.l('one_of_the_following')
     }
   },
-  getTextual(operation, currentValue, formatter) {
+  getTextual(operation: any, currentValue: any, formatter?: StatusFormatterConfig) {
     var possibleOperations = this.possibleOperations();
     
     var translatedValues = [];
@@ -19,7 +28,7 @@ export default {
     
     return '%%fieldname%% ' + possibleOperations[operation] + ' ' + translatedValues.join(", ")
   },
-  isMatch(recordValue, operation, matchingValue) {
+  isMatch(recordValue: string, operation: string, matchingValue: string[]) {
     switch(operation) {
       case 'in':
         return matchingValue.includes(recordValue);

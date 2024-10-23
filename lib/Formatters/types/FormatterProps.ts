@@ -1,12 +1,6 @@
-type PropsConfig = {
+type PropsConfig<T> = {
   data: any;
-  config: {
-    formatter: {
-      badgeStyle: string;
-      dataType: string;
-      mapping: Record<string, { title: string; classList: string }>;
-    };
-  };
+  config: T;
   rowid: string | number;
   record: Record<string, any>;
   refreshGrid: () => void;

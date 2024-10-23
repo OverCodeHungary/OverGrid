@@ -11,13 +11,14 @@
   import useI18n from '../composables/useI18n';
   const i18n = useI18n('hu');
   import FormatterProps from './types/FormatterProps';
-  const props = defineProps<FormatterProps>()
+  import { DateFormatterConfigType } from '../components/model/OGConfig'
+  const props = defineProps<FormatterProps<DateFormatterConfigType>>()
 
   const formattedDate = computed(() => {
     if(!props.data) {
       return '';
     }
-    return moment(props.data, props.config.formatter.inputFormat ? props.config.formatter.inputFormat : null).format(props.config.formatter.outputFormat);
+    return moment(props.data, props.config.inputFormat || undefined).format(props.config.outputFormat);
   })
 </script>
 

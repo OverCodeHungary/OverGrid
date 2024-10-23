@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { reactive, watch } from 'vue';
 
   const componentId = 'dd' + Math.random().toString(36).substring(7);
@@ -27,10 +27,10 @@
     open: false
   });
 
-  function outsideClickClose(event) {
-    if(!event.target.closest('#' + componentId)) {
-      state.open = false;
-    }
+  function outsideClickClose(event: MouseEvent) {
+    // if(!event.target.closest('#' + componentId)) {
+    //   state.open = false;
+    // }
   }
 
   watch(() => state.open, (newValue) => {
@@ -50,7 +50,9 @@
     state.open = false;
   }
 
-  defineExpose({
+  defineExpose<{
+    close: () => void;
+  }>({
     close
   });
 

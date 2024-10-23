@@ -20,22 +20,26 @@
   </CustomContentModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { onMounted, reactive, computed, watch } from 'vue';
   import CustomContentModal from '../CustomContentModal.vue';
   import useI18n from '../../composables/useI18n';
+  import { MappingRecordType } from '../model/OGConfig';
   const i18n = useI18n('hu');
 
-  const props = defineProps({
-    gridUniqueId: String,
-    dataMapping: Object,
+  const props = defineProps<{
+    gridUniqueId: string,
+    dataMapping: Record<string, MappingRecordType>,
     rerender: Function,
     closeModal: Function,
     closeDropdown: Function,
-    showModal: Boolean
-  });
+    showModal: boolean
+  }>();
 
-  const state = reactive({
+  const state = reactive<{
+    showModal: boolean,
+    selected: Array<string>
+  }>({
     showModal: props.showModal,
     selected: []
   });

@@ -13,19 +13,21 @@
   </div>
 </template>
 
-<script setup>
-  import Config from './FilterableText.config.js'
+<script setup lang="ts">
+  import Config from './FilterableText.config'
   import { computed, reactive, watch } from 'vue';
-  import useI18n from '../../../composables/useI18n.js';
+  import useI18n from '../../../composables/useI18n';
   const i18n = useI18n('hu');
 
   const emit = defineEmits(['changeValue']);
 
-  const props = defineProps({
+  const props = defineProps<{
     data: Object,
-    config: Object,
+    config: {
+      filterKey: String
+    },
     id: String | Number
-  });
+  }>();
 
   const state = reactive({
     currentValue: null,

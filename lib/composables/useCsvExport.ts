@@ -1,13 +1,19 @@
 import { unparse } from "papaparse";
 import { saveAs } from "file-saver";
 
+type CsvExportConfig = {
+  delimiter: string;
+  encoding: string;
+  opts: Record<string, any>;
+}
+
 export default () => {
   return {
-    generate: (data, filename, config) => {
-      const config = {
-        delimiter: config.delimiter || ",",
-        encoding: config.encoding || "utf-8",
-        opts: config.opts || {}
+    generate: (data: any, filename: string, configInput: CsvExportConfig) => {
+      const config: CsvExportConfig = {
+        delimiter: configInput.delimiter || ",",
+        encoding: configInput.encoding || "utf-8",
+        opts: configInput.opts || {}
       }
 
       if(!data) {

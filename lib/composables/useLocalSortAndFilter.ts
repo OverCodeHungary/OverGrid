@@ -1,13 +1,21 @@
-import FilterableNumberConfig from '../components/Filtering/Filterables/FilterableNumber.config.js';
-import FilterableDateConfig from '../components/Filtering/Filterables/FilterableDate.config.js';
-import FilterableStatusConfig from '../components/Filtering/Filterables/FilterableStatus.config.js';
-import FilterableTextConfig from '../components/Filtering/Filterables/FilterableText.config.js';
+import FilterableNumberConfig from '../components/Filtering/Filterables/FilterableNumber.config';
+import FilterableDateConfig from '../components/Filtering/Filterables/FilterableDate.config';
+import FilterableStatusConfig from '../components/Filtering/Filterables/FilterableStatus.config';
+import FilterableTextConfig from '../components/Filtering/Filterables/FilterableText.config';
+import { MappingRecordType } from '../components/model/OGConfig';
+import { OrderDirection } from '../components/model/Ordering';
+import { FilteringOperator } from '../components/model/Filtering';
 
 export default () => {
 
   return {
 
-    isRecordMatchTheCurrentFiltering: (record, filters, filterOperator) => {
+    isRecordMatchTheCurrentFiltering: (record: any, filters: Array<{
+      field: string,
+      type: string,
+      operation: string,
+      value: any
+    }>, filterOperator: FilteringOperator) => {
       if(filters.length <= 0) {
         return true;
       }
@@ -33,23 +41,23 @@ export default () => {
         return true;
       }
 
-      if(filterOperator.toLowerCase() == "and") {
+      if(filterOperator == FilteringOperator.and) {
         return matchBools.includes(false) ? false : true;
       }
 
-      if(filterOperator.toLowerCase() == "or") {
+      if(filterOperator == FilteringOperator.or) {
         return matchBools.includes(true) ? true : false;
       }
     },
 
-    sortRecords: (recArray, field, direction, fieldMappingConfig) => {
-      return recArray.sort(function(first, second) {
+    sortRecords: (recArray: Array<object>, field: string, direction: OrderDirection, fieldMappingConfig: MappingRecordType) => {
+      return recArray.sort(function(first: Record<string, any>, second: Record<string, any>) {
         var a;
         var b;
   
-        if(fieldMappingConfig && fieldMappingConfig.formatter && fieldMappingConfig.formatter.type && fieldMappingConfig.formatter.type.toLowerCase() == "status" && fieldMappingConfig.formatter.mapping) {
+        if(fieldMappingConfig && fieldMappingConfig.formatter && fieldMappingConfig.formatter.type && fieldMappingConfig.formatter.type.toLowerCase() == "status" && 'mapping' in fieldMappingConfig.formatter) {
           a = fieldMappingConfig.formatter.mapping[first[field]].title.toLowerCase();
-          b = fieldMappingConfig.formatter.mapping[second[field]].title.toLowerCase();        
+          b = fieldMappingConfig.formatter.mapping[second[field]].title.toLowerCase();
         }
         else {
           if(first[field] && typeof first[field] == "string") { a = first[field].toLowerCase(); } else { a = ""; }
@@ -59,7 +67,7 @@ export default () => {
           if(typeof second[field] == "number") { b = second[field] }
         }
   
-        if(direction == "asc") {
+        if(direction == OrderDirection.asc) {
           if(a < b) { return -1; }
           else if(a > b) { return 1; }
           else { return 0;}

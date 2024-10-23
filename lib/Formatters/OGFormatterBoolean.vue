@@ -8,5 +8,6 @@
   import useI18n from '../composables/useI18n';
   const i18n = useI18n('hu');
   import FormatterProps from './types/FormatterProps';
-  const props = defineProps<FormatterProps>()
+  import { ConfiglessFormatterConfigType } from '../components/model/OGConfig'
+  const props = defineProps<FormatterProps<ConfiglessFormatterConfigType>>()
 </script>

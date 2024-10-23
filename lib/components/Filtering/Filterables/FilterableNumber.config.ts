@@ -2,7 +2,7 @@ import useI18n from '../../../composables/useI18n.js';
 const i18n = useI18n('hu');
 
 export default {
-  possibleOperations() {
+  possibleOperations(): Record<string, string> {
     return {
       'eq': i18n.l('equals'),
       'lt': i18n.l('less_than'),
@@ -12,11 +12,11 @@ export default {
       'ne': i18n.l('not_equals')
     }
   },
-  getTextual(operation, currentValue) {
+  getTextual(operation: string, currentValue: any) {
     var possibleOperations = this.possibleOperations();
     return '%%fieldname%% ' + possibleOperations[operation] + ' ' + currentValue;
   },
-  isMatch(recordValue, operation, matchingValue) {
+  isMatch(recordValue: string, operation: string, matchingValue: string) {
     switch(operation) {
       case 'eq':
         return recordValue == matchingValue;

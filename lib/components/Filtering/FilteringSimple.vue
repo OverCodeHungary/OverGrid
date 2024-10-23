@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
   import { reactive, watch, computed } from 'vue';
   import useI18n from '../../composables/useI18n';
@@ -40,7 +40,7 @@
     filter: ''
   });
 
-  let interval = null;
+  let interval: NodeJS.Timeout | null = null;
 
   watch(() => state.filter, (newValue) => {
     if(interval) {

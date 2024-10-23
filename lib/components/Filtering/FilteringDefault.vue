@@ -7,10 +7,10 @@
     </button>
     <div class="filtersSection">
       <div class="currentFiltersHolder">
-        <span class="og-text-compact" v-if="props.filters.length <= 0">
+        <span class="og-text-compact" v-if="props.filters && props.filters.length <= 0">
           {{ i18n.l('no_filters_added') }}
         </span>
-        <span class="flex flex-row flex-wrap items-center gap-0.5" v-if="props.filters.length > 0">
+        <span class="flex flex-row flex-wrap items-center gap-0.5" v-if="props.filters && props.filters.length > 0">
           <span v-for="filter in tweakedFilters" :key="filter.field">
             <ul class=" mb-0" v-if="!filter._opselector">
               <li>
@@ -68,45 +68,52 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 // filterables
 import FilterableNumber from './Filterables/FilterableNumber.vue'
-import FilterableNumberConfig from './Filterables/FilterableNumber.config.js'
+import FilterableNumberConfig from './Filterables/FilterableNumber.config'
 import FilterableText from './Filterables/FilterableText.vue'
-import FilterableTextConfig from './Filterables/FilterableText.config.js'
+import FilterableTextConfig from './Filterables/FilterableText.config'
 import FilterableDate from './Filterables/FilterableDate.vue'
-import FilterableDateConfig from './Filterables/FilterableDate.config.js'
+import FilterableDateConfig from './Filterables/FilterableDate.config'
 import FilterableStatus from './Filterables/FilterableStatus.vue'
-import FilterableStatusConfig from './Filterables/FilterableStatus.config.js'
+import FilterableStatusConfig from './Filterables/FilterableStatus.config'
 //import FilterableLookup from './Filterables/FilterableLookup.vue'
 import CustomContentModal from '../CustomContentModal.vue'
 import { reactive, onMounted, watch, computed } from 'vue'
+import { FilteringOperator, FilteringFilter } from '../model/Filtering'
+import { MappingRecordType, StatusFormatterConfigType } from '../model/OGConfig'
 import useI18n from '../../composables/useI18n';
 const i18n = useI18n('hu');
 
-const Filterables = {
-  FilterableNumber,
-  FilterableText,
-  FilterableDate,
-  FilterableStatus,
+const Filterables: Record<string, any> = {
+  'FilterableNumber': FilterableNumber,
+  'FilterableText': FilterableText,
+  'FilterableDate': FilterableDate,
+  'FilterableStatus': FilterableStatus,
   //FilterableLookup
 }
 
-const props = defineProps({
-  filteringConfig: Object,
-  dataMapping: Object,
+const props = defineProps<{
+  filteringConfig: object,
+  dataMapping: Record<string, MappingRecordType>,
   pushFilter: Function,
   removeFilter: Function,
-  filters: Array,
-  filterOperator: String,
+  filters: Array<FilteringFilter>,
+  filterOperator: FilteringOperator,
   changeFilterOperator: Function
-});
+}>();
 
-const state = reactive({
+const state = reactive<{
+  selectorField: string | null,
+  currentFilterValue: any,
+  operator: FilteringOperator,
+  filteringModalShown: boolean
+}>({
   selectorField: null,
   currentFilterValue: null,
-  operator: 'OR',
+  operator: FilteringOperator.or,
   filteringModalShown: false
 });
 
@@ -152,11 +159,13 @@ const tweakedFilters = computed(() => {
       ++opCounter;
     }
 
-    var cNewFilter = {
+    let cNewFilter: FilteringFilter = {
       field: props.filters[i].field,
       operation: props.filters[i].operation,
       type: props.filters[i].type,
-      value: props.filters[i].value
+      value: props.filters[i].value,
+      filterKey: '',
+      textual: ''
     }
 
     switch(props.filters[i].type) {
@@ -170,7 +179,7 @@ const tweakedFilters = computed(() => {
         cNewFilter.textual = FilterableDateConfig.getTextual(props.filters[i].operation, props.filters[i].value, true).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "status":
-        cNewFilter.textual = FilterableStatusConfig.getTextual(props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableStatusConfig.getTextual(props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter as StatusFormatterConfigType).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
     }
     
@@ -183,12 +192,12 @@ const tweakedFilters = computed(() => {
 })
 
 const selectorFieldOptions = computed(() => {
-  var options = {
+  var options: Record<string, string> = {
     null: "-- " + i18n.l('select_field') + " --"
   };
   for(var i in props.dataMapping) {
     if(props.dataMapping[i].filterable && props.dataMapping[i].filterable.active) {
-      var title = props.dataMapping[i].title;
+      var title: string | undefined = props.dataMapping[i].title;
       if(props.dataMapping[i].filterable.titleOverride) {
         title = props.dataMapping[i].filterable.titleOverride;
       }
@@ -222,7 +231,7 @@ const formatterConfig = computed(() => {
 //   return this.filters.length > 1;
 // })
 
-function translateTypeToHumanType(type) {
+function translateTypeToHumanType(type: string) {
   switch(type.toLowerCase()) {
     case "number":
       return i18n.l('whole_number')
@@ -241,7 +250,7 @@ function translateTypeToHumanType(type) {
   }
 }
 
-function changeFilterValue(field, obj) {
+function changeFilterValue(field: string, obj: string) {
   state.currentFilterValue = obj
 }
 

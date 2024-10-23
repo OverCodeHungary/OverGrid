@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { reactive, watch, computed } from 'vue';
   import SpinnerLoader from '../SpinnerLoader.vue';
 
@@ -46,7 +46,7 @@
     },
     gridRefresh: {
       type: Function,
-      required: false,
+      required: true,
     },
     config: {
       type: Object,

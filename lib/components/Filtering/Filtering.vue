@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-row" v-if="props.config.filtering && props.config.filtering.active">
+  <div class="flex flex-row" v-if="props.config?.filtering && props.config.filtering.active">
     <FilteringDefault 
-      v-if="!props.config.filtering.simple"
+      v-if="!props.config?.filtering.simple"
       data-test="FilteringDefault" 
-      :filteringConfig="props.config.filtering" 
-      :dataMapping="props.config.mapping" 
+      :filteringConfig="props.config?.filtering" 
+      :dataMapping="props.config?.mapping" 
       :pushFilter="pushFilter" 
       :removeFilter="removeFilter" 
       :changeFilterOperator="changeFilterOperator" 
@@ -19,8 +19,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { reactive, onMounted, nextTick } from 'vue';
+  import { FilteringFilter, FilteringOperator } from '../model/Filtering'
   import FilteringDefault from './FilteringDefault.vue'
   import FilteringSimple from './FilteringSimple.vue'
 
@@ -30,26 +31,28 @@
   });
 
   const state = reactive({
-    filters: [],
-    filterOperator: 'AND',
+    filters: Array<FilteringFilter>(),
+    filterOperator: FilteringOperator.and,
     simpleFilter: ''
   });
 
-  function pushFilter(filter) {
+  function pushFilter(filter: FilteringFilter) {
     if(isFilterAlreadyExists(filter.field)) {
       removeFilter(filter.field)
     }
 
     state.filters.push(filter);
-    props.setNewFiltersAndRefresh({
-      filters: state.filters,
-      filterOperator: state.filterOperator,
-      simpleFilter: state.simpleFilter
-    });
+    if(props.setNewFiltersAndRefresh) {
+      props.setNewFiltersAndRefresh({
+        filters: state.filters,
+        filterOperator: state.filterOperator,
+        simpleFilter: state.simpleFilter
+      });
+    }
     updateFilterParametersInURL();
   }
 
-  function isFilterAlreadyExists(field) {
+  function isFilterAlreadyExists(field: string) {
     for(var i in state.filters) {
       if(state.filters[i].field == field) {
         return true;
@@ -59,21 +62,23 @@
     return false;
   }
 
-  function removeFilter(field) {
-    var ind = -1;
+  function removeFilter(field: string) {
+    let ind: number = -1;
     for(var i in state.filters) {
       if(state.filters[i].field == field) {
-        ind = i;
+        ind = parseInt(i);
         break;
       }
     }
     
     state.filters.splice(ind, 1);
-    props.setNewFiltersAndRefresh({
-      filters: state.filters,
-      filterOperator: state.filterOperator,
-      simpleFilter: state.simpleFilter
-    });
+    if(props.setNewFiltersAndRefresh) {
+      props.setNewFiltersAndRefresh({
+        filters: state.filters,
+        filterOperator: state.filterOperator,
+        simpleFilter: state.simpleFilter
+      });
+    }
     updateFilterParametersInURL();
   }
 
@@ -81,32 +86,39 @@
     // @TODO: implement
   }
 
-  function changeFilterOperator(op) {
+  function changeFilterOperator(op: FilteringOperator) {
     state.filterOperator = op;
-    props.setNewFiltersAndRefresh({
-      filters: state.filters,
-      filterOperator: state.filterOperator,
-      simpleFilter: state.simpleFilter
-    });
-    updateFilterParametersInURL();
-  }
 
-  function setSimpleFilter(filter) {
-    state.simpleFilter = filter; 
-    props.setNewFiltersAndRefresh({
-      filters: state.filters,
-      filterOperator: state.filterOperator,
-      simpleFilter: state.simpleFilter
-    });
-  }
-
-  onMounted(() => {
-    nextTick(() => {
+    if(props.setNewFiltersAndRefresh) { 
       props.setNewFiltersAndRefresh({
         filters: state.filters,
         filterOperator: state.filterOperator,
         simpleFilter: state.simpleFilter
       });
+    }
+    updateFilterParametersInURL();
+  }
+
+  function setSimpleFilter(filter: string) {
+    state.simpleFilter = filter; 
+    if(props.setNewFiltersAndRefresh) {
+      props.setNewFiltersAndRefresh({
+        filters: state.filters,
+        filterOperator: state.filterOperator,
+        simpleFilter: state.simpleFilter
+      });
+    }
+  }
+
+  onMounted(() => {
+    nextTick(() => {
+      if(props.setNewFiltersAndRefresh) {
+        props.setNewFiltersAndRefresh({
+          filters: state.filters,
+          filterOperator: state.filterOperator,
+          simpleFilter: state.simpleFilter
+        });
+      }
     })
   })
 </script>

@@ -55,25 +55,32 @@
   </CustomContentModal>
 </template>
 
-<script setup>
-  import useI18n from '../../composables/useI18n.js';
+<script setup lang="ts">
+  import useI18n from '../../composables/useI18n';
   import CustomContentModal from '../CustomContentModal.vue';
   import moment from 'moment';
-  import JsonExcel from "vue-json-excel3";
+  import jsonExcel from 'vue-json-excel3';
   import { reactive, onMounted, computed, watch } from 'vue';
-  const i18n = useI18n();
+  const i18n = useI18n('hu');
 
-  const props = defineProps({
-    xlsxExportConfig: Object,
-    dataMapping: Object,
+  const props = defineProps<{
+    xlsxExportConfig: {
+      active: boolean,
+      additionalExportFields?: {
+        columnsFn?: Function
+      }
+    },
+    dataMapping: Record<string, any>,
     closeModal: Function,
     closeDropdown: Function,
-    showModal: Boolean,
-    records: Array
-  })
+    showModal: boolean,
+    records: Array<{
+      [key: string]: any
+    }>
+  }>();
 
   const state = reactive({
-    selected: [],
+    selected: Array<string>(),
     format: 'xlsx',
     loading: false,
     showModal: props.showModal
@@ -98,7 +105,7 @@
   })
 
   function finishDownload() {
-    props.hideModal();
+    props.closeModal();
   }
 
   const checkboxOptions = computed(() => {
@@ -129,7 +136,7 @@
   }
 
   function getHeaderMapping() {
-    let headerMapping = {};
+    let headerMapping: Record<string, string> = {};
     for(let i in props.dataMapping) { 
       if(!props.dataMapping[i].exportable) {
         continue;
@@ -146,7 +153,7 @@
 
     if(props.records && props.records.length > 0 && state.selected.length > 0) {
       for(var i in props.records) {
-        var cSheetData = {};
+        var cSheetData: Record<string, any> = {};
         for(var j in state.selected) {
           if(props.records[i][state.selected[j]] != undefined) {
             let rawContent = props.records[i][state.selected[j]];

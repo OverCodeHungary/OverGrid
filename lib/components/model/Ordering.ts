@@ -10,18 +10,21 @@ class Ordering {
 
   initByState(
     isActive: boolean,
-    field: string,
-    direction: OrderDirection,
-    defaultOrderKey: string,
-    defaultOrderDirection: OrderDirection
+    field?: string,
+    direction?: OrderDirection
   ) {
-    this.active = isActive;
-    this.key = field || defaultOrderKey;
-    this.direction = direction || defaultOrderDirection;
+    if(field && direction) {
+      this.key = field;
+      this.direction = direction;
+      this.active = isActive;
+    }
+    else {
+      this.active = false;
+    }
   }
 
-  constructor(active: boolean) {
-    this.active = active;
+  constructor() {
+    this.active = false;
     this.key = '';
     this.direction = OrderDirection.asc;
   }

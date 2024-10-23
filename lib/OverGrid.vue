@@ -118,11 +118,11 @@
               <th class="" v-for="(value, index) in titlesVisible" :key="'tvbl_' + index" :width="value.width">
                 <div class="flex flex-row items-center gap-0.5">
                   <span class="whitespace-nowrap og-text-compact mr-1">{{ value.title }}</span>
-                  <button v-if="value.orderable == true" v-show="(state.order.active && state.order.field == value.key) || !state.order.active" :title="(state.order.active && state.order.field == value.key && state.order.direction == 'desc') ? i18n.l('descending') : i18n.l('ascending')" :class="['og-btn og-btn-secondary og-btn-circle og-btn-sm', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
-                    <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == 'asc'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                  <button v-if="value.orderable == true" v-show="(state.order.active && state.order.field == value.key) || !state.order.active" :title="(state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.desc) ? i18n.l('descending') : i18n.l('ascending')" :class="['og-btn og-btn-secondary og-btn-circle og-btn-sm', {'': state.order.active && state.order.field == value.key}]" @click="orderChange($event, value.key)">
+                    <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.asc" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
                     </svg>
-                    <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == 'desc'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                    <svg v-if="state.order.active && state.order.field == value.key && state.order.direction == OrderDirection.desc" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
                     </svg>
                     <svg v-if="!state.order.active" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
@@ -140,7 +140,7 @@
           </thead>
           <tbody v-if="state.records.length > 0">
             <template v-for="(record, index) in filteredOrderedRecords" :key="index">
-              <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'og-row-opened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHightlighter && props.config.rowHightlighter.active && props.config.rowHightlighter.fn(record) }]" >
+              <tr data-test="OverGridRow" :data-rowid="record[props.config.idkey]" :class="[{ 'og-row-opened': state.openedRow.includes(record[props.config.idkey]) }, 'og-row', { 'bg-error/10': props.config.rowHighlighter && props.config.rowHighlighter.active && props.config.rowHighlighter.fn(record) }]" >
                 <td class="og-cell og-text-compact" width="30px" v-if="isExtraRowEnabled">
                   <button variant="link" v-if="(!state.openedRow.includes(record[props.config.idkey]))" @click="() => { mainRowClick(record[props.config.idkey]) }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -179,7 +179,7 @@
                       :data="value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody]" 
                       :config="value" 
                       :rowid="record[props.config.idkey]" 
-                      :field="cmNameBody" 
+                      :field="cmNameBody.toString()" 
                       :record="record" 
                       :refreshGrid="() => { state.refreshNeeded=true }" 
                       :customFormatters="props.customFormatters"
@@ -194,7 +194,7 @@
               <Transition name="og-extra-row">
                 <tr v-show="isRowOpened(record[props.config.idkey])">
                   <td :colspan="colNumber">
-                    <slot v-bind:record="record" v-bind:extraParams="props.config.extraRow.extraParams" name="extraRow"></slot>
+                    <slot v-bind:record="record" v-bind:extraParams="props.config.extraRow?.extraParams" name="extraRow"></slot>
                   </td>
                 </tr>
               </Transition>
@@ -239,7 +239,7 @@
 
 <script setup lang="ts">
   import { reactive, ref, computed, watch, nextTick, onMounted } from 'vue';
-  import Filtering from './components/Filtering/Filtering.vue'
+  import Filtering from './components/Filtering/Filtering.vue';
   import SpinnerLoader from './components/SpinnerLoader.vue';
   import DropDown from './components/DropDown.vue';
   import useAxios from './composables/useAxios';
@@ -247,12 +247,12 @@
   import useLocalSortAndFilter from './composables/useLocalSortAndFilter';
   import ColumnSelector from './components/ColumnSelector/ColumnSelector.vue';
   import XlsxExport from './components/XlsxExport/XlsxExport.vue';
-  import RootFormatter from './Formatters/RootFormatter.vue';
+  import RootFormatter from './formatters/RootFormatter.vue';
   import Pagination from './components/Pagination/Pagination.vue';
   import ChangePageSize from './components/Pagination/ChangePageSize.vue';
   import AutoRefresh from './components/AutoRefresh/AutoRefresh.vue';
   import BulkOperations from './components/BulkOperations/BulkOperations.vue';
-  import DefaultTransformation from './integrations/DefaultTransformation.ts';
+  import DefaultTransformation from './integrations/DefaultTransformation';
   import { FilteringClass, FilteringFilter, FilteringOperator } from './components/model/Filtering';
   import { Ordering, OrderDirection } from './components/model/Ordering';
   import { PaginationClass } from './components/model/Pagination';
@@ -261,23 +261,43 @@
   const localSortAndFilter = useLocalSortAndFilter();
   import useI18n from './composables/useI18n';
   const i18n = useI18n('hu');
-  import './themes/default.css'
+  import { OGConfig } from './components/model/OGConfig';
 
-  const operationsDropdown = ref(null);
+  const operationsDropdown = ref<typeof DropDown>();
 
-  const props = defineProps({
-    config: {
-      type: Object,
-      required: true
+  const props = defineProps<{
+    config: OGConfig,
+    customFormatters: any[]
+  }>();
+
+  const state = reactive<{
+    refreshNeeded: boolean,
+    updateKey: number,
+    records: any[],
+    registeredEvents: any,
+    openedRow: any[],
+    filters: any,
+    filterOperator: FilteringOperator,
+    simpleFilter: string,
+    checkedRows: any[],
+    checkedRow: any,
+    showColumnSelectorModal: boolean,
+    autoRefresh: string,
+    autoRefreshInterval: any,
+    pagination: {
+      active: boolean,
+      page: number,
+      size: number,
+      totalPages: number | null,
+      totalElements: number | null
     },
-    customFormatters: {
-      type: Array,
-      required: false,
-      default: () => []
-    }
-  });
-
-  const state = reactive({
+    order: {
+      active: boolean,
+      field: string | null,
+      direction: OrderDirection
+    },
+    showXlsxExportModal: boolean
+  }>({
     refreshNeeded: false,
     updateKey: 0,
     records: [],
@@ -289,7 +309,7 @@
 
     /* FILTERING */
     filters: {},
-    filterOperator: 'AND',
+    filterOperator: FilteringOperator.and,
     simpleFilter: '',
     /* FILTERING */
 
@@ -322,7 +342,7 @@
     order: {
       active: false,
       field: null,
-      direction: 'asc'
+      direction: OrderDirection.asc
     },
     /* ORDER */
 
@@ -350,7 +370,7 @@
   function removeOrder() {
     state.order.active = false;
     state.order.field = null;
-    state.order.direction = 'asc';
+    state.order.direction = OrderDirection.asc;
     if(!props.config.orderLocal) {
       state.refreshNeeded = true
     }
@@ -358,27 +378,29 @@
 
   function closeOperationDropdown() {
     nextTick(() => {
-      operationsDropdown.value.close()
+      if (operationsDropdown.value) {
+        operationsDropdown.value.close();
+      }
     })
   }
 
-  function orderChange(event, field) {
+  function orderChange(event: Event, field: string) {
     if (!state.order.active) {
       state.order.active = true
       state.order.field = field
     }
     else {
       if (state.order.field == field) {
-        if (state.order.direction == "asc") {
-          state.order.direction = "desc"
+        if (state.order.direction == OrderDirection.asc) {
+          state.order.direction = OrderDirection.desc
         }
         else {
-          state.order.direction = "asc"
+          state.order.direction = OrderDirection.asc
         }
       }
       else {
         state.order.field = field
-        state.order.direction = "asc"
+        state.order.direction = OrderDirection.asc
       }
     }
 
@@ -428,7 +450,9 @@
     return columnsVisible.titlesVisible(props.config);
   });
 
-  const mappingVisible = computed(() => {
+  const mappingVisible = computed<{
+    [key: string]: any
+  }>(() => {
     state.updateKey; // to trigger the reactivity when updateKey changes
     return columnsVisible.mappingVisible(props.config);
   })
@@ -445,11 +469,11 @@
     return (props.config.filtering && props.config.filtering.active) || needsToShowAdditionalOperationsDropdown;
   })
 
-  function isRecordMatchTheCurrentFiltering(record) {
+  function isRecordMatchTheCurrentFiltering(record: any) {
     return localSortAndFilter.isRecordMatchTheCurrentFiltering(record, state.filters, state.filterOperator);
   }
 
-  function sortRecords(recArray, field, direction) {
+  function sortRecords(recArray: any, field: string, direction: OrderDirection) {
     return localSortAndFilter.sortRecords(recArray, field, direction, props.config.mapping[field]);
   }
 
@@ -468,7 +492,7 @@
 
     if(props.config.orderLocal) {
       if(state.order.active) {
-        filteredRecords = sortRecords(filteredRecords, state.order.field, state.order.direction);
+        filteredRecords = sortRecords(filteredRecords, state.order.field ? state.order.field : '', state.order.direction);
       }
       else {
         if(props.config.defaultOrderKey && props.config.defaultOrderDirection) {
@@ -489,9 +513,9 @@
 
     let isOrderActive = false;
     let orderKey = null;
-    let orderDirection = null;
+    let orderDirection: OrderDirection = OrderDirection.asc;
     if(!props.config?.orderLocal) {
-      if(state.order.active) {
+      if(state.order.active && state.order.field) {
         isOrderActive = true;
         orderKey = props.config.mapping[state.order.field].orderKey ? props.config.mapping[state.order.field].orderKey : state.order.field;
         orderDirection = state.order.direction;
@@ -507,7 +531,7 @@
 
     ordering.initByState(
       isOrderActive,
-      orderKey, 
+      orderKey ? orderKey : undefined, 
       orderDirection
     );
 
@@ -518,7 +542,7 @@
     );
     
     filtering.initByState(
-      props.config.filtering && props.config.filtering.active && !props.config.filtering.local && (state.filters.length > 0 || props.config.filtering.simple),
+      !!(props.config.filtering && props.config.filtering.active && !props.config.filtering.local && (state.filters.length > 0 || props.config.filtering.simple)),
       state.filters, 
       state.filterOperator, 
       !!(props.config.filtering && props.config.filtering.simple),
@@ -541,9 +565,9 @@
 
       const response = await Axios.get(props.config.endpoint, {
         params: axiosParams.value,
-        onTokenRefreshed: () => {
-          refetchData();
-        }
+        // onTokenRefreshed: () => {
+        //   refetchData();
+        // }
       });
 
       let resData = response.data;
@@ -552,8 +576,8 @@
       }
 
       var rec = null;
-      if (props.config.rootkey) {
-        rec = resData[props.config.rootkey];
+      if (props.config.rootKey) {
+        rec = resData[props.config.rootKey];
       }
       else {
         rec = resData;
@@ -585,7 +609,7 @@
 
       if(props.config.events && props.config.events.readyAfterRefresh) {
         nextTick(function () {
-          props.config.events.readyAfterRefresh();
+          props.config.events?.readyAfterRefresh();
         });
       }
 
@@ -610,7 +634,7 @@
     }
   }
 
-  function mainRowClick(recordId) {
+  function mainRowClick(recordId: any) {
     if(!isExtraRowEnabled) {
       return;
     }
@@ -619,7 +643,7 @@
       state.openedRow.splice(state.openedRow.indexOf(recordId), 1)
     }
     else {
-      if(isExtraRowMultiOpenEnable) {
+      if(isExtraRowMultiOpenEnable()) {
         state.openedRow.push(recordId);
       }
       else {

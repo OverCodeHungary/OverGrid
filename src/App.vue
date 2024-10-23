@@ -28,12 +28,13 @@
 <script setup lang="ts">
   import './index.css'
   import OverGrid from '../lib/OverGrid.vue'
-  import { Filtering, Ordering, Pagination } from '../lib/OverGrid.vue'
   import CustomFormatter from './CustomFormatter.vue';
+  import '../lib/themes/default.css'
+  import { OGConfig } from '../lib/components/model/OGConfig'
 
   const gridUniqueId = 'ogSampleGrid'
 
-  const config = {
+  const config: OGConfig = {
     endpoint: 'http://localhost:3000',
     rootkey: "data",
     idkey: "id",
@@ -79,7 +80,6 @@
       active: true,
       simple: true,
       local: false,
-      simpleHelpText: null,
       simpleFilterTemplate: 'workName=*{data}/i|workNumberCustom=*{data}/i|orderNumber=*{data}/i|attentionTo=*{data}/i',
       simplePlaceholder: 'Keresés...',
     },
@@ -100,8 +100,6 @@
           clearRows();
         }
       }]
-    },
-    events: {
     },
     columnSelector: {
       active: true

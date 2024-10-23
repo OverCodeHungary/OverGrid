@@ -14,7 +14,7 @@
   </ul>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { onMounted, reactive, nextTick } from 'vue';
   import useI18n from '../../composables/useI18n';
   const i18n = useI18n('hu');
@@ -30,14 +30,16 @@
     }
   });
 
-  const state = reactive({
-    pageSize: null,
+  const state = reactive<{
+    pageSize: number
+  }>({
+    pageSize: 10
   });
 
-  function changePageSize(size) {
+  function changePageSize(size: number) {
     state.pageSize = size;
     if(props.config.gridUniqueId) {
-      localStorage.setItem('pagesizevalue_' + props.config.gridUniqueId, size)
+      localStorage.setItem('pagesizevalue_' + props.config.gridUniqueId, size.toString());
     }
 
     nextTick(() => {
@@ -49,7 +51,7 @@
     if(props.config.pagination && props.config.pagination.possiblePageSizes && props.config.pagination.possiblePageSizes.length > 0) {
       var currentPageSizeValue = localStorage.getItem('pagesizevalue_' + props.config.gridUniqueId)
       if(currentPageSizeValue) {
-        state.pageSize = currentPageSizeValue;
+        state.pageSize = parseInt(currentPageSizeValue);
         nextTick(() => {
           props.changePageSize(state.pageSize);
         })

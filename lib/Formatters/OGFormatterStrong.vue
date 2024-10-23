@@ -6,7 +6,8 @@
 
 <script setup lang="ts">
   import FormatterProps from './types/FormatterProps';
-  const props = defineProps<FormatterProps>()
+  import { ConfiglessFormatterConfigType } from '../components/model/OGConfig'
+  const props = defineProps<FormatterProps<ConfiglessFormatterConfigType>>()
 </script>
 
 

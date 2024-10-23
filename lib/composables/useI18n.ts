@@ -1,11 +1,20 @@
-import i18nhu from '../i18n/hu.i18n.js';
+import i18nhu from '../i18n/hu.i18n';
 
 let currentLang = 'hu';
-let i18n = {
+
+interface I18n {
+  [key: string]: { [key: string]: string };
+}
+
+interface I18nParams {
+  [key: string]: string;
+}
+
+let i18n: I18n = {
   hu: i18nhu
 };
 
-function storeMissingLangKeys(key, lang) {
+function storeMissingLangKeys(key: string, lang: string) {
   let cVal = localStorage.getItem('missing-lang-keys-' + lang);
   if(!cVal) {
     cVal = "";
@@ -18,7 +27,7 @@ function storeMissingLangKeys(key, lang) {
   localStorage.setItem('missing-lang-keys-' + lang, cArray.join(","));
 }
 
-let l = (key, params = null) => {
+let l = (key: string, params?: I18nParams) => {
   if(!i18n[currentLang][key]) {
     storeMissingLangKeys(key, currentLang);
   }
@@ -38,7 +47,7 @@ let l = (key, params = null) => {
   }
 }
 
-export default function useI18n(lang) {
+export default function useI18n(lang: string) {
   currentLang = lang || 'hu';
 
   return {

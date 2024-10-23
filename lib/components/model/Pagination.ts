@@ -9,8 +9,8 @@ class PaginationClass {
     this.size = size;
   }
 
-  constructor(active: boolean) {
-    this.active = active;
+  constructor() {
+    this.active = false;
     this.page = 1;
     this.size = 10;
   }

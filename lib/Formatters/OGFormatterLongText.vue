@@ -8,7 +8,7 @@
 
     <CustomContentModal 
       :show="state.modalShown" 
-      :title="props.config.formatter.title ? props.config.formatter.title : i18n.l('untitled')" :disableButtons="true" :close="() => { state.modalShown = false }">
+      :title="props.config.title ? props.config.title : i18n.l('untitled')" :disableButtons="true" :close="() => { state.modalShown = false }">
       <template #content>
         <div v-if="props.data" class="w-full overflow-hidden whitespace-normal og-text-compact">{{ props.data }}</div>
         <div v-else class="w-full overflow-hidden whitespace-normal italic og-text-compact">
@@ -25,7 +25,8 @@
   const i18n = useI18n('hu');
   import { reactive } from 'vue';
   import FormatterProps from './types/FormatterProps';
-  const props = defineProps<FormatterProps>()
+  import { LongTextFormatterConfigType } from '../components/model/OGConfig'
+  const props = defineProps<FormatterProps<LongTextFormatterConfigType>>()
 
   const state = reactive({
     modalShown: false
