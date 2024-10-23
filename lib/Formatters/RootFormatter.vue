@@ -23,7 +23,7 @@
   import OGFormatterHTML from './OGFormatterHTML.vue'
   import OGFormatterLongText from './OGFormatterLongText.vue'
   import OGFormatterTailwindFormatter from './OGFormatterTailwindFormatter.vue'
-  import { AllFormatterConfigTypes, StatusFormatterConfigType, DateFormatterConfigType, OperationsFormatterConfigType, ConfiglessFormatterConfigType, HighlightFormatterConfigType, LongTextFormatterConfigType, TailwindClassFormatterConfigType } from '../components/model/OGConfig'
+  import { AllFormatterConfigTypes, StatusFormatterConfigType, DateFormatterConfigType, OperationsFormatterConfigType, ConfiglessFormatterConfigType, HighlightFormatterConfigType, LongTextFormatterConfigType, TailwindClassFormatterConfigType } from '../components/model/OverGridConfig'
 
   const props = defineProps<{
     theme: string,

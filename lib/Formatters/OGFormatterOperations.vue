@@ -32,7 +32,7 @@
 <script setup lang="ts">
   import DropDown from '../components/DropDown.vue'
   import FormatterProps from './types/FormatterProps';
-  import { OperationsFormatterConfigType, OperatorButtonType } from '../components/model/OGConfig'
+  import { OperationsFormatterConfigType, OperatorButtonType } from '../components/model/OverGridConfig'
   const props = defineProps<FormatterProps<OperationsFormatterConfigType>>()
   import { computed } from 'vue';
 

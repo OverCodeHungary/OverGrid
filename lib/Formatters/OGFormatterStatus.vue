@@ -7,7 +7,7 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import PropsConfig from './types/FormatterProps';
-  import { StatusFormatterConfigType } from '../components/model/OGConfig'
+  import { StatusFormatterConfigType } from '../components/model/OverGridConfig'
   const props = defineProps<PropsConfig<StatusFormatterConfigType>>();
 
   const currentStatus = computed<{

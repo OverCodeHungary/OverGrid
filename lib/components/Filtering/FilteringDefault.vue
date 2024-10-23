@@ -83,7 +83,7 @@ import FilterableStatusConfig from './Filterables/FilterableStatus.config'
 import CustomContentModal from '../CustomContentModal.vue'
 import { reactive, onMounted, watch, computed } from 'vue'
 import { FilteringOperator, FilteringFilter } from '../model/Filtering'
-import { MappingRecordType, StatusFormatterConfigType } from '../model/OGConfig'
+import { MappingRecordType, StatusFormatterConfigType } from '../model/OverGridConfig'
 import useI18n from '../../composables/useI18n';
 const i18n = useI18n('hu');
 

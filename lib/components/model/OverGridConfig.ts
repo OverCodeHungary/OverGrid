@@ -83,12 +83,18 @@ type MappingRecordType = {
   formatter?: AllFormatterConfigTypes
 }
 
-type OGConfig = {
+/**
+ * The full configuration object for the OverGrid
+ */
+type OverGridConfig = {
+  /**
+   * The endpoint of the API
+   */
   endpoint: string,
   theme?: string,
   rootkey?: string,
   idkey: string,
-  title?: string,
+  //title?: string,
   defaultOrderKey?: string,
   defaultOrderDirection?: OrderDirection,
   orderLocal?: boolean,
@@ -169,5 +175,5 @@ export type {
   TailwindClassFormatterConfigType,
   AllFormatterConfigTypes,
   MappingRecordType,
-  OGConfig
+  OverGridConfig
 }

@@ -1,4 +1,4 @@
-import { OperatorButtonType, ConfiglessFormatterConfigType, DateFormatterConfigType, HighlightFormatterConfigType, LongTextFormatterConfigType, OperationsFormatterConfigType, StatusFormatterConfigType, TailwindClassFormatterConfigType, AllFormatterConfigTypes, MappingRecordType, OGConfig } from './components/model/OGConfig';
+import { OperatorButtonType, ConfiglessFormatterConfigType, DateFormatterConfigType, HighlightFormatterConfigType, LongTextFormatterConfigType, OperationsFormatterConfigType, StatusFormatterConfigType, TailwindClassFormatterConfigType, AllFormatterConfigTypes, MappingRecordType, OverGridConfig } from './components/model/OverGridConfig';
 
 export type {
   OperatorButtonType,
@@ -11,6 +11,6 @@ export type {
   TailwindClassFormatterConfigType,
   AllFormatterConfigTypes,
   MappingRecordType,
-  OGConfig
+  OverGridConfig
 }
 

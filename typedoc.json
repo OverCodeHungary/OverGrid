@@ -1,0 +1,15 @@
+{
+  "entryPoints": ["./lib/components/model/OverGridConfig.ts"],
+  "out": "docs",
+  "tsconfig": "./tsconfig.json",
+  "exclude": [
+    "**/node_modules/**",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__tests__/**"
+  ],
+  "includeVersion": true,
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": true
+}

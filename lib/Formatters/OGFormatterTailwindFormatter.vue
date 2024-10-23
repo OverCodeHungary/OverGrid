@@ -6,6 +6,6 @@
 
 <script setup lang="ts">
   import FormatterProps from './types/FormatterProps';
-  import { TailwindClassFormatterConfigType } from '../components/model/OGConfig'
+  import { TailwindClassFormatterConfigType } from '../components/model/OverGridConfig'
   const props = defineProps<FormatterProps<TailwindClassFormatterConfigType>>()
 </script>

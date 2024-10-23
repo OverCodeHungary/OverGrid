@@ -2,7 +2,7 @@ import FilterableNumberConfig from '../components/Filtering/Filterables/Filterab
 import FilterableDateConfig from '../components/Filtering/Filterables/FilterableDate.config';
 import FilterableStatusConfig from '../components/Filtering/Filterables/FilterableStatus.config';
 import FilterableTextConfig from '../components/Filtering/Filterables/FilterableText.config';
-import { MappingRecordType } from '../components/model/OGConfig';
+import { MappingRecordType } from '../components/model/OverGridConfig';
 import { OrderDirection } from '../components/model/Ordering';
 import { FilteringOperator } from '../components/model/Filtering';
 

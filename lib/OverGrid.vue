@@ -263,13 +263,13 @@
   const localSortAndFilter = useLocalSortAndFilter();
   import useI18n from './composables/useI18n';
   const i18n = useI18n('hu');
-  import { OGConfig } from './components/model/OGConfig';
+  import { OverGridConfig } from './components/model/OverGridConfig';
   import './themes/default.css'
 
   const operationsDropdown = ref<typeof DropDown>();
 
   const props = defineProps<{
-    config: OGConfig,
+    config: OverGridConfig,
     customFormatters: any[]
   }>();
 

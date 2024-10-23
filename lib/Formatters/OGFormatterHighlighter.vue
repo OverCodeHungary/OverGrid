@@ -5,7 +5,7 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import FormatterProps from './types/FormatterProps';
-  import { HighlightFormatterConfigType } from '../components/model/OGConfig'
+  import { HighlightFormatterConfigType } from '../components/model/OverGridConfig'
   const props = defineProps<FormatterProps<HighlightFormatterConfigType>>()
 
   const craftedData = computed(() => {

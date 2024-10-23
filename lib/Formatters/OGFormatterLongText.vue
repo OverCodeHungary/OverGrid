@@ -25,7 +25,7 @@
   const i18n = useI18n('hu');
   import { reactive } from 'vue';
   import FormatterProps from './types/FormatterProps';
-  import { LongTextFormatterConfigType } from '../components/model/OGConfig'
+  import { LongTextFormatterConfigType } from '../components/model/OverGridConfig'
   const props = defineProps<FormatterProps<LongTextFormatterConfigType>>()
 
   const state = reactive({

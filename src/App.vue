@@ -30,12 +30,12 @@
   import OverGrid from '../lib/OverGrid.vue'
   import CustomFormatter from './CustomFormatter.vue';
   import '../lib/themes/default.css'
-  import { OGConfig } from '../lib/components/model/OGConfig'
+  import { OverGridConfig } from '../lib/components/model/OverGridConfig'
   import { OrderDirection } from '../lib/components/model/Ordering';
 
   const gridUniqueId = 'ogSampleGrid'
 
-  const config: OGConfig = {
+  const config: OverGridConfig = {
     endpoint: 'http://localhost:3000',
     rootkey: "data",
     idkey: "id",

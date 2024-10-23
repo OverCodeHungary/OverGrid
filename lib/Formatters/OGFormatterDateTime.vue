@@ -11,7 +11,7 @@
   import useI18n from '../composables/useI18n';
   const i18n = useI18n('hu');
   import FormatterProps from './types/FormatterProps';
-  import { DateFormatterConfigType } from '../components/model/OGConfig'
+  import { DateFormatterConfigType } from '../components/model/OverGridConfig'
   const props = defineProps<FormatterProps<DateFormatterConfigType>>()
 
   const formattedDate = computed(() => {

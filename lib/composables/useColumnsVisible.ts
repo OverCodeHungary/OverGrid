@@ -1,8 +1,8 @@
-import { OGConfig, MappingRecordType } from "../components/model/OGConfig";
+import { OverGridConfig, MappingRecordType } from "../components/model/OverGridConfig";
 
 export default function useColumnsVisible() {
   return {
-    titlesVisible: (config: OGConfig) => {
+    titlesVisible: (config: OverGridConfig) => {
       let enabledColumnsStr: string | null = '';
       let enabledColumns: string[] = [];
       if(config.columnSelector && config.columnSelector.active) {
@@ -43,7 +43,7 @@ export default function useColumnsVisible() {
       return titles;
     },
 
-    mappingVisible: (config: OGConfig) => {
+    mappingVisible: (config: OverGridConfig) => {
       let enabledColumnsStr: string | null = '';
       let enabledColumns: string[] = [];
 

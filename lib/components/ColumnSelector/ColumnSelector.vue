@@ -24,7 +24,7 @@
   import { onMounted, reactive, computed, watch } from 'vue';
   import CustomContentModal from '../CustomContentModal.vue';
   import useI18n from '../../composables/useI18n';
-  import { MappingRecordType } from '../model/OGConfig';
+  import { MappingRecordType } from '../model/OverGridConfig';
   const i18n = useI18n('hu');
 
   const props = defineProps<{
