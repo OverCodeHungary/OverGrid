@@ -37,7 +37,6 @@
 
   const config: OGConfig = {
     endpoint: 'http://localhost:3000',
-    theme: 'default',
     rootkey: "data",
     idkey: "id",
     title: "Hello World",
@@ -192,7 +191,7 @@
         exportable: true,
         orderable: true,
         formatter: {
-          type: 'Strong'
+          type: 'CustomFormatter'
         }
       },
       "name": {

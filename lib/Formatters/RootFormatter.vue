@@ -8,6 +8,9 @@
   <OGFormatterHTML v-if="type === 'OGFormatterHTML'" :theme="props.theme" :data="data" :formatter="(formatter as ConfiglessFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
   <OGFormatterLongText v-if="type === 'OGFormatterLongText'" :theme="props.theme" :data="data" :formatter="(formatter as LongTextFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
   <OGFormatterTailwindFormatter v-if="type === 'OGFormatterTailwindFormatter'" :theme="props.theme" :data="data" :formatter="(formatter as TailwindClassFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <template v-for="formatter in props.customFormatters">
+    <component v-if="type === 'OGFormatter' + formatter.name" :is="formatter.component" :data="props.data" :formatter="(formatter as any)" :rowid="rowid" :field="field" :record="record" :refreshGrid="refreshGrid" :openExtraRow="openExtraRow" />
+  </template> 
 </template>
 
 <script setup lang="ts">

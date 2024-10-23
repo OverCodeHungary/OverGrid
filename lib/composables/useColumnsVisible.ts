@@ -17,12 +17,12 @@ export default function useColumnsVisible() {
         key: string,
         title: string,
         orderable: boolean,
-        filterable: {
+        filterable?: {
           active: boolean,
           type: string
         },
         //filterable_config: Record<string, any>,
-        width: string
+        width?: string
       }> = {};
 
       for(var i in config.mapping) {
@@ -31,8 +31,8 @@ export default function useColumnsVisible() {
             titles[i] = {
               key: i,
               title: config.mapping[i].title,
-              orderable: config.mapping[i].orderable,
-              filterable: config.mapping[i].filterable,
+              orderable: config.mapping[i].orderable ? true : false,
+              filterable: config.mapping[i].filterable ? config.mapping[i].filterable : undefined,
               //filterable_config: config.mapping[i].filterable_config,
               width: config.mapping[i].width
             };

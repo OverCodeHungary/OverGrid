@@ -68,24 +68,24 @@ type AllFormatterConfigTypes = ConfiglessFormatterConfigType | DateFormatterConf
 
 type MappingRecordType = {
   title: string,
-  visible: boolean,
-  filterable: {
+  visible?: boolean,
+  filterable?: {
     active: boolean,
     type: string,
     filterKey?: string,
     titleOverride?: string
   },
-  selectable: boolean,
-  orderable: boolean,
+  selectable?: boolean,
+  orderable?: boolean,
   orderKey?: string,
-  exportable: boolean,
-  width: string,
-  formatter: AllFormatterConfigTypes
+  exportable?: boolean,
+  width?: string,
+  formatter?: AllFormatterConfigTypes
 }
 
 type OGConfig = {
   endpoint: string,
-  theme: string,
+  theme?: string,
   rootkey?: string,
   idkey: string,
   title?: string,
@@ -130,10 +130,10 @@ type OGConfig = {
     }>
   },
   events?: {
-    onDataLoad: (data: Array<any>) => Array<any>,
-    onDataLoadWithFullResponse: (response: AxiosResponse) => Array<any>,
-    readyAfterRefresh: () => void,
-    onBulkSelectChanges: (checkedRows: Array<any>) => void
+    onDataLoad?: (data: Array<any>) => Array<any>,
+    onDataLoadWithFullResponse?: (response: AxiosResponse) => Array<any>,
+    readyAfterRefresh?: () => void,
+    onBulkSelectChanges?: (checkedRows: Array<any>) => void
   },
   columnSelector?: {
     active: boolean

@@ -196,13 +196,15 @@ const selectorFieldOptions = computed(() => {
     null: "-- " + i18n.l('select_field') + " --"
   };
   for(var i in props.dataMapping) {
-    if(props.dataMapping[i].filterable && props.dataMapping[i].filterable.active) {
+    if(props.dataMapping[i].filterable && props.dataMapping[i].filterable?.active) {
       var title: string | undefined = props.dataMapping[i].title;
-      if(props.dataMapping[i].filterable.titleOverride) {
-        title = props.dataMapping[i].filterable.titleOverride;
+      if(props.dataMapping[i].filterable?.titleOverride) {
+        title = props.dataMapping[i].filterable?.titleOverride;
       }
 
-      options[i] = title + " (" + translateTypeToHumanType(props.dataMapping[i].filterable.type) + ")";
+      if(props.dataMapping[i].filterable && props.dataMapping[i].filterable?.type) {
+        options[i] = title + " (" + translateTypeToHumanType(props.dataMapping[i].filterable?.type) + ")";
+      }
     }
   }
 
@@ -231,7 +233,11 @@ const formatterConfig = computed(() => {
 //   return this.filters.length > 1;
 // })
 
-function translateTypeToHumanType(type: string) {
+function translateTypeToHumanType(type?: string) {
+  if(!type) {
+    return i18n.l('text');
+  }
+
   switch(type.toLowerCase()) {
     case "number":
       return i18n.l('whole_number')
