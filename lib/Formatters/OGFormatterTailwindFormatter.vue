@@ -1,5 +1,5 @@
 <template>
-  <span v-if="!props.config.hideWhenEmpty || data" :class="[props.config.classList]">
+  <span v-if="!props.formatter.hideWhenEmpty || data" :class="[props.formatter.classList]">
     {{ data }}
   </span>
 </template>

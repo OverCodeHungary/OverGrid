@@ -10,13 +10,13 @@
 
   const craftedData = computed(() => {
     var cut = props.data;
-    if(props.config && props.config.maxLength) {
-      cut = cut.slice(0, props.config.maxLength) + "..."
+    if(props.formatter && props.formatter.maxLength) {
+      cut = cut.slice(0, props.formatter.maxLength) + "..."
     }
 
-    if(props.config && props.config.highlights) {
-      for(var i in props.config.highlights) {
-        var chl = props.config.highlights[i];
+    if(props.formatter && props.formatter.highlights) {
+      for(var i in props.formatter.highlights) {
+        var chl = props.formatter.highlights[i];
         cut = cut.replace(chl.regexp, '<strong style="' + chl.style + '">$1</strong>')
       }
     }

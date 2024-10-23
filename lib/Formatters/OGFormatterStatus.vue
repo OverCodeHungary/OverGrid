@@ -14,27 +14,27 @@
     classList: string;
     title: string;
   }>(() => {
-    if(!props.config.dataType || props.config.dataType == 'text') {
-      for (const i in props.config.mapping) {
+    if(!props.formatter.dataType || props.formatter.dataType == 'text') {
+      for (const i in props.formatter.mapping) {
         if (i == props.data) {
-          return props.config.mapping[i];
+          return props.formatter.mapping[i];
         }
       }
     }
 
-    if(props.config.dataType && props.config.dataType == 'integer') {
-      for (const j in props.config.mapping) {
+    if(props.formatter.dataType && props.formatter.dataType == 'integer') {
+      for (const j in props.formatter.mapping) {
         if (window.parseInt(j) == props.data) {
-          return props.config.mapping[j];
+          return props.formatter.mapping[j];
         }
       }
     }
 
-    if(props.config.dataType && props.config.dataType == 'boolean') {
+    if(props.formatter.dataType && props.formatter.dataType == 'boolean') {
       if (props.data) {
-        return props.config.mapping['true'];
+        return props.formatter.mapping['true'];
       } else {
-        return props.config.mapping['false'];
+        return props.formatter.mapping['false'];
       }
     }
 

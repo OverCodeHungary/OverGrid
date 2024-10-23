@@ -1,16 +1,13 @@
 <template>
-  <OGFormatterStatus v-if="type === 'OGFormatterStatus'" :data="data" :config="(config as StatusFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterDateTime v-if="type === 'OGFormatterDateTime'" :data="data" :config="config as DateFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterOperations v-if="type === 'OGFormatterOperations'" :data="data" :config="config as OperationsFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterStrong v-if="type === 'OGFormatterStrong'" :data="data" :config="config as ConfiglessFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterBoolean v-if="type === 'OGFormatterBoolean'" :data="data" :config="config as ConfiglessFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterHighlighter v-if="type === 'OGFormatterHighlighter'" :data="data" :config="config as HighlightFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterHTML v-if="type === 'OGFormatterHTML'" :data="data" :config="config as ConfiglessFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterLongText v-if="type === 'OGFormatterLongText'" :data="data" :config="config as LongTextFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <OGFormatterTailwindFormatter v-if="type === 'OGFormatterTailwindFormatter'" :data="data" :config="config as TailwindClassFormatterConfigType" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
-  <!-- <template v-for="formatter in props.customFormatters">
-    <component v-if="type === 'OGFormatter' + formatter.name" :is="formatter.component" :data="props.data" :config="config" :rowid="rowid" :field="field" :record="record" :refreshGrid="refreshGrid" :openExtraRow="openExtraRow" />
-  </template> -->
+  <OGFormatterStatus v-if="type === 'OGFormatterStatus'" :data="data" :formatter="(formatter as StatusFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterDateTime v-if="type === 'OGFormatterDateTime'" :data="data" :formatter="(formatter as DateFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterOperations v-if="type === 'OGFormatterOperations'" :data="data" :formatter="(formatter as OperationsFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterStrong v-if="type === 'OGFormatterStrong'" :data="data" :formatter="(formatter as ConfiglessFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterBoolean v-if="type === 'OGFormatterBoolean'" :data="data" :formatter="(formatter as ConfiglessFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterHighlighter v-if="type === 'OGFormatterHighlighter'" :data="data" :formatter="(formatter as HighlightFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterHTML v-if="type === 'OGFormatterHTML'" :data="data" :formatter="(formatter as ConfiglessFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterLongText v-if="type === 'OGFormatterLongText'" :data="data" :formatter="(formatter as LongTextFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
+  <OGFormatterTailwindFormatter v-if="type === 'OGFormatterTailwindFormatter'" :data="data" :formatter="(formatter as TailwindClassFormatterConfigType)" :rowid="rowid" :field="field" :record="record" :refreshGrid="() => { refreshGrid() }" :openExtraRow="openExtraRow" />
 </template>
 
 <script setup lang="ts">
@@ -28,8 +25,8 @@
   const props = defineProps<{
     type: string,
     data: any,
-    config: AllFormatterConfigTypes,
-    rowid: number,
+    formatter: AllFormatterConfigTypes,
+    rowid: string | number,
     field: string,
     record: any,
     refreshGrid: Function,
@@ -37,3 +34,9 @@
     customFormatters: any[]
   }>();
 </script>
+
+  <!-- 
+  <template v-for="formatter in props.customFormatters">
+    <component v-if="type === 'OGFormatter' + formatter.name" :is="formatter.component" :data="props.data" :config="config" :rowid="rowid" :field="field" :record="record" :refreshGrid="refreshGrid" :openExtraRow="openExtraRow" />
+  </template> 
+  -->

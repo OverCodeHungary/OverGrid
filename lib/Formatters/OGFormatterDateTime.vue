@@ -18,7 +18,7 @@
     if(!props.data) {
       return '';
     }
-    return moment(props.data, props.config.inputFormat || undefined).format(props.config.outputFormat);
+    return moment(props.data, props.formatter.inputFormat || undefined).format(props.formatter.outputFormat);
   })
 </script>
 

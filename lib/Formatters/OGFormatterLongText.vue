@@ -8,7 +8,7 @@
 
     <CustomContentModal 
       :show="state.modalShown" 
-      :title="props.config.title ? props.config.title : i18n.l('untitled')" :disableButtons="true" :close="() => { state.modalShown = false }">
+      :title="props.formatter.title ? props.formatter.title : i18n.l('untitled')" :disableButtons="true" :close="() => { state.modalShown = false }">
       <template #content>
         <div v-if="props.data" class="w-full overflow-hidden whitespace-normal og-text-compact">{{ props.data }}</div>
         <div v-else class="w-full overflow-hidden whitespace-normal italic og-text-compact">

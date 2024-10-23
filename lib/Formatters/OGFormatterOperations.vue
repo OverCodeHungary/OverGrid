@@ -7,7 +7,7 @@
       </button>
     </span>
     <span v-if="rowButtonsDropdowned.length > 0" class="flex items-center">
-      <DropDown :orientation="props.config?.config?.dropdownOrientation ? props.config.config.dropdownOrientation : 'left'">
+      <DropDown :orientation="props.formatter?.config?.dropdownOrientation ? props.formatter.config.dropdownOrientation : 'left'">
         <button class="og-btn og-btn-primary og-btn-circle">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 min-w-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -37,19 +37,19 @@
   import { computed } from 'vue';
 
   const rowButtons = computed(() => {
-    if(!props.config.config || !props.config.config.buttons) {
+    if(!props.formatter.config || !props.formatter.config.buttons) {
       return []
     }
 
     var btnz: Array<OperatorButtonType> = [];
 
-    if(typeof props.config.config.buttons == "object") {
-      btnz = props.config.config.buttons
+    if(typeof props.formatter.config.buttons == "object") {
+      btnz = props.formatter.config.buttons
     }
 
-    if(typeof props.config.config.buttons == "function") {
+    if(typeof props.formatter.config.buttons == "function") {
       var vm = this;
-      btnz = props.config.config.buttons(this, () => {
+      btnz = props.formatter.config.buttons(this, () => {
         props.refreshGrid()
       }, props.rowid, props.record)
     }

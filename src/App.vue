@@ -31,6 +31,7 @@
   import CustomFormatter from './CustomFormatter.vue';
   import '../lib/themes/default.css'
   import { OGConfig } from '../lib/components/model/OGConfig'
+  import { OrderDirection } from '../lib/components/model/Ordering';
 
   const gridUniqueId = 'ogSampleGrid'
 
@@ -40,7 +41,7 @@
     idkey: "id",
     title: "Hello World",
     defaultOrderKey: 'id',
-    defaultOrderDirection: 'desc',
+    defaultOrderDirection: OrderDirection.asc,
     orderLocal: false,
     gridUniqueId: gridUniqueId,
     // serverTransformation: (ordering: Ordering, pagination: Pagination, filtering: Filtering): URLSearchParams => {
@@ -188,7 +189,10 @@
         visible: true,
         selectable: true,
         exportable: true,
-        orderable: true
+        orderable: true,
+        formatter: {
+          type: 'Strong'
+        }
       },
       "name": {
         title: "Név",

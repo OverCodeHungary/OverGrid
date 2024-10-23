@@ -177,7 +177,7 @@
                     <RootFormatter 
                       :type="'OGFormatter' + value.formatter.type" 
                       :data="value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody]" 
-                      :config="value" 
+                      :formatter="value.formatter ? value.formatter : null" 
                       :rowid="record[props.config.idkey]" 
                       :field="cmNameBody.toString()" 
                       :record="record" 
@@ -576,8 +576,8 @@
       }
 
       var rec = null;
-      if (props.config.rootKey) {
-        rec = resData[props.config.rootKey];
+      if (props.config.rootkey) {
+        rec = resData[props.config.rootkey];
       }
       else {
         rec = resData;
@@ -599,7 +599,6 @@
       }
 
       state.records = rec;
-
 
       let allRecordsCountKey = props.config.filtering?.allRecordsCountKey ? props.config.filtering?.allRecordsCountKey : 'count';
       if(props.config.pagination && props.config.pagination.active) {

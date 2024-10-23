@@ -1,6 +1,6 @@
 type PropsConfig<T> = {
   data: any;
-  config: T;
+  formatter: T;
   rowid: string | number;
   record: Record<string, any>;
   refreshGrid: () => void;
