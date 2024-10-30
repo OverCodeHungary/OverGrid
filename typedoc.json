@@ -2,6 +2,7 @@
   "entryPoints": ["./lib/components/model/OverGridConfig.ts"],
   "out": "docs",
   "tsconfig": "./tsconfig.json",
+  "plugin": ["typedoc-github-theme"],
   "exclude": [
     "**/node_modules/**",
     "**/*.spec.ts",

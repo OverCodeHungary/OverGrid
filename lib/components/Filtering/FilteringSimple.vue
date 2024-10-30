@@ -1,5 +1,5 @@
 <template>
-  <div class="sm:mt-2 flex flex-col sm:flex-row gap-2 sm:gap-1 items-start sm:items-center w-full"> 
+  <div class="flex flex-col sm:flex-row gap-2 sm:gap-1 items-start sm:items-center w-full"> 
     <div class="relative flex h-8 w-full">
       <input v-model="state.filter" :placeholder="placeholder" class="og-form-input og-text-compact !pl-8">
       <div class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">

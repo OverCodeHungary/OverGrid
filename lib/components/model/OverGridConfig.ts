@@ -75,6 +75,7 @@ type MappingRecordType = {
     filterKey?: string,
     titleOverride?: string
   },
+  middleware?: (data: any) => any,
   selectable?: boolean,
   orderable?: boolean,
   orderKey?: string,
@@ -91,20 +92,72 @@ type OverGridConfig = {
    * The endpoint of the API
    */
   endpoint: string,
+
+  /**
+   * Theme code for the OverGrid.
+   */
   theme?: string,
+
+  /**
+   * The root key of the server's response object. For example, if your server returns an object like this: { data: [{...}, {...}], count: 2 }, then the root key is 'data'. If null, the root key is the root object itself.
+   */
   rootkey?: string,
+
+  /**
+   * The field that you use as unique ID in records. This field is used internally for row selection, bulk operations and "extra row".
+   * For example, if your server returns an object like this: { data: [{ id: 1, name: 'Jane' }, { id: 2, name: 'Jack' }], count: 2 }, then the idKey is 'id'.
+   * Not set this field leads to unexpected behavior and bugs.
+   */
   idkey: string,
   //title?: string,
+
+  /**
+   * The default ordering key. If not set, the grid will not be ordered by default.
+   */
   defaultOrderKey?: string,
+
+  /**
+   * The default ordering direction. If not set, the grid will not be ordered by default.
+   */
   defaultOrderDirection?: OrderDirection,
+
+  /**
+   * If true, the grid will order the records locally, in which case, the order will work only the current page. If false, the grid will pass order parameters to the server.
+   */
   orderLocal?: boolean,
+
+  /**
+   * The unique ID of the grid. This is used for the grid's internal operations. It should be unique for each grid in the same domain.
+   */
   gridUniqueId: string,
+
+  /**
+   * You can modify the server request parameters before sending to the server. This function is called before the request is sent. You can modify the ordering, pagination and filtering parameters in order to your needs. If not set, the grid will send the parameters as is.
+   */
   serverTransformation?: (ordering: Ordering, pagination: PaginationClass, filtering: FilteringClass) => URLSearchParams,
+
+  /**
+   * The pagination configuration object for the grid.
+   */
   pagination: {
+    /**
+     * If true, the pagination is active. If false, the pagination is disabled.
+     */
     active: boolean,
+    /**
+     * The initial page number.
+     */
     page: number,
+
+    /**
+     * The initial page size.
+     */
     size: number,
-    possiblePageSizes: Array<number>
+
+    /**
+     * The possible page sizes that the user can select/change in settins menu. If not set, the grid will not show the page size selector.
+     */
+    possiblePageSizes?: Array<number>
   },
   rowHighlighter?: {
     active: boolean,
