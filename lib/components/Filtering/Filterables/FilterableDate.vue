@@ -2,14 +2,14 @@
   <div class="flex flex-col gap-2 my-2 ">
 
     <div>
-      <label for="selectorOperationField" class="og-text-compact">{{ i18n.l('operation') }}:</label>
+      <label for="selectorOperationField" class="og-text-compact">{{ props.l('operation') }}:</label>
       <select @change="changeValue" v-model="state.operation" class="og-form-select og-text-compact">
         <option v-for="(option, key) in possibleOperations" :value="key" :key="key">{{ option }}</option>
       </select>
     </div>
 
     <div class="flex flex-col" v-if="state.operation == 'eq'">
-      <label class="og-text-compact">{{ i18n.l('value') }}:</label>
+      <label class="og-text-compact">{{ props.l('value') }}:</label>
       <span class="relative mt-1.5 flex">
         <input 
           class="og-form-input"
@@ -21,13 +21,13 @@
         />
       </span>
       <span v-if="!validation" class="text-tiny+ text-error mt-1 text-red-500 text-sm og-text-compact">
-        {{ i18n.l('choose_date') }}
+        {{ props.l('choose_date') }}
       </span>
     </div>
 
     <div class="flex flex-row gap-2" v-if="state.operation == 'bw'">
       <div class="w-1/2 flex flex-col">
-        <label for="selectorDateValueStart" class="og-text-compact">{{ i18n.l('start_date') }}</label>
+        <label for="selectorDateValueStart" class="og-text-compact">{{ props.l('start_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
             class="og-form-input"
@@ -41,7 +41,7 @@
       </div>
 
       <div class="w-1/2 flex flex-col">
-        <label for="selectorDateValueStart" class="og-text-compact">{{ i18n.l('end_date') }}</label>
+        <label for="selectorDateValueStart" class="og-text-compact">{{ props.l('end_date') }}</label>
         <span class="relative mt-1.5 flex">
           <input 
             class="og-form-input"
@@ -63,12 +63,11 @@
   import Config from './FilterableDate.config'
   import moment from 'moment';
   import { computed, reactive } from 'vue';
-  import useI18n from '../../../composables/useI18n';
-  const i18n = useI18n('hu');
 
   const emit = defineEmits(['changeValue']);
 
   const props = defineProps<{
+    l: Function,
     data: Object,
     config: {
       filterKey: string
@@ -87,7 +86,7 @@
   })
 
   const possibleOperations = computed(() => {
-    return Config.possibleOperations();
+    return Config.possibleOperations(props.l);
   })
 
   const validation = computed(() => {
@@ -109,7 +108,7 @@
 
     if(state.operation == "eq") {
       value = moment(state.currentValue).format('YYYY-MM-DD');
-      textual = Config.getTextual(state.operation, value, true)
+      textual = Config.getTextual(props.l, state.operation, value, true)
     }
 
     if(state.operation == "bw") {
@@ -117,7 +116,7 @@
         start: moment(state.currentValue).format('YYYY-MM-DD'),
         end: moment(state.currentValueEnd).format('YYYY-MM-DD')
       };
-      textual = Config.getTextual(state.operation, value, true)
+      textual = Config.getTextual(props.l, state.operation, value, true)
     }
 
     emit('changeValue', props.id, {

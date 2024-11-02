@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row gap-1 items-center"> 
-    <button :title="i18n.l('add_filter')" class="og-btn og-btn-circle og-btn-primary" @click="() => { state.filteringModalShown = true }">
+    <button :title="props.l('add_filter')" class="og-btn og-btn-circle og-btn-primary" @click="() => { state.filteringModalShown = true }">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="min-w-4 w-4 h-4" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
       </svg>
@@ -8,7 +8,7 @@
     <div class="filtersSection">
       <div class="currentFiltersHolder">
         <span class="og-text-compact" v-if="props.filters && props.filters.length <= 0">
-          {{ i18n.l('no_filters_added') }}
+          {{ props.l('no_filters_added') }}
         </span>
         <span class="flex flex-row flex-wrap items-center gap-0.5" v-if="props.filters && props.filters.length > 0">
           <span v-for="filter in tweakedFilters" :key="filter.field">
@@ -30,8 +30,8 @@
             <ul class="mb-0" v-else>
               <li>
                 <select class="h-8 rounded-lg og-text-compact border-2" data-test="filterOperatorSelector" v-model="state.operator">
-                  <option value="OR">{{ i18n.l('or') }}</option>
-                  <option value="AND">{{ i18n.l('and') }}</option>
+                  <option value="OR">{{ props.l('or') }}</option>
+                  <option value="AND">{{ props.l('and') }}</option>
                 </select>
               </li>
             </ul>
@@ -42,14 +42,15 @@
 
     <!-- :disabled="!currentFilterValue || !currentFilterValue.isValid" -->
     <CustomContentModal 
+      :l="props.l"
       :show="state.filteringModalShown" 
-      :title="i18n.l('add_filter')" 
+      :title="props.l('add_filter')" 
       :close="() => { closeFiltering() }" 
       :disableOkButton="!state.currentFilterValue || !state.currentFilterValue.isValid"
       :ok="() => { addFiltering() }">
       <template #content>
         <div class="pb-2">
-          <label class="pull-left og-text-compact" for="selectorField">{{ i18n.l('select_field') }}</label>
+          <label class="pull-left og-text-compact" for="selectorField">{{ props.l('select_field') }}</label>
           <select class="og-form-select og-text-compact" v-model="state.selectorField">
             <option v-for="(text, key) in selectorFieldOptions" :key="key" :value="key">{{ text }}</option>
           </select>
@@ -84,8 +85,6 @@ import CustomContentModal from '../CustomContentModal.vue'
 import { reactive, onMounted, watch, computed } from 'vue'
 import { FilteringOperator, FilteringFilter } from '../model/Filtering'
 import { MappingRecordType, StatusFormatterConfigType } from '../model/OverGridConfig'
-import useI18n from '../../composables/useI18n';
-const i18n = useI18n('hu');
 
 const Filterables: Record<string, any> = {
   'FilterableNumber': FilterableNumber,
@@ -102,7 +101,8 @@ const props = defineProps<{
   removeFilter: Function,
   filters: Array<FilteringFilter>,
   filterOperator: FilteringOperator,
-  changeFilterOperator: Function
+  changeFilterOperator: Function,
+  l: Function
 }>();
 
 const state = reactive<{
@@ -170,16 +170,16 @@ const tweakedFilters = computed(() => {
 
     switch(props.filters[i].type) {
       case "number":
-        cNewFilter.textual = FilterableNumberConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableNumberConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "text":
-        cNewFilter.textual = FilterableTextConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableTextConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "date":
-        cNewFilter.textual = FilterableDateConfig.getTextual(props.filters[i].operation, props.filters[i].value, true).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableDateConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value, true).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "status":
-        cNewFilter.textual = FilterableStatusConfig.getTextual(props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter as StatusFormatterConfigType).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableStatusConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter as StatusFormatterConfigType).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
     }
     
@@ -193,7 +193,7 @@ const tweakedFilters = computed(() => {
 
 const selectorFieldOptions = computed(() => {
   var options: Record<string, string> = {
-    null: "-- " + i18n.l('select_field') + " --"
+    null: "-- " + props.l('select_field') + " --"
   };
   for(var i in props.dataMapping) {
     if(props.dataMapping[i].filterable && props.dataMapping[i].filterable?.active) {
@@ -235,24 +235,24 @@ const formatterConfig = computed(() => {
 
 function translateTypeToHumanType(type?: string) {
   if(!type) {
-    return i18n.l('text');
+    return props.l('text');
   }
 
   switch(type.toLowerCase()) {
     case "number":
-      return i18n.l('whole_number')
+      return props.l('whole_number')
     case "text":
-      return i18n.l('text')
+      return props.l('text')
     case "date":
-      return i18n.l('date')
+      return props.l('date')
     case "user":
-      return i18n.l('user')
+      return props.l('user')
     case "status":
-      return i18n.l('status')
+      return props.l('status')
     case "lookup":
-      return i18n.l('lookup')
+      return props.l('lookup')
     default:
-      return i18n.l('text')
+      return props.l('text')
   }
 }
 

@@ -1,19 +1,17 @@
 
 import moment from 'moment';
-import useI18n from '../../../composables/useI18n';
-const i18n = useI18n('hu');
 
 type StartAndEnd = string | { start: string, end: string };
 
 export default {
-  possibleOperations(): Record<string, string> {
+  possibleOperations(l: Function): Record<string, string> {
     return {
-      'eq': i18n.l('on_this_day'),
-      'bw': i18n.l('in_this_interval')
+      'eq': l('on_this_day'),
+      'bw': l('in_this_interval')
     }
   },
-  getTextual(operation: string, currentValue: StartAndEnd, convertUnixToReadable: boolean) {
-    var possibleOperations = this.possibleOperations();
+  getTextual(l: Function, operation: string, currentValue: StartAndEnd, convertUnixToReadable: boolean) {
+    var possibleOperations = this.possibleOperations(l);
 
     if(operation == "bw") {
       if(typeof currentValue == "object") {

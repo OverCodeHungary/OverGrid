@@ -2,7 +2,7 @@
   <ul>
     <li>
       <h3 class="font-bold og-text-compact">
-        {{ i18n.l('auto_refresh_menu_title') }}
+        {{ props.l('auto_refresh_menu_title') }}
       </h3>
     </li>
     <li v-if="props.config?.refreshable.autoCanBeDisabled">
@@ -10,7 +10,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" :class="[{ '!text-red-500': state.autoRefresh == 'disabled' }]" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
         </svg>
-        <span class="">{{ i18n.l('automatic-list-update-disabled') }}</span>
+        <span class="">{{ props.l('automatic-list-update-disabled') }}</span>
       </a>
     </li>
     <li v-for="(value) in props.config?.refreshable.autoValues" :key="value.key" >
@@ -25,12 +25,14 @@
 </template>
 
 <script setup lang="ts">
-  import useI18n from '../../composables/useI18n';
-  const i18n = useI18n('hu');
   import { reactive, onMounted } from 'vue';
 
   const props = defineProps({
     config: Object,
+    l: {
+      type: Function,
+      required: true
+    },
     gridRefresh: {
       type: Function,
       required: true

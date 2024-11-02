@@ -19,7 +19,7 @@ export default function useColumnsVisible() {
         orderable: boolean,
         filterable?: {
           active: boolean,
-          type: string
+          type?: string
         },
         //filterable_config: Record<string, any>,
         width?: string

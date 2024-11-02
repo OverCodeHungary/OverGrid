@@ -1,15 +1,15 @@
 <template>
   <div class="flex flex-row gap-2 my-2 ">
     <div class="w-1/2">
-      <label class="og-text-compact">{{ i18n.l('operation') }}:</label>
+      <label class="og-text-compact">{{ props.l('operation') }}:</label>
       <select @change="changeValue" v-model="state.operation" class="og-form-select og-text-compact">
         <option v-for="(option, key) in possibleOperations" :value="key" :key="key">{{ option }}</option>
       </select>
     </div>
     <div class="w-1/2">
-      <label class="og-text-compact">{{ i18n.l('values') }}</label>
+      <label class="og-text-compact">{{ props.l('values') }}</label>
       <select :disabled="availableOptions.length == 0" @change="(e) => { if(e && e.target && e.target) { addTag(e.target) } }" v-model="state.currentSelectedValue" class="og-form-select og-text-compact">
-        <option value="null">{{ i18n.l('please_choose_values') }}</option>
+        <option value="null">{{ props.l('please_choose_values') }}</option>
         <option v-for="(option, key) in availableOptions" :value="key" :key="key">{{ option }}</option>
       </select>
 
@@ -27,8 +27,6 @@
 <script setup lang="ts">
   import Config from './FilterableStatus.config'
   import { computed, reactive } from 'vue';
-  import useI18n from '../../../composables/useI18n';
-  const i18n = useI18n('hu');
 
   const emit = defineEmits(['changeValue']);
 
@@ -44,6 +42,7 @@
 
   const props = defineProps<{
     data: Object,
+    l: Function,
     config: {
       filterKey: String
     },
@@ -60,7 +59,7 @@
   }>();
 
   const possibleOperations = computed(() => {
-    return Config.possibleOperations()
+    return Config.possibleOperations(props.l)
   });
 
   const validation = computed(() => {
@@ -161,7 +160,7 @@
       operation: state.operation,
       value: ids,
       isValid: validation,
-      textual: Config.getTextual(state.operation, titles)
+      textual: Config.getTextual(props.l, state.operation, titles)
     })
   }
 </script>

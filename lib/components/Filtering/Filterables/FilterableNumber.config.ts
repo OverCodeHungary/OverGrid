@@ -1,19 +1,17 @@
-import useI18n from '../../../composables/useI18n.js';
-const i18n = useI18n('hu');
 
 export default {
-  possibleOperations(): Record<string, string> {
+  possibleOperations(l: Function): Record<string, string> {
     return {
-      'eq': i18n.l('equals'),
-      'lt': i18n.l('less_than'),
-      'le': i18n.l('less_than_equals'),
-      'gt': i18n.l('greater_than'),
-      'ge': i18n.l('greater_than_equals'),
-      'ne': i18n.l('not_equals')
+      'eq': l('equals'),
+      'lt': l('less_than'),
+      'le': l('less_than_equals'),
+      'gt': l('greater_than'),
+      'ge': l('greater_than_equals'),
+      'ne': l('not_equals')
     }
   },
-  getTextual(operation: string, currentValue: any) {
-    var possibleOperations = this.possibleOperations();
+  getTextual(l: Function, operation: string, currentValue: any) {
+    var possibleOperations = this.possibleOperations(l);
     return '%%fieldname%% ' + possibleOperations[operation] + ' ' + currentValue;
   },
   isMatch(recordValue: string, operation: string, matchingValue: string) {

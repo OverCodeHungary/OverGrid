@@ -1,4 +1,5 @@
 type PropsConfig<T> = {
+  l: Function;
   theme: string;
   data: any;
   formatter: T;

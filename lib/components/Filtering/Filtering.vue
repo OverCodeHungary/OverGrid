@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-row" v-if="props.config?.filtering && props.config.filtering.active">
     <FilteringDefault 
+      :l="props.l"
       v-if="!props.config?.filtering.simple"
       data-test="FilteringDefault" 
       :filteringConfig="props.config?.filtering" 
@@ -11,6 +12,7 @@
       :filters="state.filters" 
       :filterOperator="state.filterOperator" />
     <FilteringSimple 
+      :l="props.l"
       :config="props.config" 
       :setFilter="setSimpleFilter" 
       data-test="FilteringSimple" 
@@ -27,7 +29,11 @@
 
   const props = defineProps({
     config: Object,
-    setNewFiltersAndRefresh: Function
+    setNewFiltersAndRefresh: Function,
+    l: {
+      type: Function,
+      required: true
+    },
   });
 
   const state = reactive({

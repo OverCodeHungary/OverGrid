@@ -1,12 +1,10 @@
 <template>
   <span>
-    {{ props.data ? i18n.l('yes') : i18n.l('no') }}
+    {{ props.data ? props.l('yes') : props.l('no') }}
   </span>
 </template>
 
 <script setup lang="ts">
-  import useI18n from '../composables/useI18n';
-  const i18n = useI18n('hu');
   import FormatterProps from './types/FormatterProps';
   import { ConfiglessFormatterConfigType } from '../components/model/OverGridConfig'
   const props = defineProps<FormatterProps<ConfiglessFormatterConfigType>>()

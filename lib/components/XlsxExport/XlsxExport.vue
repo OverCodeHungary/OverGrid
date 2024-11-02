@@ -1,7 +1,8 @@
 <template>
   <CustomContentModal
+    :l="props.l"
     :show="state.showModal" 
-    :title="i18n.l('export_records')" 
+    :title="props.l('export_records')" 
     :disableButtons="true"
     :close="() => { props.closeModal(); }" 
     :ok="download">
@@ -9,7 +10,7 @@
       <div class="flex flex-col mt-1">
 
         <h3 class="font-bold mb-2">
-          {{ i18n.l('export_fields') }}
+          {{ props.l('export_fields') }}
         </h3>
         <div class="grid grid-cols-2 gap-2 mb-5">
           <label class="block" v-for="(output, index) in checkboxOptions" :key="index">
@@ -21,7 +22,7 @@
         </div>
 
         <h3 class="font-bold mb-2">
-          {{ i18n.l('export_format') }}
+          {{ props.l('export_format') }}
         </h3>
         <div class="flex flex-col items-start gap-1">
           <div class="flex flex-row items-center gap-1">
@@ -36,7 +37,7 @@
 
         <div class="flex flex-row justify-end gap-2">
           <button @click="() => { props.closeModal() }" class="disabled:opacity-60 btn min-w-[7rem] !rounded-full h-9 border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80">
-            {{ i18n.l('cancel') }}
+            {{ props.l('cancel') }}
           </button>
           <jsonExcel
             :data="sheetData"
@@ -45,7 +46,7 @@
             @click="finishDownload"
             >
             <button class="disabled:opacity-60 uppercase min-w-[7rem] h-9 !rounded-full bg-teal-400 font-medium text-white hover:bg-primary-focus focus:bg-teal-500 active:bg-teal-500">
-              <span>{{ i18n.l('ok') }}</span>
+              <span>{{ props.l('ok') }}</span>
             </button>
           </jsonExcel>
         </div>
@@ -56,14 +57,13 @@
 </template>
 
 <script setup lang="ts">
-  import useI18n from '../../composables/useI18n';
   import CustomContentModal from '../CustomContentModal.vue';
   import moment from 'moment';
   import jsonExcel from 'vue-json-excel3';
   import { reactive, onMounted, computed, watch } from 'vue';
-  const i18n = useI18n('hu');
 
   const props = defineProps<{
+    l: Function,
     xlsxExportConfig: {
       active: boolean,
       additionalExportFields?: {

@@ -1,6 +1,3 @@
-import useI18n from '../../../composables/useI18n';
-const i18n = useI18n('hu');
-
 type StatusFormatterConfig = {
   mapping: {
     [key: string]: {
@@ -11,13 +8,13 @@ type StatusFormatterConfig = {
 }
 
 export default {
-  possibleOperations(): Record<string, string> {
+  possibleOperations(l: Function): Record<string, string> {
     return {
-      'in': i18n.l('one_of_the_following')
+      'in': l('one_of_the_following')
     }
   },
-  getTextual(operation: any, currentValue: any, formatter?: StatusFormatterConfig) {
-    var possibleOperations = this.possibleOperations();
+  getTextual(l: Function, operation: any, currentValue: any, formatter?: StatusFormatterConfig) {
+    var possibleOperations = this.possibleOperations(l);
     
     var translatedValues = [];
     for(var i in currentValue) {

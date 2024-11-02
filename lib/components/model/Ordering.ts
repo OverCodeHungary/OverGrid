@@ -13,7 +13,7 @@ class Ordering {
     field?: string,
     direction?: OrderDirection
   ) {
-    if(field && direction) {
+    if(field && (direction === OrderDirection.asc || direction === OrderDirection.desc)) {
       this.key = field;
       this.direction = direction;
       this.active = isActive;

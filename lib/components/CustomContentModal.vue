@@ -20,10 +20,10 @@
               <slot name="content"></slot>
               <div v-if="disableButtons !== true" class="mt-3 flex flex-row items-center justify-end gap-1">
                 <button @click="close()" :disabled="okButtonLoading" class="og-btn og-btn-secondary og-btn-rounded og-text-compact">
-                  {{ cancelButtonTitle ? cancelButtonTitle : i18n.l('cancel') }}
+                  {{ cancelButtonTitle ? cancelButtonTitle : props.l('cancel') }}
                 </button>
                 <button v-if="!noNeedOkButton" :disabled="okButtonLoading || disableOkButton" @click="() => { if(props.ok) { props.ok() } }" class="og-btn og-btn-primary og-btn-rounded og-text-compact min-w-24 font-bold uppercase">
-                  <span v-if="!okButtonLoading">{{ okButtonTitle ? okButtonTitle : i18n.l('ok') }}</span>
+                  <span v-if="!okButtonLoading">{{ okButtonTitle ? okButtonTitle : props.l('ok') }}</span>
                   <SpinnerLoader v-else sizeClasses="h-5.5 w-5.5" />
                 </button>
               </div>
@@ -38,10 +38,12 @@
 <script setup lang="ts">
   import { watch, reactive } from 'vue';
   import SpinnerLoader from './SpinnerLoader.vue';
-  import useI18n from '../composables/useI18n';
-  const i18n = useI18n('hu');
 
   const props = defineProps({
+    l: {
+      type: Function,
+      required: true
+    },
     show: {
       required: true
     },

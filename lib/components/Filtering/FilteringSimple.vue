@@ -18,12 +18,13 @@
 </template>
 
 <script setup lang="ts">
-
   import { reactive, watch, computed } from 'vue';
-  import useI18n from '../../composables/useI18n';
-  const i18n = useI18n('hu');
 
   const props = defineProps({
+    l: {
+      type: Function,
+      required: true
+    },
     setFilter: {
       type: Function,
       required: true,
@@ -56,7 +57,7 @@
       return props.config.filtering.simplePlaceholder;
     }
     else {
-      return i18n.l('search')
+      return props.l('search')
     }
   });
 

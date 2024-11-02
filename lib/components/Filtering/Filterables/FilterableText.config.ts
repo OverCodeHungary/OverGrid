@@ -1,17 +1,14 @@
-import useI18n from '../../../composables/useI18n';
-const i18n = useI18n('hu');
-
 export default {
-  possibleOperations(): Record<string, string> {
+  possibleOperations(l: Function): Record<string, string> {
     return {
-      'eq': i18n.l('equals'),
-      'cn': i18n.l('contains'),
-      'bw': i18n.l('starts_with'),
-      'ew': i18n.l('ends_with')
+      'eq': l('equals'),
+      'cn': l('contains'),
+      'bw': l('starts_with'),
+      'ew': l('ends_with')
     }
   },
-  getTextual(operation: string, currentValue: string | null) {
-    var possibleOperations = this.possibleOperations();
+  getTextual(l: Function, operation: string, currentValue: string | null) {
+    var possibleOperations = this.possibleOperations(l);
     return '%%fieldname%% ' + possibleOperations[operation] + ' ' + currentValue
   },
   isMatch(recordValue: string, operation: string, matchingValue: string) {

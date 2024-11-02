@@ -1,7 +1,8 @@
 <template>
   <CustomContentModal 
+    :l="props.l"
     :show="state.showModal" 
-    :title="i18n.l('select_columns')" 
+    :title="props.l('select_columns')" 
     :close="() => { props.closeModal() }" 
     :ok="setColumns">
     <template #content>
@@ -23,11 +24,10 @@
 <script setup lang="ts">
   import { onMounted, reactive, computed, watch } from 'vue';
   import CustomContentModal from '../CustomContentModal.vue';
-  import useI18n from '../../composables/useI18n';
   import { MappingRecordType } from '../model/OverGridConfig';
-  const i18n = useI18n('hu');
 
   const props = defineProps<{
+    l: Function,
     gridUniqueId: string,
     dataMapping: Record<string, MappingRecordType>,
     rerender: Function,

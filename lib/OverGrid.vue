@@ -5,6 +5,7 @@
 
       <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 justify-between" v-if="needsToShowTopFiltersBar">
         <Filtering 
+          :l="i18n.l"
           :config="props.config"
           :setNewFiltersAndRefresh="(newFilters: any) => { state.filters = newFilters.filters; state.filterOperator = newFilters.filterOperator; state.simpleFilter = newFilters.simpleFilter; gridRefresh(); }"
           />
@@ -18,6 +19,7 @@
 
           <!-- BULK OPERATION -->
             <BulkOperations
+              :l="i18n.l"
               :config="props.config"
               :checkedRows="state.checkedRows"
               :changeCheckedRows="(checkedRows: any) => { state.checkedRows = checkedRows; }"
@@ -69,12 +71,14 @@
                 </ul>
 
                 <AutoRefresh
+                  :l="i18n.l"
                   class="mt-3"
                   v-if="props.config.refreshable && props.config.refreshable.autoActive && props.config.refreshable.autoValues && props.config.refreshable.autoValues.length > 0"
                   :gridRefresh="() => { gridRefresh() }"
                   :config="props.config" />
 
                 <ChangePageSize
+                  :l="i18n.l"
                   class="mt-3"
                   v-if="props.config.pagination && props.config.pagination.possiblePageSizes"
                   :config="props.config"
@@ -85,6 +89,7 @@
           </DropDown>
 
           <ColumnSelector 
+            :l="i18n.l"
             v-if="props.config.columnSelector && props.config.columnSelector.active"
             :showModal="state.showColumnSelectorModal"
             :closeDropdown="closeOperationDropdown"
@@ -94,6 +99,7 @@
             :rerender="() => { gridRefresh() }" />
 
           <XlsxExport 
+            :l="i18n.l"
             v-if="props.config.xlsxExport && props.config.xlsxExport.active && state.records.length > 0"
             :showModal="state.showXlsxExportModal"
             :closeModal="() => { state.showXlsxExportModal = false; }"
@@ -175,6 +181,7 @@
                   <td class="og-cell og-text-compact" :class="[{ 'sticky': value.sticky }]" v-for="(value, cmNameBody) in mappingVisible" :key="cmNameBody">
                     <span v-if="value.formatter && typeof value.formatter == 'object' && value.formatter.type">
                       <RootFormatter 
+                        :l="i18n.l"
                         :theme="props.config.theme ? props.config.theme : 'default'"
                         :type="'OGFormatter' + value.formatter.type" 
                         :data="value.middleware ? value.middleware(record[cmNameBody], record) : record[cmNameBody]" 
@@ -262,8 +269,8 @@
   const Axios = useAxios();
   const localSortAndFilter = useLocalSortAndFilter();
   import useI18n from './composables/useI18n';
-  const i18n = useI18n('hu');
-  import { OverGridConfig } from './components/model/OverGridConfig';
+  
+  import { OverGridConfig, PossibleLanguages } from './components/model/OverGridConfig';
   import './themes/default.css'
 
   const operationsDropdown = ref<typeof DropDown>();
@@ -272,7 +279,7 @@
     config: OverGridConfig,
     customFormatters: any[]
   }>();
-
+  const i18n = useI18n(props.config.locale);
   const state = reactive<{
     refreshNeeded: boolean,
     updateKey: number,
@@ -538,7 +545,7 @@
 
     ordering.initByState(
       isOrderActive,
-      orderKey ? orderKey : undefined, 
+      orderKey !== null && orderKey !== undefined ? orderKey : undefined, 
       orderDirection
     );
 
