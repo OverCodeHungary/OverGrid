@@ -19,12 +19,16 @@
       "require": "./dist/style.css"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
     "preview": "vite preview",
     "generate-docs": "npx typedoc ./lib/components/model/*",
-    "npm-publish": "npm run build && npm publish --access=public"
+    "npm-publish": "npm run build && npm publish --access=public",
+    "semantic-release": "semantic-release"
   },
   "dependencies": {
     "axios": "^1.7.7",
@@ -33,17 +37,21 @@
     "vue-json-excel3": "^1.0.29"
   },
   "devDependencies": {
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/gitlab": "^13.2.1",
+    "@semantic-release/npm": "^12.0.1",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^22.6.1",
     "@types/papaparse": "^5.3.15",
-    "typedoc-github-theme": "^0.1.2",
-    "typedoc-material-theme": "^1.1.0",
     "@vitejs/plugin-vue": "^5.1.2",
     "@vue/compiler-sfc": "^3.5.12",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
+    "semantic-release": "^24.2.0",
     "tailwindcss": "^3.4.13",
     "typedoc": "^0.26.10",
+    "typedoc-github-theme": "^0.1.2",
+    "typedoc-material-theme": "^1.1.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
     "vue-tsc": "^2.0.29"
