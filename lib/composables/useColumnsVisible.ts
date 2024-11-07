@@ -11,6 +11,14 @@ export default function useColumnsVisible() {
         if(enabledColumnsStr) {
           enabledColumns = enabledColumnsStr.split(',');
         }
+        else {
+          enabledColumns = [];
+          for(var i in config.mapping) {
+            if(config.mapping[i].visible) {
+              enabledColumns.push(i);
+            }
+          }
+        }
       }
 
       let titles: Record<string, {
@@ -52,6 +60,14 @@ export default function useColumnsVisible() {
         
         if(enabledColumnsStr) {
           enabledColumns = enabledColumnsStr.split(',');
+        }
+        else {
+          enabledColumns = [];
+          for(var i in config.mapping) {
+            if(config.mapping[i].visible) {
+              enabledColumns.push(i);
+            }
+          }
         }
       }
 

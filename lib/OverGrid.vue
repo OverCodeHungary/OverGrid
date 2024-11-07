@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-3 overgrid">
       <slot name="title"></slot>
 
-      <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 justify-between" v-if="needsToShowTopFiltersBar">
+      <div class="flex flex-col gap-3 sm:!flex-row sm:gap-0 justify-between" v-if="needsToShowTopFiltersBar">
         <Filtering 
           :l="i18n.l"
           :config="props.config"
@@ -266,7 +266,6 @@
   import { Ordering, OrderDirection } from './components/model/Ordering';
   import { PaginationClass } from './components/model/Pagination';
   const columnsVisible = useColumnsVisible();
-  const Axios = useAxios();
   const localSortAndFilter = useLocalSortAndFilter();
   import useI18n from './composables/useI18n';
   
@@ -360,6 +359,8 @@
     showXlsxExportModal: false,
     /* XLSX EXPORT */
   });
+  
+  const Axios = useAxios(props.config.axiosConfigurator);
 
   const theme = computed(() => {
     return props.config.theme ? props.config.theme : 'default';

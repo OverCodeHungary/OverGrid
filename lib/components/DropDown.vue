@@ -32,9 +32,10 @@
   });
 
   function outsideClickClose(event: MouseEvent) {
-    // if(!event.target.closest('#' + componentId)) {
-    //   state.open = false;
-    // }
+    const componentElement = document.getElementById(componentId);
+    if(event.target instanceof HTMLElement && componentElement && !event.composedPath().includes(componentElement)) {
+      state.open = false;
+    }
   }
 
   watch(() => state.open, (newValue) => {

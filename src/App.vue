@@ -122,6 +122,18 @@
 
     //   return params;
     // },
+    axiosConfigurator: (axios) => {
+      const token = localStorage.getItem('og_token');
+      axios.interceptors.request.use((config) => {
+        if(!config.headers['Authorization']) {
+          config.headers['Authorization'] = 'Bearer ' + token;
+        }
+        return config;
+      }, (error) => {
+        Promise.reject(error)
+      });
+      return axios;
+    },
     pagination: {
       active: true,
       page: 0,

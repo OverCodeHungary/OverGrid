@@ -1,5 +1,5 @@
 import OverGrid from './OverGrid.vue'
-import { OperatorButtonType, ConfiglessFormatterConfigType, DateFormatterConfigType, HighlightFormatterConfigType, LongTextFormatterConfigType, OperationsFormatterConfigType, StatusFormatterConfigType, TailwindClassFormatterConfigType, AllFormatterConfigTypes, MappingRecordType, OverGridConfig } from './components/model/OverGridConfig';
+import { OperatorButtonType, ConfiglessFormatterConfigType, DateFormatterConfigType, HighlightFormatterConfigType, LongTextFormatterConfigType, OperationsFormatterConfigType, StatusFormatterConfigType, TailwindClassFormatterConfigType, AllFormatterConfigTypes, MappingRecordType, OverGridConfig, PossibleLanguages } from './components/model/OverGridConfig';
 import { OrderDirection } from './components/model/Ordering';
 
 export type {
@@ -18,7 +18,8 @@ export type {
 
 export { 
   OverGrid,
-  OrderDirection
+  OrderDirection,
+  PossibleLanguages
 };
 
 

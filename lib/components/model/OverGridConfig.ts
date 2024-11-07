@@ -145,8 +145,19 @@ type OverGridConfig = {
 
   /**
    * You can modify the server request parameters before sending to the server. This function is called before the request is sent. You can modify the ordering, pagination and filtering parameters in order to your needs. If not set, the grid will send the parameters as is.
+   * @param ordering The ordering object.
+   * @param pagination The pagination object.
+   * @param filtering The filtering object.
+   * @returns The modified URLSearchParams object.
    */
   serverTransformation?: (ordering: Ordering, pagination: PaginationClass, filtering: FilteringClass) => URLSearchParams,
+
+  /**
+   * You can modify the axios instance before sending the request to the server. This function is called before the request is sent. You can modify the axios instance in order to your needs. If not set, the grid will use the default axios instance. 
+   * @param axios The default axios instance.
+   * @returns The modified axios instance.
+   */
+  axiosConfigurator?: (axios: any) => any,
 
   /**
    * The pagination configuration object for the grid.

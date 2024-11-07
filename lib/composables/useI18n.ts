@@ -59,8 +59,6 @@ export default function useI18n(lang?: PossibleLanguages | Record<string, string
     currentLang = lang || PossibleLanguages.en;
   }
 
-  console.log(currentLang)
-
   return {
     l
   }
