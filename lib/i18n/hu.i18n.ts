@@ -48,4 +48,6 @@ export default {
   'ascending': 'Növekvő sorrend',
   'descending': 'Csökkenő sorrend',
   'remove_order': 'Rendezés törlése',
+  'about': 'Névjegy',
+  'close': 'Bezárás',
 }

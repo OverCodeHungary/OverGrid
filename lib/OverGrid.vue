@@ -41,7 +41,7 @@
               </svg>
             </button>
             <template #content>
-              <div class="flex flex-col p-1.5">
+              <div class="flex flex-col p-1.5 w-full">
                 <ul>
                   <li>
                     <h3 class="font-bold og-text-compact">
@@ -84,6 +84,17 @@
                   :config="props.config"
                   :changePageSize="(newPageSize: any) => { state.pagination.size = newPageSize; gridRefresh(); }" />
 
+                  <ul class="mt-4 border-t-[1px] border-slate-300" v-if="props.config.hideAboutWindow !== true">
+                    <li class="pt-2">
+                      <a class="flex flex-row gap-1 items-center ml-1 mt-1 og-text-compact og-operation-link" href="javascript:void(null)" @click="() => { state.showAboutWindow = true }">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 mr-1">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
+                        </svg>
+                        <span>{{ i18n.l('about') }} OverGrid</span>
+                      </a>
+                    </li>
+                  </ul>
+
               </div>
             </template>
           </DropDown>
@@ -107,6 +118,7 @@
             :xlsxExportConfig="props.config.xlsxExport" 
             :dataMapping="props.config.mapping" 
             :records="state.records" />
+
         </div>
       </div>
 
@@ -242,6 +254,14 @@
           v-if="props.config.pagination && props.config.pagination.active && state.pagination.totalPages && state.pagination.totalPages > 1" />
       <!-- PAGINATION -->
 
+      <!-- ABOUT WINDOW -->
+        <AboutWindow 
+          :l="i18n.l"
+          :showModal="state.showAboutWindow"
+          :closeModal="() => { state.showAboutWindow = false }"
+          :closeDropdown="closeOperationDropdown" />
+      <!-- ABOUT WINDOW -->
+
     </div>
   </div>
 </template>
@@ -265,11 +285,12 @@
   import { FilteringClass, FilteringFilter, FilteringOperator } from './components/model/Filtering';
   import { Ordering, OrderDirection } from './components/model/Ordering';
   import { PaginationClass } from './components/model/Pagination';
+  import AboutWindow from './components/AboutWindow/AboutWindow.vue';
   const columnsVisible = useColumnsVisible();
   const localSortAndFilter = useLocalSortAndFilter();
   import useI18n from './composables/useI18n';
   
-  import { OverGridConfig, PossibleLanguages } from './components/model/OverGridConfig';
+  import { OverGridConfig } from './components/model/OverGridConfig';
   import './themes/default.css'
 
   const operationsDropdown = ref<typeof DropDown>();
@@ -293,6 +314,7 @@
     showColumnSelectorModal: boolean,
     autoRefresh: string,
     autoRefreshInterval: any,
+    showAboutWindow: boolean,
     pagination: {
       active: boolean,
       page: number,
@@ -311,6 +333,7 @@
     updateKey: 0,
     records: [],
     registeredEvents: {},
+    showAboutWindow: false,
 
     /* EXTRA ROW */
     openedRow: [] as any[],

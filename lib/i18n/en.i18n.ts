@@ -47,5 +47,7 @@ export default {
   'search': 'Search',
   'ascending': 'Ascending order',
   'descending': 'Descending order',
-  'remove_order': 'Remove ordering'
+  'remove_order': 'Remove ordering',
+  'about': 'About',
+  'close': 'Close',
 }
