@@ -1,16 +1,16 @@
 <template>
   <div class="flex flex-row gap-1 items-center"> 
-    <button title="Szűrőfeltétel hozzáadása" class="bg-slate-200 rounded-full p-2" @click="() => { state.filteringModalShown = true }">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4" stroke="currentColor">
+    <button :title="props.l('add_filter')" class="og-btn og-btn-circle og-btn-primary" @click="() => { state.filteringModalShown = true }">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="min-w-4 w-4 h-4" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
       </svg>
     </button>
     <div class="filtersSection">
       <div class="currentFiltersHolder">
-        <span class="noFilterMessage" v-if="props.filters.length <= 0">
-          Nincs beállított szűrőfeltétel...
+        <span class="og-text-compact" v-if="props.filters && props.filters.length <= 0">
+          {{ props.l('no_filters_added') }}
         </span>
-        <span class="flex flex-row items-center gap-2" v-if="props.filters.length > 0">
+        <span class="flex flex-row flex-wrap items-center gap-0.5" v-if="props.filters && props.filters.length > 0">
           <span v-for="filter in tweakedFilters" :key="filter.field">
             <ul class=" mb-0" v-if="!filter._opselector">
               <li>
@@ -18,20 +18,20 @@
                   @click="removeFilter(filter.field)"
                   :title="filter.textual"
                   :disabled="false"
-                  class="bg-teal-400 px-2 text-white hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-500/80 flex flex-row items-center cursor-pointer rounded-lg"
+                  class="og-filtering-tag"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
                   </svg> 
-                  <span>{{ filter.textual }}</span>
+                  <span class="og-text-compact py-1">{{ filter.textual }}</span>
                 </a>
               </li>
             </ul>
-            <ul class="mb-0 ml-2 mr-2" v-else>
+            <ul class="mb-0" v-else>
               <li>
-                <select class="h-7 w-full rounded-lg px-2.5 text-xs+ border-2" data-test="filterOperatorSelector" v-model="state.operator">
-                  <option value="OR">VAGY</option>
-                  <option value="AND">ÉS</option>
+                <select class="h-8 rounded-lg og-text-compact border-2" data-test="filterOperatorSelector" v-model="state.operator">
+                  <option value="OR">{{ props.l('or') }}</option>
+                  <option value="AND">{{ props.l('and') }}</option>
                 </select>
               </li>
             </ul>
@@ -41,18 +41,24 @@
     </div>
 
     <!-- :disabled="!currentFilterValue || !currentFilterValue.isValid" -->
-    <CustomContentModal :show="state.filteringModalShown" title="Szűrőfeltétel hozzáadása" cancelButtonTitle="Mégse" okButtonTitle="OK" :close="() => { state.filteringModalShown = false }" :ok="addFiltering">
+    <CustomContentModal 
+      :l="props.l"
+      :show="state.filteringModalShown" 
+      :title="props.l('add_filter')" 
+      :close="() => { closeFiltering() }" 
+      :disableOkButton="!state.currentFilterValue || !state.currentFilterValue.isValid"
+      :ok="() => { addFiltering() }">
       <template #content>
         <div class="pb-2">
-          <label class="pull-left" for="selectorField">Mező kiválasztása:</label>
-          <select class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent" v-model="state.selectorField">
+          <label class="pull-left og-text-compact" for="selectorField">{{ props.l('select_field') }}</label>
+          <select class="og-form-select og-text-compact" v-model="state.selectorField">
             <option v-for="(text, key) in selectorFieldOptions" :key="key" :value="key">{{ text }}</option>
           </select>
           <component
-            :is="Filterables['RVGFilterable' + currentFilterableConfig.type]" 
+            :is="Filterables['Filterable' + currentFilterableConfig.type]" 
             v-if="state.selectorField != 'null' && currentFilterableConfig" 
             @changeValue="changeFilterValue" 
-            v-bind:is="'RVGFilterable' + currentFilterableConfig.type" 
+            v-bind:is="'Filterable' + currentFilterableConfig.type" 
             :config="currentFilterableConfig" 
             :id="state.selectorField" 
             :formatterConfig="formatterConfig" />
@@ -63,48 +69,56 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 // filterables
-import RVGFilterableNumber from '../../Filterables/RVGFilterableNumber.vue'
-import RVGFilterableNumberConfig from '../../Filterables/RVGFilterableNumber.config.js'
-import RVGFilterableText from '../../Filterables/RVGFilterableText.vue'
-import RVGFilterableTextConfig from '../../Filterables/RVGFilterableText.config.js'
-import RVGFilterableDate from '../../Filterables/RVGFilterableDate.vue'
-import RVGFilterableDateConfig from '../../Filterables/RVGFilterableDate.config.js'
-import RVGFilterableStatus from '../../Filterables/RVGFilterableStatus.vue'
-import RVGFilterableStatusConfig from '../../Filterables/RVGFilterableStatus.config.js'
-//import RVGFilterableLookup from '../../Filterables/RVGFilterableLookup.vue'
+import FilterableNumber from './Filterables/FilterableNumber.vue'
+import FilterableNumberConfig from './Filterables/FilterableNumber.config'
+import FilterableText from './Filterables/FilterableText.vue'
+import FilterableTextConfig from './Filterables/FilterableText.config'
+import FilterableDate from './Filterables/FilterableDate.vue'
+import FilterableDateConfig from './Filterables/FilterableDate.config'
+import FilterableStatus from './Filterables/FilterableStatus.vue'
+import FilterableStatusConfig from './Filterables/FilterableStatus.config'
+//import FilterableLookup from './Filterables/FilterableLookup.vue'
 import CustomContentModal from '../CustomContentModal.vue'
 import { reactive, onMounted, watch, computed } from 'vue'
+import { FilteringOperator, FilteringFilter } from '../model/Filtering'
+import { MappingRecordType, StatusFormatterConfigType } from '../model/OverGridConfig'
 
-const Filterables = {
-  RVGFilterableNumber,
-  RVGFilterableText,
-  RVGFilterableDate,
-  RVGFilterableStatus,
-  //RVGFilterableLookup
+const Filterables: Record<string, any> = {
+  'FilterableNumber': FilterableNumber,
+  'FilterableText': FilterableText,
+  'FilterableDate': FilterableDate,
+  'FilterableStatus': FilterableStatus,
+  //FilterableLookup
 }
 
-const props = defineProps({
-  filteringConfig: Object,
-  dataMapping: Object,
+const props = defineProps<{
+  filteringConfig: object,
+  dataMapping: Record<string, MappingRecordType>,
   pushFilter: Function,
   removeFilter: Function,
-  filters: Array,
-  filterOperator: String,
-  changeFilterOperator: Function
-});
+  filters: Array<FilteringFilter>,
+  filterOperator: FilteringOperator,
+  changeFilterOperator: Function,
+  l: Function
+}>();
 
-const state = reactive({
+const state = reactive<{
+  selectorField: string | null,
+  currentFilterValue: any,
+  operator: FilteringOperator,
+  filteringModalShown: boolean
+}>({
   selectorField: null,
   currentFilterValue: null,
-  operator: 'OR',
+  operator: FilteringOperator.or,
   filteringModalShown: false
 });
 
 onMounted(() => {
-  state.operator = state.filterOperator;
+  state.operator = props.filterOperator;
 });
 
 watch(() => props.filterOperator, () => {
@@ -116,6 +130,20 @@ watch(() => state.operator, () => {
     props.changeFilterOperator(state.operator);
   }
 });
+
+function resetFiltering() {
+  state.selectorField = null;
+  state.currentFilterValue = null;
+}
+
+function closeFiltering() {
+  state.filteringModalShown = false;
+  resetFiltering();
+}
+
+watch(() => state.selectorField, () => {
+  state.currentFilterValue = null;
+})
 
 const tweakedFilters = computed(() => {
   var newFilters = [];
@@ -131,25 +159,27 @@ const tweakedFilters = computed(() => {
       ++opCounter;
     }
 
-    var cNewFilter = {
+    let cNewFilter: FilteringFilter = {
       field: props.filters[i].field,
       operation: props.filters[i].operation,
       type: props.filters[i].type,
-      value: props.filters[i].value
+      value: props.filters[i].value,
+      filterKey: '',
+      textual: ''
     }
 
     switch(props.filters[i].type) {
       case "number":
-        cNewFilter.textual = RVGFilterableNumberConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableNumberConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "text":
-        cNewFilter.textual = RVGFilterableTextConfig.getTextual(props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableTextConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "date":
-        cNewFilter.textual = RVGFilterableDateConfig.getTextual(props.filters[i].operation, props.filters[i].value, true).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableDateConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value, true).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
       case "status":
-        cNewFilter.textual = RVGFilterableStatusConfig.getTextual(props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
+        cNewFilter.textual = FilterableStatusConfig.getTextual(props.l, props.filters[i].operation, props.filters[i].value, props.dataMapping[props.filters[i].field].formatter as StatusFormatterConfigType).replace("%%fieldname%%", props.dataMapping[props.filters[i].field].title)
         break;
     }
     
@@ -162,17 +192,19 @@ const tweakedFilters = computed(() => {
 })
 
 const selectorFieldOptions = computed(() => {
-  var options = {
-    null: "-- Mező kiválasztása --"
+  var options: Record<string, string> = {
+    null: "-- " + props.l('select_field') + " --"
   };
   for(var i in props.dataMapping) {
-    if(props.dataMapping[i].filterable && props.dataMapping[i].filterable.active) {
-      var title = props.dataMapping[i].title;
-      if(props.dataMapping[i].filterable.titleOverride) {
-        title = props.dataMapping[i].filterable.titleOverride;
+    if(props.dataMapping[i].filterable && props.dataMapping[i].filterable?.active) {
+      var title: string | undefined = props.dataMapping[i].title;
+      if(props.dataMapping[i].filterable?.titleOverride) {
+        title = props.dataMapping[i].filterable?.titleOverride;
       }
 
-      options[i] = title + " (" + translateTypeToHumanType(props.dataMapping[i].filterable.type) + ")";
+      if(props.dataMapping[i].filterable && props.dataMapping[i].filterable?.type) {
+        options[i] = title + " (" + translateTypeToHumanType(props.dataMapping[i].filterable?.type) + ")";
+      }
     }
   }
 
@@ -201,26 +233,30 @@ const formatterConfig = computed(() => {
 //   return this.filters.length > 1;
 // })
 
-function translateTypeToHumanType(type) {
+function translateTypeToHumanType(type?: string) {
+  if(!type) {
+    return props.l('text');
+  }
+
   switch(type.toLowerCase()) {
     case "number":
-      return "Egész szám"
+      return props.l('whole_number')
     case "text":
-      return "Szöveges"
+      return props.l('text')
     case "date":
-      return "Dátum"
+      return props.l('date')
     case "user":
-      return "Felhasználó"
+      return props.l('user')
     case "status":
-      return "Státusz"
+      return props.l('status')
     case "lookup":
-      return "Elem"
+      return props.l('lookup')
     default:
-      return "Szöveges"
+      return props.l('text')
   }
 }
 
-function changeFilterValue(field, obj) {
+function changeFilterValue(field: string, obj: string) {
   state.currentFilterValue = obj
 }
 
@@ -238,9 +274,6 @@ function addFiltering() {
     textual: state.currentFilterValue.textual.replace("%%fieldname%%", props.dataMapping[state.currentFilterValue.field].title)
   });
 
-  state.filteringModalShown = false;
-
-  state.selectorField = null;
-
+  closeFiltering();
 }
 </script>

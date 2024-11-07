@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ 
+@layer components {
+  .og-theme-default .overgrid, .og-theme-default .overgrid * {
+    --og-color-primary: #61b1a6;
+    --og-color-primary-active: #6ebeb3;
+    font-family: 'Urbanist', sans-serif;
+  }
+
+  .og-theme-default .overgrid table {
+    @apply rounded-lg overflow-hidden
+  }
+
+  .og-theme-default .og-table-thead tr th {
+    @apply border-r border-white bg-slate-100 p-2;
+  }
+
+  .og-theme-default .og-row {
+    @apply border-y border-transparent border-b-slate-200 dark:border-b-slate-500 dark:hover:bg-slate-700 hover:bg-slate-100
+  }
+
+  .og-theme-default .og-checkbox {
+    @apply h-5 w-5
+  }
+
+  .og-theme-default .og-form-select {
+    @apply w-full h-8 rounded-lg border border-slate-300 bg-white px-3 hover:border-slate-400
+  }
+
+  .og-theme-default .og-form-input {
+    @apply w-full h-8 rounded-lg border border-slate-300 bg-transparent px-3 placeholder:text-slate-400/70 hover:border-slate-400
+  }
+
+  .og-theme-default .og-radio {
+    @apply h-5 w-5
+  }
+
+  .og-theme-default .og-cell {
+    @apply whitespace-nowrap px-2 py-1.5
+  }
+
+  .og-theme-default .og-filtering-tag {
+    @apply bg-[--og-color-primary] px-2 text-white hover:bg-[--og-color-primary-active] focus:bg-[--og-color-primary-active] active:bg-[--og-color-primary-active] flex flex-row items-center cursor-pointer rounded-lg
+  }
+
+  .og-theme-default .og-btn {
+    @apply h-[30px] flex items-center justify-center disabled:opacity-40 outline-none focus:outline-none
+  }
+
+  .og-theme-default .og-btn-primary {
+    @apply bg-[--og-color-primary] focus:bg-[--og-color-primary-active] active:bg-[--og-color-primary-active] hover:bg-[--og-color-primary-active] text-white
+  }
+
+  .og-theme-default .og-btn-secondary {
+    @apply bg-slate-300 focus:bg-slate-300/80 active:bg-slate-300/80 hover:bg-slate-300/80 text-black
+  }
+
+  .og-theme-default .og-btn-rounded {
+    @apply rounded-full px-4
+  }
+
+  .og-theme-default .og-btn-circle {
+    @apply w-[30px] min-w-[30px] rounded-full
+  }
+
+  .og-theme-default .og-btn-sm {
+    &.og-btn-circle {
+      @apply h-[20px] w-[20px] min-w-[20px]
+    }
+  }
+
+  .og-theme-default .og-text-compact {
+    @apply text-sm
+  }
+
+  .og-theme-default .og-bg-primary {
+    @apply bg-[--og-color-primary]
+  }
+
+  .og-theme-default .og-operation-link {
+    @apply text-black hover:text-black/70
+  }
+}
+
+
+.og-theme-default.og-dropdown {
+  @apply bg-slate-200 shadow-lg rounded-lg
+}
