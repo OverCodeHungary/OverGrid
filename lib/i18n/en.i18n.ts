@@ -48,6 +48,6 @@ export default {
   'ascending': 'Ascending order',
   'descending': 'Descending order',
   'remove_order': 'Remove ordering',
-  'about': 'About',
+  'about': 'About OverGrid',
   'close': 'Close',
 }
