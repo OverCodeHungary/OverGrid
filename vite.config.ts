@@ -12,9 +12,9 @@ export default defineConfig({
     }
   },
   plugins: [vue()],
-  define: {
-    '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
-  },
+  // define: {
+  //   '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
+  // },
   build: {
     lib: {
       entry: resolve(__dirname, 'lib/main.ts'),

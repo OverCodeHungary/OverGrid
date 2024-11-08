@@ -11,7 +11,7 @@
       <div class="flex flex-col items-center justify-center">
         <h1 class="text-3xl font-bold">OverGrid</h1>
         <p>
-          <strong>{{ props.l('version') }}:</strong> {{ __APP_VERSION__ }}
+          <strong>{{ props.l('version') }}:</strong> @TBD
         </p>
         <div class="mt-2">
           Licence: <strong>MIT</strong>
