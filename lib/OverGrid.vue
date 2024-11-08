@@ -276,7 +276,7 @@
   import useLocalSortAndFilter from './composables/useLocalSortAndFilter';
   import ColumnSelector from './components/ColumnSelector/ColumnSelector.vue';
   import XlsxExport from './components/XlsxExport/XlsxExport.vue';
-  import RootFormatter from './formatters/RootFormatter.vue';
+  import RootFormatter from './formatter/RootFormatter.vue';
   import Pagination from './components/Pagination/Pagination.vue';
   import ChangePageSize from './components/Pagination/ChangePageSize.vue';
   import AutoRefresh from './components/AutoRefresh/AutoRefresh.vue';
