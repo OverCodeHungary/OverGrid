@@ -11,7 +11,7 @@
       <div class="flex flex-col items-center justify-center">
         <h1 class="text-3xl font-bold">OverGrid</h1>
         <p>
-          <strong>{{ props.l('version') }}:</strong> {{ version }}
+          <strong>{{ props.l('version') }}:</strong> {{ __APP_VERSION__ }}
         </p>
         <div class="mt-2">
           Licence: <strong>MIT</strong>
@@ -34,8 +34,6 @@
     showModal: boolean,
     closeDropdown: Function,
   }>();
-
-  const version = __APP_VERSION__;
 
   const state = reactive<{
     showModal: boolean
