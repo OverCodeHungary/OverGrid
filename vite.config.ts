@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwind from "tailwindcss";
 import autoprefixer from "autoprefixer";
+import version from 'vite-plugin-package-version';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,7 +12,7 @@ export default defineConfig({
       plugins: [tailwind, autoprefixer],
     }
   },
-  plugins: [vue()],
+  plugins: [vue(), version()],
   // define: {
   //   '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
   // },

@@ -11,7 +11,7 @@
       <div class="flex flex-col items-center justify-center">
         <h1 class="text-3xl font-bold">OverGrid</h1>
         <p>
-          <strong>{{ props.l('version') }}:</strong> @TBD
+          <strong>{{ props.l('version') }}:</strong> {{ VERSION }}
         </p>
         <div class="mt-2">
           Licence: <strong>MIT</strong>
@@ -27,6 +27,8 @@
 <script setup lang="ts">
   import { reactive, watch } from 'vue';
   import CustomContentModal from '../CustomContentModal.vue';
+
+  const VERSION = import.meta.env.PACKAGE_VERSION;
 
   const props = defineProps<{
     l: Function,
