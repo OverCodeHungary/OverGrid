@@ -250,38 +250,107 @@ type OverGridConfig = {
   singleRowSelection?: {
     active: boolean
   },
+  /* 
+  * The extra row configuration object for the grid.
+  */
   extraRow?: {
+    /**
+     * If true, the extra row is active. If false, the extra row is disabled.
+     */
     active: boolean,
+    /**
+     * Determines the user can open more than one extra row at the same time. If false, the user can open only one extra row at a time (close the other when open a new one).
+     */
     multiOpen: boolean,
+    /**
+     * Ths extraRow slot gets the full record object of the "parent". You can define extra fields here that you want to pass to the slot.
+     */
     extraParams: object
   },
+  /*
+  * The column selector/bulk operation configuration object for the grid.
+  */
   bulkOperation?: {
+    /**
+     * If true, the column selector/bulk operation is active. If false, the column selector/bulk operation is disabled.
+     */
     active: boolean,
+    /**
+     * The bulk operation methods. You can define multiple methods here. Each method has a title, a key (must be unique) and an action function. The action function gets the checked rows and a function to clear the checked rows.
+     */
     methods: Array<{
       title: string,
       key: string,
       action: (checkedRows: Array<any>, clearRows: () => void) => void
     }>
   },
+  /* 
+  * The events configuration object for the grid.
+  */
   events?: {
+    /**
+     * The event is fired when the grid is ready. The grid is ready when the first data load is finished.
+     */
     onDataLoad?: (data: Array<any>) => Array<any>,
+    /* 
+    * Same as the onDataLoad event, but this event gets the full response object, not just the data.
+    */
     onDataLoadWithFullResponse?: (response: AxiosResponse) => Array<any>,
+    /**
+     * The event is fired when the grid is ready after a refresh. The grid is ready when the first data load is finished.
+     */
     readyAfterRefresh?: () => void,
+    /**
+     * The event is fired when the selected records on the current pages are changed. The function gets the selected rows.
+     */
     onBulkSelectChanges?: (checkedRows: Array<any>) => void
   },
+  /* 
+  * The column selector configuration object for the grid.
+  */
   columnSelector?: {
+    /**
+     * If true, the column selector is active. If false, the column selector is disabled.
+     */
     active: boolean
   },
+  /*
+  * The XLSX/CSV export configuration object for the grid.
+  */
   xlsxExport?: {
+    /**
+     * If true, the XLSX/CSV export is active. If false, the XLSX/CSV export is disabled.
+     */
     active: boolean,
+    /**
+     * @TBD
+     */
     additionalExportFields?: {
       columnsFn?: Function
     }
   },
+  /*
+  * The refreshable configuration object for the grid.
+  */
   refreshable: {
+    /**
+     * If true, the refresh button is active. If false, the refresh button is hidden.
+     */
     manualActive: boolean,
+
+    /**
+     * If true, the auto refresh is active in the grid's menu. If false, the auto refresh is disabled.
+     */
     autoActive: boolean,
+
+    /**
+     * If true, the auto refresh can be disabled in the grid's menu by the user. If false, the auto refresh cannot be disabled.
+     */
     autoCanBeDisabled: boolean,
+
+    /**
+     * The auto refresh values. You can set multiple values here. Each value has a key (must be unique), a refresh interval in milliseconds and a title. The default value is the value that is selected by default in the grid's menu.
+     */
     autoValues: Array<{
       key: string,
       refreshInterval: number,
@@ -289,6 +358,10 @@ type OverGridConfig = {
       default?: boolean
     }>
   },
+
+  /**
+   * The columns configuration object for the grid.
+   */
   mapping: Record<string, MappingRecordType>
 }
 
