@@ -1,6 +1,6 @@
 <template>
   <div class="p-8">
-    <OverGrid :config="config" :customFormatters="[{
+    <OverGrid ref="grid" :config="config" :customFormatters="[{
       name: 'CustomFormatter',
       component: CustomFormatter
     }]">
@@ -32,7 +32,13 @@
   import '../lib/themes/default.css'
   import { OverGridConfig, OperatorButtonType, PossibleLanguages } from '../lib/components/model/OverGridConfig'
   import { OrderDirection } from '../lib/components/model/Ordering';
-  import { onMounted } from 'vue';
+  import { onMounted, ref } from 'vue'
+
+  const grid = ref<InstanceType<typeof OverGrid>>()
+
+  onMounted(() => {
+    console.log('App mounted', grid.value)
+  })
 
   // const customi18n: Record<string, string> = {
   //   'auto_refresh_menu_title': 'Automatikus frissítés222',

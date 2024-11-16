@@ -724,12 +724,6 @@
   })
 
   defineExpose({
-    FilteringClass,
-    FilteringFilter,
-    FilteringOperator,
-    Ordering,
-    OrderDirection,
-    PaginationClass,
     gridRefresh
   })
 </script>
