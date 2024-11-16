@@ -19,8 +19,8 @@ class FilteringFilter {
 }
 
 enum FilteringOperator {
-  and,
-  or
+  and = 'AND',
+  or = 'OR'
 }
 
 /**

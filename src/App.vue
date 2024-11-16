@@ -151,7 +151,7 @@
     filtering: {
       allRecordsCountKey: 'totalRecords',
       active: true,
-      simple: true,
+      simple: false,
       local: false,
       simpleFilterTemplate: 'workName=*{data}/i|workNumberCustom=*{data}/i|orderNumber=*{data}/i|attentionTo=*{data}/i',
       simplePlaceholder: 'Search...',

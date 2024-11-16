@@ -28,6 +28,8 @@ export default (
     else {
       params.append('filter', filtering.simpleFilterValue);
     }
+
+    params.append('filterOperator', filtering.operator);
   }
 
   return params;

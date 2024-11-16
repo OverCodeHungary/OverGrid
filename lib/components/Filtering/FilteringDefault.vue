@@ -61,6 +61,7 @@
             v-bind:is="'Filterable' + currentFilterableConfig.type" 
             :config="currentFilterableConfig" 
             :id="state.selectorField" 
+            :l="props.l"
             :formatterConfig="formatterConfig" />
         </div>
       </template>
