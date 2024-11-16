@@ -32,6 +32,7 @@
   import '../lib/themes/default.css'
   import { OverGridConfig, OperatorButtonType, PossibleLanguages } from '../lib/components/model/OverGridConfig'
   import { OrderDirection } from '../lib/components/model/Ordering';
+  import { onMounted } from 'vue';
 
   // const customi18n: Record<string, string> = {
   //   'auto_refresh_menu_title': 'Automatikus frissítés222',
@@ -91,6 +92,7 @@
     endpoint: 'http://localhost/overgrid-demo-api.php',
     rootkey: "data",
     idkey: "id",
+    hideAboutWindow: false,
     defaultOrderKey: 'id',
     defaultOrderDirection: OrderDirection.asc,
     orderLocal: false,

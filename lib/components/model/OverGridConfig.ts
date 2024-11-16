@@ -146,7 +146,7 @@ type OverGridConfig = {
   /**
    * If true, the grid will show the about window. Otherwise the grid will not show the about window.
    */
-  hideAboutWindow: boolean,
+  hideAboutWindow?: boolean,
 
   /**
    * You can modify the server request parameters before sending to the server. This function is called before the request is sent. You can modify the ordering, pagination and filtering parameters in order to your needs. If not set, the grid will send the parameters as is.

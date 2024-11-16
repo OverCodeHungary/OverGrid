@@ -729,7 +729,8 @@
     FilteringOperator,
     Ordering,
     OrderDirection,
-    PaginationClass
+    PaginationClass,
+    gridRefresh
   })
 </script>
 

@@ -13,7 +13,7 @@ export type {
   TailwindClassFormatterConfigType,
   AllFormatterConfigTypes,
   MappingRecordType,
-  OverGridConfig
+  OverGridConfig,
 }
 
 export { 
