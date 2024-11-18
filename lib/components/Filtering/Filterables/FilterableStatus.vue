@@ -10,7 +10,7 @@
       <label class="og-text-compact">{{ props.l('values') }}</label>
       <select :disabled="availableOptions.length == 0" @change="(e) => { if(e && e.target && e.target) { addTag(e.target) } }" v-model="state.currentSelectedValue" class="og-form-select og-text-compact">
         <option value="null">{{ props.l('please_choose_values') }}</option>
-        <option v-for="(option, key) in availableOptions" :value="key" :key="key">{{ option }}</option>
+        <option v-for="(option, key) in availableOptions" :value="option.key" :key="key">{{ option.title }}</option>
       </select>
 
       <div v-if="state.currentValue.length > 0" class="flex flex-row whitespace-normal overflow-auto flex-wrap gap-2 mt-2">
@@ -67,18 +67,24 @@
   });
 
   const availableOptions = computed(() => {
-    var opts: Array<string> = []
+    let opts: Array<{
+      key: string,
+      title: string
+    }> = []
 
     for(var i in props.formatterConfig.mapping) {
-      var f = false;
+      var isAlreadySelected = false;
       for(var j in state.currentValue) {
         if(state.currentValue[j].id == i) {
-          f = true
+          isAlreadySelected = true
         }
       }
 
-      if(!f) {
-        opts.push(props.formatterConfig.mapping[i].title)
+      if(!isAlreadySelected) {
+        opts.push({
+          key: i,
+          title: props.formatterConfig.mapping[i].title
+        })
       }
     }
 
@@ -98,7 +104,7 @@
   function addTag(eventTarget?: EventTarget) {
     let optId = eventTarget ? (eventTarget as HTMLSelectElement).value : null;
 
-    if(!optId || optId == "null") {
+    if(optId == undefined || optId == null || optId == "null") {
       return
     }
 
