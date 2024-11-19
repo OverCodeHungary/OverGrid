@@ -3,67 +3,239 @@ import { FilteringClass } from "./Filtering";
 import { OrderDirection, Ordering } from "./Ordering";
 import { PaginationClass } from "./Pagination";
 
+/**
+ * The OperatorButtonType is a type for the operator buttons in the Operations formatter.
+ */
 type OperatorButtonType = {
+  /**
+   * The title of the button.
+   */
   title?: string,
+
+  /**
+   * The tooltip of the button.
+   */
   tooltip?: string,
+
+  /**
+   * The icon of the button. You can use any valid FontAwesome icon class here. For example, 'fas fa-edit'.
+   */
   icon?: string,
+
+  /**
+   * The test value attribute of the button. If set, the button will have a test value attribute with this value to make e2e testing easier.
+   */
   testValueAttribute?: string,
+
+  /**
+   * The class list of the button. You can set multiple classes here. For example, 'btn btn-primary'.
+   */
   classList?: string,
+
+  /**
+   * If true, the button is a dropdown button. If false, the button is a normal button.
+   */
   dropdowned?: boolean,
+
+  /**
+   * If true, the button is disabled. If false, the button is enabled.
+   */
   disabled?: boolean,
+
+  /**
+   * The function that is called when the button is clicked. You can access the full record object while you define buttons in the OperationsFormatterConfigType.buttons function.
+   */
   onClick: Function
 }
 
+/**
+ * The PossibleLanguages enum is used to set the possible languages that the grid can use. If not set, the grid will use the default language, which is 'en'.
+ */
 enum PossibleLanguages {
   en = 'en',
   hu = 'hu'
 }
 
 /* FORMATTER CONFIGS */
+/**
+ * The configuration object for all the formatters that have no configurations (e.g.: Strong).
+ */
 type ConfiglessFormatterConfigType = {
+  /**
+   * The type of the formatter.
+   */
   type: string
 }
 
+/**
+ * The configuration object for the DateFormatter formatter.
+ */
 type DateFormatterConfigType = {
+  /**
+   * The type of the formatter. In this case, it should be 'DateTime'.
+   */
   type: string,
+  /**
+   * The input format of the date. If not set, the input format is 'YYYY-MM-DD HH:mm:ss'. Under the hood, OverGrid uses the moment.js library to parse the date. You can set any format that moment.js supports. For more information, see the moment.js documentation: https://momentjs.com/docs/#/parsing/string-format/.
+   */
   inputFormat?: string,
+
+  /**
+   * The output format of the date. If not set, the output format is 'YYYY-MM-DD HH:mm:ss'. Under the hood, OverGrid uses the moment.js library to format the date. You can set any format that moment.js supports. For more information, see the moment.js documentation: https://momentjs.com/docs/#/displaying/format/.
+   */
   outputFormat?: string
 }
 
+
+/**
+ * The configuration object for the Highlighter formatter.
+ */
 type HighlightFormatterConfigType = {
+  /**
+   * The type of the formatter. In this case, it should be 'Highlighter'.
+   */
   type: string,
+  /**
+   * The maximum length of the text. If the text is longer than this value, the text will be cut off and an ellipsis will be added. If not set, the text will not be cut off.
+   */
   maxLength?: number,
+
+  /**
+   * The highlighter configuration object. The highlighter is a special component to highlight text in the cell. You can set multiple highlighters here. Each highlighter has a regular expression and a style. The regular expression is used to match the text, and the style is used to highlight the text. For example, you can set a highlighter to highlight all the occurrences of the word 'important' in the cell with a bold style. The 'style' should be a valid CSS style string.
+   */
   highlights: Array<{
     regexp: RegExp,
     style: string
   }>
 }
 
+/**
+ * The configuration object for the LongText formatter. LongText formatter shows a modal with the full text when the user clicks on the button in the cell.
+ */
 type LongTextFormatterConfigType = {
+  /**
+   * The type of the formatter. In this case, it should be 'LongText'.
+   */
   type: string,
+
+  /**
+   * The title of the modal window. If not set, the title is 'Long text'.
+   */
   title?: string
 }
 
+/**
+ * The configuration object for the Operations formatter. 
+ * Operations formatter shows operation buttons in the cell. 
+ * For example, if you want to show an 'Edit' and a 'Delete' button in the cell, you can use the Operations formatter.
+ */
 type OperationsFormatterConfigType = {
+  /**
+   * The type of the formatter. In this case, it should be 'Operations'.
+   */
   type: string,
+  /**
+   * The configuration object for the Operations formatter. The configuration object has two keys: 'dropdownOrientation' and 'buttons'.
+   */
   config?: {
+    /**
+     * The orientation of the dropdown. The possible values are 'right' and 'left'. If not set, the dropdown orientation is 'right'.
+     */
     dropdownOrientation: 'right' | 'left',
+
+    /**
+     * 
+     * @param vm the vue object
+     * @param callMeToRefreshTheGrid a Function that you can call to refresh the grid. The function has no parameters.
+     * @param rowid the unique ID of the row
+     * @param record the full record object
+     * @returns an array of OperatorButtonType objects. Each OperatorButtonType object represents a button in the cell. The OperatorButtonType object has the following keys: 'title', 'tooltip', 'icon', 'testValueAttribute', 'classList', 'dropdowned', 'disabled' and 'onClick'. The 'title' key is the title of the button. The 'tooltip' key is the tooltip of the button. The 'icon' key is the icon of the button. The 'testValueAttribute' key is the test value attribute of the button. The 'classList' key is the class list of the button. The 'dropdowned' key is a boolean value. If true, the button is a dropdown button. The 'disabled' key is a boolean value. If true, the button is disabled. The 'onClick' key is the function that is called when the button is clicked. The function gets the rowid and the record object as parameters.
+     */
     buttons: (vm: any, callMeToRefreshTheGrid: Function, rowid: any, record: any) => Array<OperatorButtonType>
   }
 }
 
+
+/**
+ * The configuration object for the Status formatter.
+ */
 type StatusFormatterConfigType = {
+  /**
+   * The type of the formatter. In this case, it should be 'Status'.
+   */
   type: string,
+  /**
+   * The field's data type in the server's response DTO. The possible values are 'integer', 'boolean', 'text'.
+   * It the data type is 'integer', that means the field type in the response is numeric. 
+   * If the data type is 'boolean', that means the field type in the response is boolean (true/false).
+   * If the data type is 'text', that means the field type in the response is text.
+   */
   dataType: string,
+
+  /**
+   * The object mapping for the status formatter.
+   * @example 
+   * dataType: 'text',
+   * mapping: {
+   *  'active': {
+   *    classList: 'bg-green-500 text-white',
+   *    title: 'Active'
+   *   },
+   *  'inactive': {
+   *    classList: 'bg-red-500 text-white',
+   *    title: 'Inactive'
+   *   }
+   * }
+   * 
+   * @example 
+   * dataType: 'boolean',
+   * mapping: {
+   *  'true': {
+   *    classList: 'bg-green-500 text-white',
+   *    title: 'Yes'
+   *   },
+   *  'false': {
+   *    classList: 'bg-red-500 text-white',
+   *    title: 'No'
+   *   }
+   * }
+   * 
+   * @example 
+   * dataType: 'integer',
+   * mapping: {
+   *  '1': {
+   *    classList: 'bg-green-500 text-white',
+   *    title: 'First'
+   *   },
+   *  '2': {
+   *    classList: 'bg-red-500 text-white',
+   *    title: 'Second'
+   *   }
+   * }
+   */
   mapping: Record<string, {
     classList: string,
     title: string
   }>
 }
 
+/**
+ * The configuration object for the TailwindClass formatter.
+ */
 type TailwindClassFormatterConfigType = {
+  /**
+   * The type of the formatter. In this case, it should be 'Tailwind'.
+   */
   type: string,
+
+  /**
+   * If true and the cell is empty, the data in the cell will be hidden. If false, the data will be shown no matter if its empty or not.
+   */
   hideWhenEmpty: boolean,
+
+  /**
+   * The class list of the cell. You can set multiple classes here. For example, 'bg-green-500 text-white'.
+   */
   classList: string
 }
 
@@ -71,21 +243,82 @@ type AllFormatterConfigTypes = ConfiglessFormatterConfigType | DateFormatterConf
 
 /* FORMATTER CONFIGS */
 
+/*
+* The configuration object for one column in the grid.
+*/
 type MappingRecordType = {
+  /**
+   * The title of the column shown in the thead.
+   */
   title: string,
+
+  /**
+   * If true, the column is visible. If false, the column is hidden in grid.
+   */
   visible?: boolean,
+
+  /**
+   * If set, the column is filterable. If false, the column is not filterable.
+   */
   filterable?: {
+    /**
+     * If true, the filter is active. If false, the filter is disabled for the field.
+     */
     active: boolean,
+
+    /**
+     * The filter type. The filter type is used to determine the filter input field. The possible values are 'text', 'number', 'date', 'status'.
+     */
     type?: string,
+
+    /**
+     * The key to send to the server. If not set, the key is the same as the field name. If set, the key is the value of the key. Useful when the server expects a different key as it serves in the DTO.
+     */
     filterKey?: string,
+
+    /**
+     * If set, this title will be shown in the Search Panel. If not set, the title is the same as the field title defined in "title" key.
+     */
     titleOverride?: string
   },
+  /**
+   * A function to modify the data after it gets from the server but before showing in the cell. This function is called before the data is shown in the cell. You can modify the data here. For example, you can format a date, or you can show a different value based on the raw data.
+   * @param data The raw data of the cell
+   * @returns The modified/formatted/tweaked data to show in the cell
+   */
   middleware?: (data: any) => any,
+
+  /**
+   * If true, the column is selectable in the Column Selector Panel. If false, the column is not selectable.
+   */
   selectable?: boolean,
+
+  /**
+   * If true, the column is orderable/sortable. If false, the column is not orderable/sortable. 
+  */
   orderable?: boolean,
+
+  /**
+   * You can set a custom order key for the column. If not set, the order key is the same as the field name. Useful when the server expects a different key as it serves in the DTO.
+   */
   orderKey?: string,
+
+  /**
+   * If its true or not set, the column is exportable and will be added in the export file. If false, the column is not exportable.
+  */
   exportable?: boolean,
+
+  /**
+   * Sets the width of the column. If not set, the column width is auto. Example values: '100px', '10%'.
+   */
   width?: string,
+
+  /**
+   * The formatter configuration object for the column. The formatter is a special component to format the data in the cell. 
+   * There are 9 types of formatters built-in: 'Boolean', 'DateTime', 'Highlighter', 'HTML', 'LongText', 'Operations', 'Status', 'Strong', 'Tailwind'.
+   * You can set the formatter type and the configuration object for the formatter. For example, a 'Strong' type of formatter makes the text bold in cell, and a 'DateTime' type of formatter formats the date.
+   * You can define your own custom formatter as well. Check the documentation 'Custom formatters' section for more information.
+   */
   formatter?: AllFormatterConfigTypes
 }
 
@@ -247,9 +480,6 @@ type OverGridConfig = {
      */
     simplePlaceholder?: string,
   },
-  singleRowSelection?: {
-    active: boolean
-  },
   /* 
   * The extra row configuration object for the grid.
   */
@@ -326,6 +556,9 @@ type OverGridConfig = {
      * @TBD
      */
     additionalExportFields?: {
+      /**
+       * User-defined function to append additional fields for the export. The function gets the record object and should return an array.
+       */
       columnsFn?: Function
     }
   },
@@ -352,15 +585,30 @@ type OverGridConfig = {
      * The auto refresh values. You can set multiple values here. Each value has a key (must be unique), a refresh interval in milliseconds and a title. The default value is the value that is selected by default in the grid's menu.
      */
     autoValues: Array<{
+      /**
+       * The key of the value. This key is used in the grid's menu to identify the value. It must be unique in the array.
+       */
       key: string,
+
+      /**
+       * The refresh interval in milliseconds.
+       */
       refreshInterval: number,
+
+      /**
+       * The title of the value. This title is shown in the grid's menu.
+       */
       title: string,
+
+      /**
+       * If true, the value is the default value. If false, the value is not the default value.
+       */
       default?: boolean
     }>
   },
 
   /**
-   * The columns configuration object for the grid.
+   * The columns configuration object for the grid. The key of the object is the field name in the server's response. The value is the configuration object for the column. See the MappingRecordType for more information.
    */
   mapping: Record<string, MappingRecordType>
 }

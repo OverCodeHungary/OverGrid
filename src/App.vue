@@ -156,9 +156,6 @@
       simpleFilterTemplate: 'workName=*{data}/i|workNumberCustom=*{data}/i|orderNumber=*{data}/i|attentionTo=*{data}/i',
       simplePlaceholder: 'Search...',
     },
-    singleRowSelection: {
-      active: false
-    },
     extraRow: {
       active: true,
       multiOpen: true,

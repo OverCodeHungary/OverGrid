@@ -129,7 +129,7 @@
             <thead class="og-table-thead">
               <tr class="">
                 <th class="" width="30px" v-if="isExtraRowEnabled"></th>
-                <th class="" width="30px" v-if="(props.config.bulkOperation && props.config.bulkOperation.active) || (props.config.singleRowSelection && props.config.singleRowSelection.active)">
+                <th class="" width="30px" v-if="props.config.bulkOperation && props.config.bulkOperation.active">
                   <label class="">
                   </label>
                 </th>
@@ -178,15 +178,6 @@
                         :value="record[props.config.idkey]" v-model="state.checkedRows"
                         class="og-checkbox"
                         type="checkbox"
-                      />
-                    </label>
-                  </td>
-                  <td class="og-cell og-text-compact" width="30px" v-if="(props.config.singleRowSelection && props.config.singleRowSelection.active)">
-                    <label class="inline-flex items-center space-x-2">
-                      <input
-                        :value="record[props.config.idkey]" v-model="state.checkedRow"
-                        class="og-radio"
-                        type="radio"
                       />
                     </label>
                   </td>
