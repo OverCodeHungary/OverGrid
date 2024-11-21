@@ -6,6 +6,11 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OverCodeHungary/OverGrid"
+  },
+  "license": "MIT",
   "main": "./dist/OverGrid.umd.mjs",
   "module": "./dist/OverGrid",
   "types": "dist/main.d.ts",
