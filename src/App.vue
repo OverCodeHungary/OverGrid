@@ -95,7 +95,7 @@
   const gridUniqueId = 'ogSampleGrid'
 
   const config: OverGridConfig = {
-    endpoint: 'http://localhost/overgrid-demo-api.php',
+    endpoint: 'https://robber.hu/overgrid-api/overgrid-demo-api.php',
     rootkey: "data",
     idkey: "id",
     hideAboutWindow: false,
